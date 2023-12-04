@@ -20,11 +20,6 @@ const connectionSchema = new Schema({
   active: {
     type: Boolean,
     default: true
-  },
-  userId: {
-    type: String,
-    required: true,
-    unique: true
   }
 }, {
   timestamps: true

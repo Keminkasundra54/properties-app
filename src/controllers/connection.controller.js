@@ -13,11 +13,10 @@ const httpStatus = require('http-status')
 const CLIENT_ID = process.env.CLIENT_ID
 const CLIENT_SECRET = process.env.CLIENT_SECRET
 
-const REDIRECT_URI = `https://apps.hubresolution.com/dashboard`
+const REDIRECT_URI = `http://localhost:3000/api/connection/create-auth`
 exports.create = async (req, res, next) => {
   try {
-    const body = req.body
-    body.userId = req.user._id
+    const body = req.query
     if (body.code) {
       console.log('       > Received an authorization token')
 
@@ -31,8 +30,8 @@ exports.create = async (req, res, next) => {
       console.log(authCodeProof)
       // Step 4
       // Exchange the authorization code for an access token and refresh token
-      console.log('===> Step 4: Exchanging authorization code for an access token and refresh token', req.user._id)
-      const token = await exchangeForTokens(req.user._id, authCodeProof)
+      console.log('===> Step 4: Exchanging authorization code for an access token and refresh token', '_id')
+      const token = await exchangeForTokens('test', authCodeProof)
       console.log(token)
       if (token.message) {
         return res.json({ message: 'ERROR', data: {message: token.message} })
@@ -53,6 +52,7 @@ exports.create = async (req, res, next) => {
       res.send('Failed')
     }
   } catch (error) {
+    console.log(error)
     res.status(httpStatus.PRECONDITION_FAILED)
     res.send(error)
   }
@@ -91,6 +91,7 @@ const exchangeForTokens = async (userId, exchangeProof) => {
     console.log('       > Received an access token and refresh token3')
     return tokens
   } catch (e) {
+    console.log(e)
     console.error(e, `       > Error exchanging ${exchangeProof.grant_type} for access token`)
     return JSON.parse(e)
   }
