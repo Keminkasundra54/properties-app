@@ -1,6 +1,6 @@
 node_modules/
-.env
 .idea
-.env
 .env-example
 .history/*
+kemin-property
+kemin-property.pub
