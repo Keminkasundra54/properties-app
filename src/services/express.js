@@ -44,7 +44,7 @@ app.get('/get-card', async (req, res, next) => {
         "type": "IFRAME",
         "width": 890,
         "height": 748,
-        "uri": "https://tools.hubteam.com/integrations-iframe-test-app",
+        "uri": "https://www.propertyapp.hubresolution.com/",
         "label": "Properties"
       }
     ]
