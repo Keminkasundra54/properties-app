@@ -28,7 +28,7 @@ if (config.env !== 'test') app.use(morgan('combined'))
 app.use(passport.initialize())
 app.set('view engine', 'ejs');
 app.get('/', async (req, res, next) => {
-  res.setHeader("X-Frame-Options", "ALLOW-FROM https://hubspot.com");
+  res.setHeader("Content-Security-Policy", "frame-ancestors : 'ALLOW-FROM https://hubspot.com'");
   const properties = await Property.find();
   return res.render('home', {properties: properties});
 });
