@@ -32,20 +32,24 @@ app.get('/', async (req, res, next) => {
   return res.render('home', {properties: properties});
 });
 app.get('/get-card', async (req, res, next) => {
-  return res.json({
+  return res.json(
+    {
+      "results": [{
     "objectId": 123,
     "title": "Properties",
-    "details": "Manage properties ",
+    "details": "Manage properties",
+    "description": "Customer reported that the APIs are just running too fast. This is causing a problem in that they're so happy.",
     "actions": [
       {
         "type": "IFRAME",
         "width": 890,
         "height": 748,
         "uri": "https://tools.hubteam.com/integrations-iframe-test-app",
-        "label": "Manage Properties"
+        "label": "Properties"
       }
     ]
-  });
+  }]
+});
 })
 app.get('/auth-app', async (req, res, next) => {
   return res.json({
