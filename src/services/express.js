@@ -32,7 +32,7 @@ app.get('/', async (req, res, next) => {
   return res.render('home', {properties: properties});
 });
 app.get('/get-card', async (req, res, next) => {
-  return res.json([{
+  return res.json({
     "objectId": 123,
     "title": "Properties",
     "details": "Manage properties ",
@@ -45,7 +45,7 @@ app.get('/get-card', async (req, res, next) => {
         "label": "Manage Properties"
       }
     ]
-  }]);
+  });
 })
 app.get('/auth-app', async (req, res, next) => {
   return res.json({
