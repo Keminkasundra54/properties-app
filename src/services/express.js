@@ -28,11 +28,11 @@ if (config.env !== 'test') app.use(morgan('combined'))
 app.use(passport.initialize())
 app.set('view engine', 'ejs');
 app.get('/', async (req, res, next) => {
+  res.setHeader("X-Frame-Options", "ALLOW-FROM https://hubspot.com");
   const properties = await Property.find();
   return res.render('home', {properties: properties});
 });
 app.get('/get-card', async (req, res, next) => {
-  res.setHeader("X-Frame-Options", "ALLOW-FROM https://hubspot.com");
   return res.json(
     {
       "results": [{
