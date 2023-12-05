@@ -32,6 +32,7 @@ app.get('/', async (req, res, next) => {
   return res.render('home', {properties: properties});
 });
 app.get('/get-card', async (req, res, next) => {
+  res.setHeader("X-Frame-Options", "ALLOW-FROM https://app.hubspot.com");
   return res.json(
     {
       "results": [{
