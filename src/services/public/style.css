@@ -99,7 +99,7 @@ label.filter-search.open:before {transform: rotate(180deg);}
 
 .popupItem [type="file"]::-webkit-file-upload-button:hover {
     background: #fff;
-   
+
     color: #0096ff;
 }
 
@@ -108,6 +108,7 @@ body {
     padding: 20px;
 }
 
+.buttonBox .button a {padding: 0;margin: 0;border: none;background-color: transparent;width: 20px;height: auto;  margin: 0 auto;}
 @media(max-width:1670px){
 .table-rowINr table th:nth-child(8), .table-rowINr table td:nth-child(8), .table-rowINr table th:nth-child(9), .table-rowINr table td:nth-child(9) {width: 4%;}
 .table-rowINr table td, .table-rowINr table th {width: 13%;}
@@ -124,7 +125,17 @@ body {
 
 @media(max-width:1230px){
 .table-rowINr {overflow: auto;}
-.table-rowINr table {width: 1400px !important;}
+
+/* Updated CSS */
+
+
+
+.table-rowINr table thead th:last-child {padding: 10px 7px;}
+.table-rowINr table th {padding: 10px 7px;}
+
+.table-rowINr table {
+  max-width: 1130px !important;
+}
 }
 
 @media(max-width:767px){
@@ -136,6 +147,8 @@ body {
 
 .popupSec {padding: 20px;}
 .popupBoxs {padding: 50px 20px 20px;border-radius: 20px;}
-
+.table-rowINr table {
+  width: 768px;
+}
 
 }
