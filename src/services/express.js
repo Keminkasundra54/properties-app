@@ -40,7 +40,7 @@ app.get('/get-card', async (req, res, next) => {
     {
       "results": [{
     "objectId": 123,
-    "title": "Properties",
+    "title": "Manage Properties",
     "details": "Manage properties",
     "description": "Customer reported that the APIs are just running too fast. This is causing a problem in that they're so happy.",
     "actions": [
