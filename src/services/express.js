@@ -46,7 +46,7 @@ app.get('/get-card', async (req, res, next) => {
     "actions": [
       {
         "type": "IFRAME",
-        "width": 890,
+        "width": 1020,
         "height": 748,
         "uri": "https://www.propertyapp.hubresolution.com/",
         "label": "Properties"
