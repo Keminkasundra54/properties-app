@@ -21,7 +21,10 @@ const Property = require('../models/property.model')
 app.use(bodyParser.json())
 app.use(cors())
 app.use(helmet())
-
+const path = require('path')
+console.log(path.join(__dirname, 'public'));
+// eslint-disable-next-line no-path-concat
+app.use('/static', express.static(path.join(__dirname, 'public')))
 if (config.env !== 'test') app.use(morgan('combined'))
 
 // passport

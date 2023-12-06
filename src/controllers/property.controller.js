@@ -29,9 +29,16 @@ exports.create = async (req, res, next) => {
 
 exports.getProperty = async (req, res, next) => {
   try {
-    const property = await Property.findProperty(req.body._id)
-    const payload = {sub: property._id}
-    return res.json({ message: 'OK', data: payload })
+    const property = await Property.findOne({_id: req.body._id})
+    return res.json({ message: 'OK', data: property })
+  } catch (error) {
+    next(error)
+  }
+}
+exports.updateProperty = async (req, res, next) => {
+  try {
+    const property = await Property.findOneAndUpdate({_id: req.body._id}, req.body)
+    return res.json({ message: 'OK', data: property })
   } catch (error) {
     next(error)
   }
