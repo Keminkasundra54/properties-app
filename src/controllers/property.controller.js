@@ -9,9 +9,8 @@ const httpStatus = require('http-status')
 exports.create = async (req, res, next) => {
   try {
     const myfile = req.body
-    console.log("hey", myfile)
+    console.log(req.body)
     const body = req.body;
-    res.send('asdasds')
     if (body) {
       // console.log(body)
       const property = new Property(body)

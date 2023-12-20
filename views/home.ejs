@@ -8,6 +8,10 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script src="/static/js/main.js"></script>
 <script>
+let selectedFiles = []
+function onFileSelected(event){	
+	selectedFiles = event.target.files;
+}
   $(document).on('submit', 'form.propertyForm', function(e) {
   e.preventDefault();
   var data = getFormData($('form.propertyForm'));
@@ -20,6 +24,13 @@
   }
 
 const formdata = new FormData()
+
+if (selectedFiles.length) {
+      for (let i = 0; i < selectedFiles.length; i++) {
+		console.log("selectedFiles", selectedFiles[i])
+        formdata.append('image',selectedFiles[i]);
+      }
+}
 formdata.append('address' ,  data.address);
 formdata.append('price' , data.price);
 formdata.append('marketingStatus' , data.marketingStatus);
@@ -27,15 +38,18 @@ formdata.append('owner' , data.owner);
 formdata.append('letType' , data.letType);
 formdata.append('minimumeTenancy' , data.minimumeTenancy);
 formdata.append('userId' , data.userId);
+// formdata.append('image' , data.image)
 
+const urlEncoded = new URLSearchParams(formdata).toString()
   $.ajax({
     url: idToUpdate ? "/api/property/update" : "/api/property/create",
     method: 'post',
-    data: formdata,
+	data: formdata,
 	processData: false,
     success: function(result){
-
+       
 		console.log(result)
+	
       // location.reload();
     },
 	error:function(result){
@@ -43,6 +57,7 @@ formdata.append('userId' , data.userId);
 	}
   });
 })
+
 function getFormData($form){
   var unindexed_array = $form.serializeArray();
   var indexed_array = {};
@@ -294,11 +309,11 @@ function getFormData($form){
 										<input type="text" name="address" placeholder="Address">
 									</div>
 								</fieldset>
-								<!-- <fieldset class="fieldset-onecolumn">
+								<fieldset class="fieldset-onecolumn">
 									<div class="form-field">
-										<input type="file" name="Image" />
+										<input type="file" id="image" name="image"  onchange="onFileSelected(event)"/>
 									</div>
-								</fieldset> -->
+								</fieldset>
 								<div class="submit-btn">
 									<input type="submit" value="Submit">
 								</div>

@@ -4,20 +4,19 @@ const express = require('express')
 const router = express.Router()
 const multer = require('multer')
 const propertyController = require('../../controllers/property.controller')
-
-
-const formData = require('express-form-data');
-const newdata = formData.parse()
-
+const cors = require('cors')
+router.use(cors())
 const storage = multer.diskStorage({
     destination: function(req ,file, cb){
-      cb(null, './Image/')
+      cb(null, 'images/')
     },
     filename :function(req , file,cb){
-    cb(null , file.originalname + '-' + Date.now())
+    cb(null , file.originalname)
     }
 })
-router.post('/create', newdata , propertyController.create)
+const upload = multer({storage:storage})
+
+router.post('/create', upload.single('image'), propertyController.create)
 router.post('/get', propertyController.getProperty)
 router.post('/update', propertyController.updateProperty)
 router.get('/getAll', propertyController.getAllProperty)
