@@ -27,11 +27,13 @@ formdata.append('owner' , data.owner);
 formdata.append('letType' , data.letType);
 formdata.append('minimumeTenancy' , data.minimumeTenancy);
 formdata.append('userId' , data.userId);
+const urlEncoded = new URLSearchParams(formdata).toString();
 
   $.ajax({
     url: idToUpdate ? "/api/property/update" : "/api/property/create",
     method: 'post',
-    data: formdata,
+    data: urlEncoded,
+    contentType: "application/x-www-form-urlencoded",
 	processData: false,
     success: function(result){
 

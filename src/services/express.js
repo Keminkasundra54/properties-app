@@ -18,11 +18,8 @@ const passportJwt = require('../services/passport')
 const app = express()
 const process = require('process')
 const Property = require('../models/property.model')
-var multer = require('multer');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-
-
 app.use(cors())
 app.use(helmet())
 const path = require('path')
