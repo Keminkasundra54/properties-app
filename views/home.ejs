@@ -9,7 +9,7 @@
 <script src="/static/js/main.js"></script>
 <script>
 let selectedFiles = []
-function onFileSelected(event){	
+function onFileSelected(event){
 	selectedFiles = event.target.files;
 }
   $(document).on('submit', 'form.propertyForm', function(e) {
@@ -38,27 +38,17 @@ formdata.append('owner' , data.owner);
 formdata.append('letType' , data.letType);
 formdata.append('minimumeTenancy' , data.minimumeTenancy);
 formdata.append('userId' , data.userId);
-<<<<<<< HEAD
-// formdata.append('image' , data.image)
-=======
-const urlEncoded = new URLSearchParams(formdata).toString();
->>>>>>> 0a7107ebd35c9bc3ade005a41c7f1154e7d90061
-
 const urlEncoded = new URLSearchParams(formdata).toString()
   $.ajax({
     url: idToUpdate ? "/api/property/update" : "/api/property/create",
     method: 'post',
-<<<<<<< HEAD
-	data: formdata,
-=======
-    data: urlEncoded,
-    contentType: "application/x-www-form-urlencoded",
->>>>>>> 0a7107ebd35c9bc3ade005a41c7f1154e7d90061
-	processData: false,
+    data: formdata,
+    contentType: false, //this is requireded please see answers above
+    processData: false,
     success: function(result){
-       
+
 		console.log(result)
-	
+
       // location.reload();
     },
 	error:function(result){
