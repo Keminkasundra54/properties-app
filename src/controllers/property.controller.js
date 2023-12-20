@@ -3,12 +3,17 @@
 require('dotenv').config()
 const Property = require('../models/property.model')
 const httpStatus = require('http-status')
+
+
+
 exports.create = async (req, res, next) => {
   try {
-    const body = req.body
-    console.log(body)
+    const myfile = req.body
+    console.log("hey", myfile)
+    const body = req.body;
+    res.send('asdasds')
     if (body) {
-      console.log(body)
+      // console.log(body)
       const property = new Property(body)
       const propertySave = await property.save()
 
@@ -18,15 +23,16 @@ exports.create = async (req, res, next) => {
       // to the HubSpot API
       // res.redirect(`/`)
     } else {
+      console.log("i am else")
       res.status(httpStatus.PRECONDITION_FAILED)
       res.send('Failed')
     }
   } catch (error) {
+    console.log(error)
     res.status(httpStatus.PRECONDITION_FAILED)
     res.send(error)
   }
 }
-
 exports.getProperty = async (req, res, next) => {
   try {
     const property = await Property.findOne({_id: req.body._id})
@@ -43,7 +49,6 @@ exports.updateProperty = async (req, res, next) => {
     next(error)
   }
 }
-
 exports.getAllProperty = async (req, res, next) => {
   try {
     const property = await Property.find()
@@ -52,7 +57,6 @@ exports.getAllProperty = async (req, res, next) => {
     next(error)
   }
 }
-
 exports.deleteProperty = async (req, res, next) => {
   try {
     await Property.removeProperty(req.body._id)
@@ -61,3 +65,4 @@ exports.deleteProperty = async (req, res, next) => {
     next(error)
   }
 }
+
