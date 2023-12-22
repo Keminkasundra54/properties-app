@@ -38,26 +38,18 @@ formdata.append('owner' , data.owner);
 formdata.append('letType' , data.letType);
 formdata.append('minimumeTenancy' , data.minimumeTenancy);
 formdata.append('userId' , data.userId);
-<<<<<<< HEAD
 // formdata.append('image' , data.image)
-=======
-const urlEncoded = new URLSearchParams(formdata).toString();
->>>>>>> 0a7107ebd35c9bc3ade005a41c7f1154e7d90061
 
 const urlEncoded = new URLSearchParams(formdata).toString()
   $.ajax({
     url: idToUpdate ? "/api/property/update" : "/api/property/create",
     method: 'post',
-<<<<<<< HEAD
 	data: formdata,
-=======
-    data: urlEncoded,
-    contentType: "application/x-www-form-urlencoded",
->>>>>>> 0a7107ebd35c9bc3ade005a41c7f1154e7d90061
-	processData: false,
+    contentType: false, //this is requireded please see answers above
+    processData: false,
     success: function(result){
        
-		console.log(result)
+		// console.log(result)
 	
       // location.reload();
     },
@@ -224,8 +216,9 @@ function getFormData($form){
                         <input type="checkbox" name="Select All" value="Select All">
                       </td>
                       <td>
-                        <img src="data:image/jpeg;base64,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" alt="Table-img" width="50" height="50" loading="lazy">
-                      </td>
+						<img src ="/profile/<%- item['image'][0] %>" alt="Table-img" width="50" height="50" loading="lazy">
+						<!-- <img src="data:image/jpeg;base64,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" alt="Table-img" width="50" height="50" loading="lazy"> -->
+					</td>
                       <td>
                         <%- item['address'] %>
                       </td>
@@ -266,9 +259,6 @@ function getFormData($form){
                       </td>
                     </tr>
                     <%});%>
-
-
-
 								</tbody>
 							</table>
 						</div>
@@ -320,7 +310,7 @@ function getFormData($form){
 								</fieldset>
 								<fieldset class="fieldset-onecolumn">
 									<div class="form-field">
-										<input type="file" id="image" name="image"  onchange="onFileSelected(event)"/>
+										<input type="file" id="image" name="image" multiple="multiple" onchange="onFileSelected(event)"/>
 									</div>
 								</fieldset>
 								<div class="submit-btn">
@@ -334,6 +324,3 @@ function getFormData($form){
 		</section>
 	</body>
 </html>
-
-
-

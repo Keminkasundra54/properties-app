@@ -31,7 +31,8 @@ const propertySchema = new Schema({
     required: true
   },
   image: {
-    type: String
+    type: Array,
+    default:null
   },
   userId: {
     type: String

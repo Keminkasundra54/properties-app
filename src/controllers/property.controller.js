@@ -3,18 +3,48 @@
 require('dotenv').config()
 const Property = require('../models/property.model')
 const httpStatus = require('http-status')
-
-
+const Image = require('../models/Image.model')
 
 exports.create = async (req, res, next) => {
   try {
-    const myfile = req.body
-    console.log(req.body)
-    const body = req.body;
+    const body = req.body
+    // body.image = req.files.path
+    let image = []
+    const myimage = req.files
+
+    if (myimage.length > 0) {
+      for (const i in myimage) {
+        const teamObj = myimage[i]
+        const mydata = new Image({
+          fieldname: teamObj.fieldname,
+          originalname: teamObj.originalname,
+          encoding: teamObj.encoding,
+          mimetype: teamObj.mimetype,
+          destination: teamObj.destination,
+          filename: teamObj.filename,
+          path: teamObj.path,
+          size: teamObj.size,
+          token: req.body.token,
+          url:  teamObj.filename,
+          userId: req.body.userId
+        });
+        image.push(mydata.url)
+
+      }
+    }
     if (body) {
-      // console.log(body)
-      const property = new Property(body)
-      const propertySave = await property.save()
+          const propertySave = new Property({
+            name: req.body.name,
+            address: req.body.address,
+            price: req.body.price,
+            marketingStatus: req.body.marketingStatus,
+            owner: req.body.owner,
+            minimumeTenancy:req.body.minimumeTenancy,
+            letType: req.body.letType,
+            image:image,
+            userId :req.body.userId,
+          });
+        await propertySave.save()
 
       res.status(httpStatus.CREATED)
       res.send(propertySave.transform())
