@@ -12,7 +12,11 @@ const storage = multer.diskStorage({
       cb(null, 'images/')
     },
     filename :function(req , file,cb){
+<<<<<<< HEAD
       cb(null , Date.now()+'_'+file.originalname)
+=======
+    cb(null , Date.now()+'_'+file.originalname)
+>>>>>>> fdb27a8b0e133337cb042e4ecddebc44fcf91bc7
     }
 })
 const upload = multer({storage:storage})

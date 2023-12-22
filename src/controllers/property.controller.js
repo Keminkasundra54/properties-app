@@ -7,6 +7,7 @@ const Image = require('../models/Image.model')
 
 exports.create = async (req, res, next) => {
   try {
+<<<<<<< HEAD
     const body = req.body
     // body.image = req.files.path
     let image = []
@@ -32,6 +33,12 @@ exports.create = async (req, res, next) => {
 
       }
     }
+=======
+    const myfile = req.body
+    console.log(req.file)
+    const body = req.body
+    body.image = req.file.path
+>>>>>>> fdb27a8b0e133337cb042e4ecddebc44fcf91bc7
     if (body) {
           const propertySave = new Property({
             name: req.body.name,

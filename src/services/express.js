@@ -18,10 +18,15 @@ const passportJwt = require('../services/passport')
 const app = express()
 const process = require('process')
 const Property = require('../models/property.model')
+<<<<<<< HEAD
 
 app.use(bodyParser.json({limit: '50mb'}));
 app.use(bodyParser.urlencoded({ extended: true, limit: '50mb', parameterLimit: 50000 }));
 
+=======
+app.use(bodyParser.json({limit: '50mb'}));
+app.use(bodyParser.urlencoded({ extended: true, limit: '50mb', parameterLimit: 50000 }));
+>>>>>>> fdb27a8b0e133337cb042e4ecddebc44fcf91bc7
 app.use(cors())
 app.use(helmet())
 const path = require('path')
