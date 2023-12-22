@@ -2,6 +2,7 @@
 const httpStatus = require('http-status')
 const mongoose = require('mongoose')
 const APIError = require('../utils/APIError')
+const boolean = require('joi/lib/types/boolean')
 const Schema = mongoose.Schema
 
 const propertySchema = new Schema({
@@ -30,9 +31,12 @@ const propertySchema = new Schema({
     type: String,
     required: true
   },
+  pushedToHive: {
+    type: Boolean
+  },
   image: {
     type: Array,
-    default:null
+    default: null
   },
   userId: {
     type: String
