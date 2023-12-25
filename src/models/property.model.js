@@ -2,7 +2,11 @@
 const httpStatus = require('http-status')
 const mongoose = require('mongoose')
 const APIError = require('../utils/APIError')
+<<<<<<< HEAD
 const object = require('joi/lib/types/object')
+=======
+const boolean = require('joi/lib/types/boolean')
+>>>>>>> 9e66cb9e423769ed43c506d50907db68c49dfaf8
 const Schema = mongoose.Schema
 
 const propertySchema = new Schema({
@@ -31,9 +35,12 @@ const propertySchema = new Schema({
     type: String,
     // required: true
   },
+  pushedToHive: {
+    type: Boolean
+  },
   image: {
     type: Array,
-    default:null
+    default: null
   },
   room_information:{
     type:Object,
