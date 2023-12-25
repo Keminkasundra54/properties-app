@@ -2,6 +2,7 @@
 const httpStatus = require('http-status')
 const mongoose = require('mongoose')
 const APIError = require('../utils/APIError')
+const object = require('joi/lib/types/object')
 const Schema = mongoose.Schema
 
 const propertySchema = new Schema({
@@ -10,31 +11,46 @@ const propertySchema = new Schema({
     maxlength: 50
   },
   address: {
-    type: String
+    type: Object
   },
-  price: {
-    type: String
+  price_information: {
+    type: Object
   },
   marketingStatus: {
     type: String
   },
   owner: {
     type: String,
-    required: true
+    // required: true
   },
   letType: {
     type: String,
-    required: true
+    // required: true
   },
   minimumeTenancy: {
     type: String,
-    required: true
+    // required: true
   },
   image: {
     type: Array,
     default:null
   },
+  room_information:{
+    type:Object,
+  },
   userId: {
+    type: String
+  },
+  roomimage:{
+    type: String
+  },
+  summary:{
+    type: String
+  },
+  room_photo_urls:{
+    type:String
+  },
+  description:{
     type: String
   }
 }, {
@@ -71,5 +87,4 @@ propertySchema.statics = {
     return property
   }
 }
-
 module.exports = mongoose.model('Property', propertySchema)

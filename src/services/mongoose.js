@@ -5,7 +5,7 @@ const mongoose = require('mongoose')
 mongoose.Promise = require('bluebird')
 
 mongoose.connection.on('connected', () => {
-  console.log('MongoDB is connected')
+  // console.log('MongoDB is connected')
 })
 
 mongoose.connection.on('error', (err) => {

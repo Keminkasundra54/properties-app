@@ -37,6 +37,10 @@ size:{
     type: String,
     maxlength: 50,
 },
+type:{
+    type: String,
+    default:"jpeg"
+},
 token:{
     type: String,
 },
