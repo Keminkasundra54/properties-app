@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <html>
-
 <head>
-<<<<<<< HEAD
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Table Filter</title>
@@ -11,46 +9,6 @@
 		fieldset.fieldset-twocolumn .form-field {
 			width: 50%
 		}
-=======
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Table Filter</title>
-<link rel="stylesheet" type="text/css" href="/static/style.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-<script src="/static/js/main.js"></script>
-<script>
-let selectedFiles = []
-function onFileSelected(event){
-	selectedFiles = event.target.files;
-}
-
-$(document).on('click', '.pushProperty', function(e) {
-  e.preventDefault();
-  var _id = $(this).attr('data-id');
-  $.ajax({
-    url: "/api/property/pushToHive",
-    method: 'post',
-    data: JSON.stringify({_id: _id}),
-    contentType: 'json', //this is requireded please see answers above
-    processData: false,
-    success: function(result){
-
-		console.log(result)
-
-      // location.reload();
-    },
-	error:function(result){
-		console.log("error", result)
-	}
-  });
-});
-  $(document).on('submit', 'form.propertyForm', function(e) {
-  e.preventDefault();
-  var data = getFormData($('form.propertyForm'));
-  data['userId'] = 1;
-  let idToUpdate = data._id;
-  if (idToUpdate) {
->>>>>>> 9e66cb9e423769ed43c506d50907db68c49dfaf8
 
 		fieldset.fieldset-twocolumn {
 			display: flex;
@@ -63,7 +21,6 @@ $(document).on('click', '.pushProperty', function(e) {
 			border-radius: 5px;
 		}
 
-<<<<<<< HEAD
 		.popupBoxs {
 			max-width: 600px;
 		}
@@ -71,29 +28,6 @@ $(document).on('click', '.pushProperty', function(e) {
 		fieldset.fieldset-threecolumn {
 			display: flex;
 		}
-=======
-if (selectedFiles.length) {
-      for (let i = 0; i < selectedFiles.length; i++) {
-		console.log("selectedFiles", selectedFiles[i])
-        formdata.append('image',selectedFiles[i]);
-      }
-}
-formdata.append('address' ,  data.address);
-formdata.append('price' , data.price);
-formdata.append('marketingStatus' , data.marketingStatus);
-formdata.append('owner' , data.owner);
-formdata.append('letType' , data.letType);
-formdata.append('minimumeTenancy' , data.minimumeTenancy);
-formdata.append('userId' , data.userId);
-const urlEncoded = new URLSearchParams(formdata).toString()
-  $.ajax({
-    url: idToUpdate ? "/api/property/update" : "/api/property/create",
-    method: 'post',
-    data: formdata,
-    contentType: false, //this is requireded please see answers above
-    processData: false,
-    success: function(result){
->>>>>>> 9e66cb9e423769ed43c506d50907db68c49dfaf8
 
 		.form-field.radio-btn {
 			display: flex;
@@ -116,7 +50,6 @@ const urlEncoded = new URLSearchParams(formdata).toString()
 		let roomes = []
 		
 
-<<<<<<< HEAD
 		function onFileSelected(event) {
 			selectedFiles = event.target.files;
 			if (selectedFiles.length) {
@@ -129,15 +62,6 @@ const urlEncoded = new URLSearchParams(formdata).toString()
 		function myfunction(event){
 			let roomImages = []
 			const imagelength = $(event.target).parents('.roomFields').find('.form-field:nth-child(7) .fileinput').prop('files').length;
-=======
-      location.reload();
-    },
-	error:function(result){
-		console.log("error", result)
-	}
-  });
-})
->>>>>>> 9e66cb9e423769ed43c506d50907db68c49dfaf8
 
 			for(let i=0; i< imagelength ; i++){
 				var imagename = $(event.target).parents('.roomFields').find('.form-field:nth-child(7) .fileinput').prop('files')[i].name
@@ -156,6 +80,7 @@ const urlEncoded = new URLSearchParams(formdata).toString()
 			"roomImage" : roomImages
 			}
 			$(event.target).parents('.roomFields').find('.form-field input').val('');
+			console.log($(event.target).parents('.roomFields').find('div:last-child').append('<div> '+ "room_name:" + myarray.room_name,"room_description:"+myarray.room_description ,"room_lengt:" + hmyarray.room_length ,"room_dimension_unit :"+ myarray.room_dimension_unit,"room_width:" +myarray.room_width,"room_dimension_text:" +myarray.room_dimension_text + "roomImage:" +myarray.roomImage +' </div>'))
 		    roomes.push(myarray)
 		}
 		$(document).on('submit', 'form.propertyForm ', function (e) {
@@ -169,7 +94,6 @@ const urlEncoded = new URLSearchParams(formdata).toString()
 			}
     
 			const mydata = JSON.stringify(roomes)
- console.log(myfile.length)
 			for(let j=0 ; j < myfile.length;j++){
 				formdata.append('roomimage', myfile[j]);
 			}
@@ -269,7 +193,6 @@ const urlEncoded = new URLSearchParams(formdata).toString()
 									</ul>
 								</div>
 							</div>
-<<<<<<< HEAD
 							<div class="filter-list">
 								<div class="filter-listInr">
 									<label class="filter-search">All Department</label>
@@ -308,11 +231,6 @@ const urlEncoded = new URLSearchParams(formdata).toString()
 											<span>lorem ispum</span>
 										</li>
 									</ul>
-=======
-							<div class="rs-filter">
-								<div class="prperty-btn popupButton button">
-									<a href="#popupButton" class="popup"> Add Property</a>
->>>>>>> 9e66cb9e423769ed43c506d50907db68c49dfaf8
 								</div>
 							</div>
 						</div>
@@ -389,20 +307,18 @@ const urlEncoded = new URLSearchParams(formdata).toString()
 										</td>
 										<td>
 											<b>house_name_number:</b><%- item.address.house_name_number %><br>
-												<b>town:</b><%- item.address.town %><br>
-													<b>postcode_1:</b><%- item.address.postcode_1 %><br>
-														<b>postcode_2:</b><%- item.address.postcode_2 %><br>
-															<b>display_address:</b><%-
-																item.address.display_address%><br>
-																<b>latitude:</b><%- item.address.latitude %><br>
-																	<b>longitude:</b><%- item.address.longitude %><br>
+											<b>town:</b><%- item.address.town %><br>
+											<b>postcode_1:</b><%- item.address.postcode_1 %><br>
+											<b>postcode_2:</b><%- item.address.postcode_2 %><br>
+											<b>display_address:</b><%-item.address.display_address%><br>
+											<b>latitude:</b><%- item.address.latitude %><br>
+											<b>longitude:</b><%- item.address.longitude %><br>
 										</td>
 										<td>
 											<b>price:</b><%- item.price_information.price%><br>
-												<b>price_qualifier: </b><%- item.price_information.price_qualifier%><br>
-													<b>deposit:</b><%- item.price_information.deposit%><br>
-														<b>administration_fee:</b><%-
-															item.price_information.administration_fee%><br>
+											<b>price_qualifier:</b><%- item.price_information.price_qualifier%><br>
+											<b>deposit:</b><%- item.price_information.deposit%><br>
+											<b>administration_fee:</b><%-item.price_information.administration_fee%><br>
 										</td>
 										<td>
 											<%- item.marketingStatus %>
@@ -415,7 +331,6 @@ const urlEncoded = new URLSearchParams(formdata).toString()
 											Oakton Estates
 										</td>
 
-<<<<<<< HEAD
 										<td>
 											<%- item.letType %>
 										</td>
@@ -424,14 +339,11 @@ const urlEncoded = new URLSearchParams(formdata).toString()
 										</td>
 										<td>
 											<b>room_name:</b><%- item.room_information.room_name%><br>
-												<b>room_description: </b><%-
-													item.room_information.room_description%><br>
-													<b>room_length:</b><%- item.room_information.room_length%><br>
-														<b>room_width:</b><%- item.room_information.room_width%><br>
-															<b>room_dimension_unit:</b><%-
-																item.room_information.room_dimension_unit%><br>
-																<b>room_dimension_text:</b><%-
-																	item.room_information.room_dimension_text%><br>
+											<b>room_description: </b><%-item.room_information.room_description%><br>
+											<b>room_length:</b><%- item.room_information.room_length%><br>
+											<b>room_width:</b><%- item.room_information.room_width%><br>
+											<b>room_dimension_unit:</b><%-item.room_information.room_dimension_unit%><br>
+											<b>room_dimension_text:</b><%-item.room_information.room_dimension_text%><br>
 										</td>
 										<td>
 											<%- item.summary %>
@@ -453,37 +365,6 @@ const urlEncoded = new URLSearchParams(formdata).toString()
 													</a>
 												</div>
 												<!-- <div class="button">
-=======
-                      </td>
-                      <td>
-                        <%- item.marketingStatus %>
-                      </td>
-                      <td>
-                        <%- item.owner %>
-                      </td>
-                      <td>
-                        Rachel Thorntone <br>
-                        Oakton Estates
-                      </td>
-
-                      <td>
-                        <%- item.letType %>
-                      </td>
-                      <td>
-                        <%- item.minimumeTenancy %> Months
-                      </td>
-                      <td>
-                        <div class="buttonBox flex flex-wrap">
-                          <div class="popupButton button">
-                            <a href="#popupBox" class="popup" data-id="<%- item._id %>">
-                              <svg clip-rule="evenodd" fill-rule="evenodd" stroke-linejoin="round" stroke-miterlimit="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="m11.25 6c.398 0 .75.352.75.75 0 .414-.336.75-.75.75-1.505 0-7.75 0-7.75 0v12h17v-8.749c0-.414.336-.75.75-.75s.75.336.75.75v9.249c0 .621-.522 1-1 1h-18c-.48 0-1-.379-1-1v-13c0-.481.38-1 1-1zm1.521 9.689 9.012-9.012c.133-.133.217-.329.217-.532 0-.179-.065-.363-.218-.515l-2.423-2.415c-.143-.143-.333-.215-.522-.215s-.378.072-.523.215l-9.027 8.996c-.442 1.371-1.158 3.586-1.264 3.952-.126.433.198.834.572.834.41 0 .696-.099 4.176-1.308zm-2.258-2.392 1.17 1.171c-.704.232-1.274.418-1.729.566zm.968-1.154 7.356-7.331 1.347 1.342-7.346 7.347z" fill-rule="nonzero"/></svg>
-                            </a>
-                            <a class="pushProperty" href="#popupBox" data-id="<%- item._id %>">
-                              Push
-                            </a>
-                          </div>
-                          <!-- <div class="button">
->>>>>>> 9e66cb9e423769ed43c506d50907db68c49dfaf8
                             <a href="#">
                               Remove
                             </a>
@@ -509,9 +390,9 @@ const urlEncoded = new URLSearchParams(formdata).toString()
 					</div>
 					<div class="popupItem">
 						<form class="propertyForm" enctype="multipart/form-data">
-							<!-- <fieldset class="fieldset-twocolumn"> -->
-								<!-- <label><b>price_information:</b></label> -->
-								<!-- <div class="form-field">
+							<fieldset class="fieldset-twocolumn">
+						
+								<div class="form-field">
 									<input type="text" name="price" placeholder="Price">
 								</div>
 								<div class="form-field">
@@ -522,9 +403,9 @@ const urlEncoded = new URLSearchParams(formdata).toString()
 								</div>
 								<div class="form-field">
 									<input type="text" name="administration_fee" placeholder="administration_fee">
-								</div> -->
-							<!-- </fieldset> -->
-							<!-- <fieldset class="fieldset-onecolumn">
+								</div>
+							 </fieldset> 
+							<fieldset class="fieldset-onecolumn">
 								<div class="form-field">
 									<input type="text" name="marketingStatus" placeholder="Marketing Status">
 								</div>
@@ -533,7 +414,7 @@ const urlEncoded = new URLSearchParams(formdata).toString()
 								<div class="form-field">
 									<input type="text" name="owner" placeholder="Owner / Landlord">
 								</div>
-							</fieldset> -->
+							</fieldset>
 							<fieldset class="fieldset-onecolumn">
 								<div class="form-field">
 									<input type="text" name="letType" placeholder="Let Type">
@@ -549,9 +430,9 @@ const urlEncoded = new URLSearchParams(formdata).toString()
 									<input type="text" name="_id" placeholder="Minimum Tenancy">
 								</div>
 							</fieldset>
-							 <!-- <fieldset class="fieldset-twocolumn"> -->
-							<!-- <label><b>address</b></label>  -->
-								<!-- <div class="form-field">
+							  <fieldset class="fieldset-twocolumn">
+					
+								<div class="form-field">
 									<input type="text" name="house_name_number" placeholder="house_name_number">
 								</div>
 								<div class="form-field">
@@ -571,10 +452,10 @@ const urlEncoded = new URLSearchParams(formdata).toString()
 								</div>
 								<div class="form-field">
 									<input type="text" name="longitude" placeholder="longitude">
-								</div> -->
-							<!-- </fieldset> -->
+								</div>
+							</fieldset>
 							<fieldset class="fieldset-twocolumn roomFields">
-								<!-- <label><b>room-details</b></label>  -->
+				
 								<div class="form-field">
 									<input type="text" name="room_name" placeholder="room_name">
 								</div>
@@ -625,14 +506,8 @@ const urlEncoded = new URLSearchParams(formdata).toString()
 					</div>
 				</div>
 			</div>
-<<<<<<< HEAD
 		</div>
 	</section>
 </body>
 
 </html>
-=======
-		</section>
-	</body>
-</html>
->>>>>>> 9e66cb9e423769ed43c506d50907db68c49dfaf8

@@ -7,10 +7,10 @@ const Image = require('../models/Image.model')
 const fs = require('fs')
 const axios = require('axios')
 var https = require('https')
+
 exports.create = async (req, res, next) => {
   try {
     const body = req.body
-<<<<<<< HEAD
     let imagevar = []
     let roomimagevar = []
     const room_information = []
@@ -19,8 +19,8 @@ exports.create = async (req, res, next) => {
     const img = req.files.roomimage
     const myimg = req.files.image
 
-   
-    if (myimg.length > 0 && myimg.length != undefined) {
+  if( myimg != undefined){
+    if (myimg.length > 0 ) {
       for (const i in myimg) {
         const teamObj = myimg[i]
         if(teamObj.fieldname == "image"){
@@ -35,7 +35,8 @@ exports.create = async (req, res, next) => {
         }
       }
     }
-
+  }
+  if(img != undefined){
     if (img.length > 0) {
       for (const i in img) {
         const teamObj = img[i]
@@ -49,6 +50,7 @@ exports.create = async (req, res, next) => {
         }
       }
     }
+  }
     const pricedata = {
       "price" : req.body.price,
       "price_qualifier" :req.body.price_qualifier , 
@@ -56,6 +58,7 @@ exports.create = async (req, res, next) => {
       "administration_fee" :req.body.administration_fee
     }
     const addressdata = {
+
       "house_name_number" : req.body.house_name_number,
 			"town" : req.body.town,
 			"postcode_1": req.body.postcode_1,
@@ -94,44 +97,6 @@ exports.create = async (req, res, next) => {
             // room_photo_urls:room_photo_urls
           });
         await propertySave.save()
-=======
-    // body.image = req.files.path
-    let image = []
-    const myimage = req.files
-
-    if (myimage.length > 0) {
-      for (const i in myimage) {
-        const teamObj = myimage[i]
-        const mydata = new Image({
-          fieldname: teamObj.fieldname,
-          originalname: teamObj.originalname,
-          encoding: teamObj.encoding,
-          mimetype: teamObj.mimetype,
-          destination: teamObj.destination,
-          filename: teamObj.filename,
-          path: teamObj.path,
-          size: teamObj.size,
-          token: req.body.token,
-          url: teamObj.filename,
-          userId: req.body.userId
-        })
-        image.push(mydata.url)
-      }
-    }
-    if (body) {
-      const propertySave = new Property({
-        name: req.body.name,
-        address: req.body.address,
-        price: req.body.price,
-        marketingStatus: req.body.marketingStatus,
-        owner: req.body.owner,
-        minimumeTenancy: req.body.minimumeTenancy,
-        letType: req.body.letType,
-        image: image,
-        userId: req.body.userId
-      })
-      await propertySave.save()
->>>>>>> 9e66cb9e423769ed43c506d50907db68c49dfaf8
 
       res.status(httpStatus.CREATED)
       res.send(propertySave.transform())
@@ -139,11 +104,7 @@ exports.create = async (req, res, next) => {
       // to the HubSpot API
       // res.redirect(`/`)
     } else {
-<<<<<<< HEAD
     
-=======
-      console.log('i am else')
->>>>>>> 9e66cb9e423769ed43c506d50907db68c49dfaf8
       res.status(httpStatus.PRECONDITION_FAILED)
       res.send('Failed')
     }
@@ -197,7 +158,7 @@ exports.pushToHive = async (req, res, next) => {
 }
 exports.updateProperty = async (req, res, next) => {
   try {
-
+     console.log("i am update")
     const {price, marketingStatus,owner, minimumeTenancy ,letType} = req.body
     const myimage = req.files
     let image = []
@@ -221,7 +182,7 @@ exports.updateProperty = async (req, res, next) => {
       }
     }
     const property = await Property.findOneAndUpdate({_id: req.body._id},
-      { $set: {price: price, marketingStatus: marketingStatus ,owner:owner, minimumeTenancy:minimumeTenancy ,letType:letType , image :image  } })
+      { $set: {price: price, marketingStatus: marketingStatus ,owner:owner, minimumeTenancy:minimumeTenancy ,letType:letType , image :image }})
     return res.json({ message: 'OK', data: property })
   } catch (error) {
     next(error)
