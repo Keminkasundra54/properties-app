@@ -13,7 +13,7 @@ $(".filter-listInr").on("click","li", function() {
 })
 
 
-$('.popupButton a.popup').on('click',function(e){
+$('.popupButton a').on('click',function(e){
 e.preventDefault();
 $('.popupSec').fadeIn();
 var id = $(this).attr('data-id');

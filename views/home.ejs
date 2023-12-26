@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html>
-
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -50,7 +49,6 @@
 		let myfile = []
 		let roomes = []
 
-
 		function onFileSelected(event) {
 			selectedFiles = event.target.files;
 			if (selectedFiles.length) {
@@ -81,6 +79,7 @@
 			"roomImage" : roomImages
 			}
 			$(event.target).parents('.roomFields').find('.form-field input').val('');
+			console.log($(event.target).parents('.roomFields').find('div:last-child').append('<div> '+ "room_name:" + myarray.room_name,"room_description:"+myarray.room_description ,"room_lengt:" + hmyarray.room_length ,"room_dimension_unit :"+ myarray.room_dimension_unit,"room_width:" +myarray.room_width,"room_dimension_text:" +myarray.room_dimension_text + "roomImage:" +myarray.roomImage +' </div>'))
 		    roomes.push(myarray)
 		}
 		$(document).on('submit', 'form.propertyForm ', function (e) {
@@ -94,7 +93,6 @@
 			}
 
 			const mydata = JSON.stringify(roomes)
- console.log(myfile.length)
 			for(let j=0 ; j < myfile.length;j++){
 				formdata.append('roomimage', myfile[j]);
 			}
@@ -308,20 +306,18 @@
 										</td>
 										<td>
 											<b>house_name_number:</b><%- item.address.house_name_number %><br>
-												<b>town:</b><%- item.address.town %><br>
-													<b>postcode_1:</b><%- item.address.postcode_1 %><br>
-														<b>postcode_2:</b><%- item.address.postcode_2 %><br>
-															<b>display_address:</b><%-
-																item.address.display_address%><br>
-																<b>latitude:</b><%- item.address.latitude %><br>
-																	<b>longitude:</b><%- item.address.longitude %><br>
+											<b>town:</b><%- item.address.town %><br>
+											<b>postcode_1:</b><%- item.address.postcode_1 %><br>
+											<b>postcode_2:</b><%- item.address.postcode_2 %><br>
+											<b>display_address:</b><%-item.address.display_address%><br>
+											<b>latitude:</b><%- item.address.latitude %><br>
+											<b>longitude:</b><%- item.address.longitude %><br>
 										</td>
 										<td>
-											<b>price:</b><%- item.price_information?.price%><br>
-												<b>price_qualifier: </b><%- item.price_information.price_qualifier%><br>
-													<b>deposit:</b><%- item.price_information.deposit%><br>
-														<b>administration_fee:</b><%-
-															item.price_information.administration_fee%><br>
+											<b>price:</b><%- item.price_information.price%><br>
+											<b>price_qualifier:</b><%- item.price_information.price_qualifier%><br>
+											<b>deposit:</b><%- item.price_information.deposit%><br>
+											<b>administration_fee:</b><%-item.price_information.administration_fee%><br>
 										</td>
 										<td>
 											<%- item.marketingStatus %>
@@ -342,14 +338,11 @@
 										</td>
 										<td>
 											<b>room_name:</b><%- item.room_information.room_name%><br>
-												<b>room_description: </b><%-
-													item.room_information.room_description%><br>
-													<b>room_length:</b><%- item.room_information.room_length%><br>
-														<b>room_width:</b><%- item.room_information.room_width%><br>
-															<b>room_dimension_unit:</b><%-
-																item.room_information.room_dimension_unit%><br>
-																<b>room_dimension_text:</b><%-
-																	item.room_information.room_dimension_text%><br>
+											<b>room_description: </b><%-item.room_information.room_description%><br>
+											<b>room_length:</b><%- item.room_information.room_length%><br>
+											<b>room_width:</b><%- item.room_information.room_width%><br>
+											<b>room_dimension_unit:</b><%-item.room_information.room_dimension_unit%><br>
+											<b>room_dimension_text:</b><%-item.room_information.room_dimension_text%><br>
 										</td>
 										<td>
 											<%- item.summary %>
@@ -396,9 +389,9 @@
 					</div>
 					<div class="popupItem">
 						<form class="propertyForm" enctype="multipart/form-data">
-							<!-- <fieldset class="fieldset-twocolumn"> -->
-								<!-- <label><b>price_information:</b></label> -->
-								<!-- <div class="form-field">
+							<fieldset class="fieldset-twocolumn">
+
+								<div class="form-field">
 									<input type="text" name="price" placeholder="Price">
 								</div>
 								<div class="form-field">
@@ -409,9 +402,9 @@
 								</div>
 								<div class="form-field">
 									<input type="text" name="administration_fee" placeholder="administration_fee">
-								</div> -->
-							<!-- </fieldset> -->
-							<!-- <fieldset class="fieldset-onecolumn">
+								</div>
+							 </fieldset>
+							<fieldset class="fieldset-onecolumn">
 								<div class="form-field">
 									<input type="text" name="marketingStatus" placeholder="Marketing Status">
 								</div>
@@ -420,7 +413,7 @@
 								<div class="form-field">
 									<input type="text" name="owner" placeholder="Owner / Landlord">
 								</div>
-							</fieldset> -->
+							</fieldset>
 							<fieldset class="fieldset-onecolumn">
 								<div class="form-field">
 									<input type="text" name="letType" placeholder="Let Type">
@@ -436,9 +429,9 @@
 									<input type="text" name="_id" placeholder="Minimum Tenancy">
 								</div>
 							</fieldset>
-							 <!-- <fieldset class="fieldset-twocolumn"> -->
-							<!-- <label><b>address</b></label>  -->
-								<!-- <div class="form-field">
+							  <fieldset class="fieldset-twocolumn">
+
+								<div class="form-field">
 									<input type="text" name="house_name_number" placeholder="house_name_number">
 								</div>
 								<div class="form-field">
@@ -458,10 +451,10 @@
 								</div>
 								<div class="form-field">
 									<input type="text" name="longitude" placeholder="longitude">
-								</div> -->
-							<!-- </fieldset> -->
+								</div>
+							</fieldset>
 							<fieldset class="fieldset-twocolumn roomFields">
-								<!-- <label><b>room-details</b></label>  -->
+
 								<div class="form-field">
 									<input type="text" name="room_name" placeholder="room_name">
 								</div>

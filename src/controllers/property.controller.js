@@ -7,6 +7,7 @@ const Image = require('../models/Image.model')
 const fs = require('fs')
 const axios = require('axios')
 var https = require('https')
+
 exports.create = async (req, res, next) => {
   try {
     const body = req.body
@@ -18,8 +19,8 @@ exports.create = async (req, res, next) => {
     const img = req.files.roomimage
     const myimg = req.files.image
 
-
-    if (myimg.length > 0 && myimg.length != undefined) {
+  if( myimg != undefined){
+    if (myimg.length > 0 ) {
       for (const i in myimg) {
         const teamObj = myimg[i]
         if(teamObj.fieldname == "image"){
@@ -34,7 +35,8 @@ exports.create = async (req, res, next) => {
         }
       }
     }
-
+  }
+  if(img != undefined){
     if (img.length > 0) {
       for (const i in img) {
         const teamObj = img[i]
@@ -48,6 +50,7 @@ exports.create = async (req, res, next) => {
         }
       }
     }
+  }
     const pricedata = {
       "price" : req.body.price,
       "price_qualifier" :req.body.price_qualifier ,
@@ -55,6 +58,7 @@ exports.create = async (req, res, next) => {
       "administration_fee" :req.body.administration_fee
     }
     const addressdata = {
+
       "house_name_number" : req.body.house_name_number,
 			"town" : req.body.town,
 			"postcode_1": req.body.postcode_1,
@@ -100,7 +104,6 @@ exports.create = async (req, res, next) => {
       // to the HubSpot API
       // res.redirect(`/`)
     } else {
-
       res.status(httpStatus.PRECONDITION_FAILED)
       res.send('Failed')
     }
@@ -154,7 +157,7 @@ exports.pushToHive = async (req, res, next) => {
 }
 exports.updateProperty = async (req, res, next) => {
   try {
-
+     console.log("i am update")
     const {price, marketingStatus,owner, minimumeTenancy ,letType} = req.body
     const myimage = req.files
     let image = []
@@ -178,7 +181,7 @@ exports.updateProperty = async (req, res, next) => {
       }
     }
     const property = await Property.findOneAndUpdate({_id: req.body._id},
-      { $set: {price: price, marketingStatus: marketingStatus ,owner:owner, minimumeTenancy:minimumeTenancy ,letType:letType , image :image  } })
+      { $set: {price: price, marketingStatus: marketingStatus ,owner:owner, minimumeTenancy:minimumeTenancy ,letType:letType , image :image }})
     return res.json({ message: 'OK', data: property })
   } catch (error) {
     next(error)
