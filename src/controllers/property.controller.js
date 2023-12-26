@@ -208,7 +208,7 @@ exports.deleteProperty = async (req, res, next) => {
 function getPropertyPayload (property) {
   let rooms = property.room_information.map((room) => {
     room.room_photo_urls = room.roomimage.map(url => {
-      return 'https://apps.hubsresolution.com/roomimage/' + url
+      return 'https://propertyapp.hubresolution.com/roomimage/' + url
     })
     room.room_dimension_unit = 5
     return room
@@ -216,7 +216,7 @@ function getPropertyPayload (property) {
   let medias = property.image.map(media => {
     return {
       'media_type': 2,
-      'media_url': 'https://apps.hubsresolution.com/profile/' + media,
+      'media_url': 'https://propertyapp.hubresolution.com/profile/' + media,
       'caption': 'Floor plan',
       'sort_order': 1,
       'media_update_date': '01-03-2017 10:00:00'
