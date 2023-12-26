@@ -371,7 +371,12 @@
 											<%- item.minimumeTenancy %> Months
 										</td>
 										<td>
-											<%- item.room_information.length%>
+                      <% if(item.room_information) { %>
+                        <%- item.room_information.length%>
+                        <% } else{ %>
+                          0
+                       <% } %>
+
 										</td>
 										<td>
 											<%- item.summary %>
