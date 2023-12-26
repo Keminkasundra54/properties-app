@@ -90,7 +90,7 @@ function createPropertyList(data) {
                         </div>
                         <div class="prop-location">
                             <ul>
-                                <li><strong>Location:</strong> ${property.address.house_name_number + ', ' + property.address.town + ', ' + property.address.postcode_1}</li>
+                                <li><strong>Location:</strong> ${property.address ? property.address.house_name_number + ', ' + property.address.town + ', ' + property.address.postcode_1 : ''}</li>
                                 <li><strong>user ID</strong> ${property.userId}</li>
                                 <li><strong>Owned by:</strong> ${property.owner}</li>
                                 <li><strong>Marketing Status: </strong>${property.marketingStatus}</li>
@@ -104,8 +104,8 @@ function createPropertyList(data) {
                     </div>
                     <div class="prop-descri">
                         <div class="prop-price">
-                            <h3>${property.price_information.price}</h3>
-                            <span>${property.price_information.administration_fee}</span>
+                            <h3>${property.price_information ? property.price_information.price : ''}</h3>
+                            <span>${property.price_information ? property.price_information.administration_fee : ''}</span>
                         </div>
                         <div class="prop-other">
                             <ul>
