@@ -331,19 +331,27 @@
 												alt="Table-img" width="50" height="50" loading="lazy"> -->
 										</td>
 										<td>
-											<b>house_name_number:</b><%- item.address.house_name_number %><br>
-											<b>town:</b><%- item.address.town %><br>
-											<b>postcode_1:</b><%- item.address.postcode_1 %><br>
-											<b>postcode_2:</b><%- item.address.postcode_2 %><br>
-											<b>display_address:</b><%-item.address.display_address%><br>
-											<b>latitude:</b><%- item.address.latitude %><br>
-											<b>longitude:</b><%- item.address.longitude %><br>
+                      <% if(item.address) { %>
+                        <b>house_name_number:</b><%- item.address.house_name_number %><br>
+                        <b>town:</b><%- item.address.town %><br>
+                        <b>postcode_1:</b><%- item.address.postcode_1 %><br>
+                        <b>postcode_2:</b><%- item.address.postcode_2 %><br>
+                        <b>display_address:</b><%-item.address.display_address%><br>
+                        <b>latitude:</b><%- item.address.latitude %><br>
+                        <b>longitude:</b><%- item.address.longitude %><br>
+                        <% } else{ %>
+                       <% } %>
+
 										</td>
 										<td>
-											<b>price:</b><%- item.price_information.price%><br>
-											<b>price_qualifier:</b><%- item.price_information.price_qualifier%><br>
-											<b>deposit:</b><%- item.price_information.deposit%><br>
-											<b>administration_fee:</b><%-item.price_information.administration_fee%><br>
+                      <% if(item.price_information) { %>
+                        <b>price:</b><%- item.price_information.price%><br>
+                        <b>price_qualifier:</b><%- item.price_information.price_qualifier%><br>
+                        <b>deposit:</b><%- item.price_information.deposit%><br>
+                        <b>administration_fee:</b><%-item.price_information.administration_fee%><br>
+                        <% } else{ %>
+                       <% } %>
+
 										</td>
 										<td>
 											<%- item.marketingStatus %>
@@ -391,7 +399,6 @@
                             </a>
                           </div>
                           <% } else{ %>
-                            <h1>bar</h1>
                          <% } %>
 											</div>
 										</td>
