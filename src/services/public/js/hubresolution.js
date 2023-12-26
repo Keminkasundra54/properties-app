@@ -3,7 +3,7 @@ const hubresolution = {
     property: {
         listing: function () {
 
-            fetch('http://localhost:3000/api/property/getAll')
+            fetch('https://propertyapp.hubresolution.com/api/property/getAll')
                 .then(response => response.json())
                 .then(data => {
                     // hubresolution.property.listing(data);
