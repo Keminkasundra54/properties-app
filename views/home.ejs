@@ -54,7 +54,7 @@
 			if (selectedFiles.length) {
 				for (let i = 0; i < selectedFiles.length; i++) {
 					formdata.append('image', selectedFiles[i]);
-                    $(".fieldset-fourcolumn").append('<div class="form-field">'+selectedFiles[i].name +'"</div><input type="radio" id="jpg" name="type" value="jpg"><label for="jpg">jpg</label><br><input type="radio" id="png" name="type" value="png"><label for="css">png</label><br><input type="radio" id="jpeg" name="type" value="jpeg"><label for="jpeg">jpeg</label><br></fieldset>')
+                    $(".fieldset-fourcolumn").append('<div class="right-cols"><input type="radio" id="jpg" name="type" value="Floor plan"><label for="jpg">Floor plan</label><br><input type="radio" id="png" name="type" value="Brochure"><label for="css">Brochure</label><br><input type="radio" id="jpeg" name="type" value="EPC"><label for="jpeg">EPC</label><br></div><div class="form-field left-colr">'+selectedFiles[i].name +'"</div></fieldset>')
 				}
 			}
 		}
@@ -79,9 +79,34 @@
 			"roomImage" : roomImages
 			}
 			$(event.target).parents('.roomFields').find('.form-field input').val('');
-			console.log($(event.target).parents('.roomFields').find('div:last-child').append('<div> '+ "room_name:" + myarray.room_name,"room_description:"+myarray.room_description ,"room_lengt:" + hmyarray.room_length ,"room_dimension_unit :"+ myarray.room_dimension_unit,"room_width:" +myarray.room_width,"room_dimension_text:" +myarray.room_dimension_text + "roomImage:" +myarray.roomImage +' </div>'))
-		    roomes.push(myarray)
+      var clonner = $('.newform-two-clr').eq(0).clone();
+      clonner.find('.form-left-rq').eq(0).find('.data').text(myarray.room_name);
+      clonner.find('.form-left-rq').eq(1).find('.data').text(myarray.room_description);
+      clonner.find('.form-left-rq').eq(2).find('.data').text(myarray.room_length);
+      clonner.find('.form-left-rq').eq(3).find('.data').text(myarray.room_dimension_unit);
+      clonner.find('.form-left-rq').eq(4).find('.data').text(myarray.room_width);
+      clonner.find('.form-left-rq').eq(5).find('.data').text(myarray.room_dimension_text);
+      clonner.find('.form-left-rq').eq(6).find('.data').text(myarray.roomImage.length);
+      $('.newform-two-clr:last').after(clonner);
+      roomes.push(myarray)
 		}
+    $(document).on('click', '.pushToHive', function() {
+      let _id = $(this).attr('data-id')
+      $.ajax({
+				url: "/api/property/pushToHive",
+				method: 'post',
+				data: JSON.stringify({_id: _id}),
+				contentType: 'application/json',
+				success: function (result) {
+					// console.log(result)
+					// location.reload();
+				},
+				error: function (result) {
+					console.log("error", result)
+				}
+			});
+
+    });
 		$(document).on('submit', 'form.propertyForm ', function (e) {
 			e.preventDefault();
 			var data = getFormData($('form.propertyForm'));
@@ -98,6 +123,7 @@
 			}
 
 			formdata.append('price', data.price);
+      formdata.append('name', data.name);
 			formdata.append('price_qualifier', data.price_qualifier);
 			formdata.append('deposit', data.deposit);
 			formdata.append('administration_fee', data.administration_fee);
@@ -279,7 +305,7 @@
 										Minimum Tenancy
 									</th>
 									<th>
-										room information
+										rooms
 									</th>
 									<th>
 										summary
@@ -337,12 +363,7 @@
 											<%- item.minimumeTenancy %> Months
 										</td>
 										<td>
-											<b>room_name:</b><%- item.room_information.room_name%><br>
-											<b>room_description: </b><%-item.room_information.room_description%><br>
-											<b>room_length:</b><%- item.room_information.room_length%><br>
-											<b>room_width:</b><%- item.room_information.room_width%><br>
-											<b>room_dimension_unit:</b><%-item.room_information.room_dimension_unit%><br>
-											<b>room_dimension_text:</b><%-item.room_information.room_dimension_text%><br>
+											<%- item.room_information.length%>
 										</td>
 										<td>
 											<%- item.summary %>
@@ -363,11 +384,15 @@
 														</svg>
 													</a>
 												</div>
-												<!-- <div class="button">
-                            <a href="#">
-                              Remove
+                        <% if(!item.pushedToHive) { %>
+                          <div class="button">
+                            <a href="#" class="pushToHive" data-id="<%- item._id %>">
+                              Push to Right Move
                             </a>
-                          </div> -->
+                          </div>
+                          <% } else{ %>
+                            <h1>bar</h1>
+                         <% } %>
 											</div>
 										</td>
 									</tr>
@@ -390,7 +415,9 @@
 					<div class="popupItem">
 						<form class="propertyForm" enctype="multipart/form-data">
 							<fieldset class="fieldset-twocolumn">
-
+                <div class="form-field">
+									<input type="text" name="name" placeholder="Title">
+								</div>
 								<div class="form-field">
 									<input type="text" name="price" placeholder="Price">
 								</div>
@@ -480,6 +507,51 @@
 									<button class="addroom" type="button" onclick="myfunction(event)">add room</button>
 								</div>
 							</fieldset>
+
+              <div class="newform">
+                <div class="new-form-inr">
+
+                  <div class="newform-two-clr">
+                    <div class="form-left-rq">
+                      <div class="data">
+
+                      </div>
+                    </div>
+                    <div class="form-left-rq">
+                      <div class="data">
+
+                      </div>
+                    </div>
+                    <div class="form-left-rq">
+                      <div class="data">
+
+                      </div>
+                    </div>
+                    <div class="form-left-rq">
+                      <div class="data">
+
+                      </div>
+                    </div>
+                    <div class="form-left-rq">
+                      <div class="data">
+
+                      </div>
+                    </div>
+                    <div class="form-left-rq">
+                      <div class="data">
+
+                      </div>
+                    </div>
+                    <div class="form-left-rq">
+                      <div class="data">
+
+                      </div>
+                    </div>
+                  </div>
+
+
+                </div>
+              </div>
 
 							<fieldset class="fieldset-onecolumn">
 								<div class="form-field">

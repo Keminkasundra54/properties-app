@@ -64,7 +64,8 @@ label.filter-search.open:before {transform: rotate(180deg);}
 
 .popupSec {display:none;position: fixed;left: 0;top: 0;width: 100%;height: 100vh;z-index: 999;padding: 40px;background-color: rgb(0 0 0 / 50%);}
 .popupsecinr {width: 100%;display: flex;flex-wrap: nowrap;justify-content: center;align-items: center;height: 100%;}
-.popupBoxs {position: relative;padding: 45px 30px;max-width: 500px;background-color: var(--white);border-radius: 30px;width: 100%;}
+.popupBoxs {position: relative;padding: 45px 30px;max-width: 500px;background-color: var(--white);border-radius: 30px;width: 100%;
+  max-height: calc(100vh - 150px); overflow: auto;max-width: 940px !important;width: 100%;}
 .popupItem {font-size: 18px;text-align: center;text-transform: capitalize;font-weight: 700;color: var(--blue);}
 .closeBTn {width: 25px;height: 25px;display: flex;flex-wrap: nowrap;justify-content: center;align-items: center;position: absolute;right: 17px;top: 17px;cursor: pointer;background-color: var(--blue);border-radius: 4px;}
 .closeBTn svg path {fill: var(--white);}
@@ -109,6 +110,115 @@ body {
 }
 
 .buttonBox .button a {padding: 0;margin: 0;border: none;background-color: transparent;width: 20px;height: auto;  margin: 0 auto;}
+
+/* 26/12/2023 CSS */
+
+.popupSec .fieldset-twocolumn .form-field,.popupSec .fieldset-onecolumn .form-field,.popupSec .fieldset-threecolumn .form-field,
+.popupSec  .fieldset-fourcolumn .form-field {padding: 10px;}
+
+.popupSec fieldset.fieldset-twocolumn {padding: 0;}
+.popupSec fieldset.fieldset-twocolumn { border: none;}
+.popupSec button.addroom {    margin: 10px;
+  padding: 8px 20px;
+  width: 100%;
+  background-color: #0096ff;
+  border: 2px solid #0096ff;
+  display: inline-block;
+  vertical-align: middle;
+  text-align: center;
+  color: #fff;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.5;
+  cursor: pointer;
+  transition: all ease 0.4s;
+}
+
+.popupSec button.addroom:hover {
+    background-color: transparent;
+    color: #0096ff;
+}
+
+.popupSec .popupItem fieldset + fieldset {
+    margin-top: 0;
+}
+
+.right-cols , .left-colr {
+  display: inline-block;
+  vertical-align: middle;
+  width: 50%;
+  margin-right: -4px;
+}
+
+.right-cols {
+  text-align: left;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.right-cols > * {
+  padding: 5px;
+}
+
+.right-cols input[type="radio"] {
+  margin: 0px 0 0 10px;
+}
+
+.right-cols , .form-field.left-colr {
+  padding: 10px;
+}
+
+.popupSec fieldset.fieldset-fourcolumn {
+  display: flex;
+  flex-wrap: wrap;
+  border-radius: 5px;
+  border: 1px solid #323232;
+  margin: 10px !important;
+  align-items: center;
+}
+
+.popupSec .left-colr {
+  text-align: right;
+}
+.right-cols label , .form-field.left-colr  {
+  font-size: 16px;
+}
+
+
+/* Add field css */
+
+.newform-two-clr {
+  display: flex;
+  flex-wrap: nowrap;
+  border: 1px solid #333333;
+  border-radius: 5px;
+  margin: 20px 10px;
+  justify-content: space-between;
+}
+
+.form-left-rq , .form-right-rq {
+  text-align: left;
+}
+
+
+.newform-two-clr:first-child {
+  margin-top: 10px;
+}
+
+.form-left-rq {
+  padding: 10px;
+  width: 14.29%;
+}
+
+.form-left-rq .data {
+  font-size: 16px;
+}
+.newform-two-clr:first-child {
+  display: none;
+}
+
 @media(max-width:1670px){
 .table-rowINr table th:nth-child(8), .table-rowINr table td:nth-child(8), .table-rowINr table th:nth-child(9), .table-rowINr table td:nth-child(9) {width: 4%;}
 .table-rowINr table td, .table-rowINr table th {width: 13%;}
