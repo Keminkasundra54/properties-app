@@ -12,7 +12,6 @@ $(".filter-listInr").on("click","li", function() {
     $(this).closest(".filter-listInr").find(".filter-search").text(valId)
 })
 
-
 $('.popupButton a').on('click',function(e){
 e.preventDefault();
 $('.popupSec').fadeIn();

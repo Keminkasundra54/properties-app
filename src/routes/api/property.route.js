@@ -22,8 +22,6 @@ const storage = multer.diskStorage({
   })
   const upload = multer({storage:storage})
 
-
-
 router.post('/create', upload.fields([{name: 'image', maxCount: 5},{name: 'roomimage', maxCount: 5}]), propertyController.create)
 router.post('/get', propertyController.getProperty)
 router.post('/pushToHive', propertyController.pushToHive)

@@ -158,31 +158,58 @@ exports.pushToHive = async (req, res, next) => {
 }
 exports.updateProperty = async (req, res, next) => {
   try {
-     console.log("i am update")
-    const {price, marketingStatus,owner, minimumeTenancy ,letType} = req.body
-    const myimage = req.files
-    let image = []
-    if (myimage.length > 0) {
-      for (const i in myimage) {
-        const teamObj = myimage[i]
-        const mydata = new Image({
-          fieldname: teamObj.fieldname,
-          originalname: teamObj.originalname,
-          encoding: teamObj.encoding,
-          mimetype: teamObj.mimetype,
-          destination: teamObj.destination,
-          filename: teamObj.filename,
-          path: teamObj.path,
-          size: teamObj.size,
-          token: req.body.token,
-          url:  teamObj.filename,
-          userId: req.body.userId
-        });
-        image.push(mydata.url)
-      }
-    }
-    const property = await Property.findOneAndUpdate({_id: req.body._id},
-      { $set: {price: price, marketingStatus: marketingStatus ,owner:owner, minimumeTenancy:minimumeTenancy ,letType:letType , image :image }})
+
+    const {price,price_qualifier, deposit ,administration_fee ,postcode_1,postcode_2 ,display_address, latitude ,longitude, marketingStatus,owner ,minimumeTenancy, letType ,description,summary ,house_name_number ,town  } = req.body
+    // const myimage = req.files
+    // let image = []
+    // if (myimage.length > 0) {
+    //   for (const i in myimage) {
+    //     const teamObj = myimage[i]
+    //     const mydata = new Image({
+    //       fieldname: teamObj.fieldname,
+    //       originalname: teamObj.originalname,
+    //       encoding: teamObj.encoding,
+    //       mimetype: teamObj.mimetype,
+    //       destination: teamObj.destination,
+    //       filename: teamObj.filename,
+    //       path: teamObj.path,
+    //       size: teamObj.size,
+    //       token: req.body.token,
+    //       url:  teamObj.filename,
+    //       userId: req.body.userId
+    //     });
+    //     image.push(mydata.url)
+    //   }
+    // }
+    const property = await Property.findOneAndUpdate({_id: req.body._id},{ $set: {
+      'price_information.price': price,
+      'price_information.price_qualifier':price_qualifier,
+      "price_information.deposit": deposit,
+      "price_information.administration_fee":administration_fee,
+      "marketingStatus": marketingStatus,
+      "owner": owner,
+      "minimumeTenancy": minimumeTenancy,
+      "letType": letType,
+      "description": description,
+      "summary": summary,
+      "address.house_name_number": house_name_number,
+      "address.town": town,
+      "address.postcode_1": postcode_1,
+      "address.postcode_2": postcode_2,
+      "address.display_address": display_address,
+      "address.latitude": latitude,
+      "address.longitude": longitude,
+
+
+      // "room_information.room_name": room_name,
+      // "room_information.room_description": room_description,
+      // "room_information.room_length": room_length,
+      // "room_information.room_dimension_unit": room_dimension_unit,
+      // "room_information.room_dimension_text": room_dimension_text,
+      // "room_information.roomimage": roomImage
+      
+      
+      }})
     return res.json({ message: 'OK', data: property })
   } catch (error) {
     next(error)
@@ -191,6 +218,7 @@ exports.updateProperty = async (req, res, next) => {
 exports.getAllProperty = async (req, res, next) => {
   try {
     const property = await Property.find()
+    
     return res.json({ message: 'OK', data: property })
   } catch (error) {
     next(error)
@@ -198,13 +226,14 @@ exports.getAllProperty = async (req, res, next) => {
 }
 exports.deleteProperty = async (req, res, next) => {
   try {
-    await Property.removeProperty(req.body._id)
+    const id = req.body._id
+    console.log(id)
+    await Property.findOneAndDelete({_id:id})
     return res.json({ message: 'OK', data: {message: 'Success'} })
   } catch (error) {
     next(error)
   }
 }
-
 function getPropertyPayload (property) {
   return {
     'network': {
@@ -353,3 +382,32 @@ function getPropertyPayload (property) {
     }
   }
 }
+
+// console.log(req.body._id)
+//     const property = await Property.findOne({ _id: req.body._id })
+
+    // const propertiedata = {
+    //   "_id": property._id,
+    //   "price": property.price_information.price,
+    //   "price_qualifier": property.price_information.price_qualifier,
+    //   "deposit": property.price_information.deposit,
+    //   "administration_fee": property.price_information.administration_fee,
+    //   "marketingStatus": property.marketingStatus,
+    //   "owner": property.owner,
+    //   "minimumeTenancy": property.minimumeTenancy,
+    //   "letType": property.letType,
+    //   "description": property.description,
+    //   "summary": property.summary,
+    //   "house_name_number": property.address.house_name_number,
+    //   "town": property.address.town,
+    //   "postcode_1": property.address.postcode_1,
+    //   "postcode_2": property.address.postcode_2,
+    //   "display_address": property.address.display_address,
+    //   "latitude": property.address.latitude,
+    //   "longitude": property.address.longitude,
+    //   "room_name": property.room_information.room_name,
+    //   "room_description": property.room_information.room_description,
+    //   "room_length": property.room_information.room_length,
+    //   "room_dimension_unit": property.room_information.room_dimension_unit,
+    //   "room_dimension_text": property.room_information.room_dimension_text,
+    //   "roomimage": property.room_information.roomImage
