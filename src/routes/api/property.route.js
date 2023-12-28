@@ -5,22 +5,22 @@ const router = express.Router()
 const multer = require('multer')
 const propertyController = require('../../controllers/property.controller')
 
-
 const storage = multer.diskStorage({
-      destination: function(req ,file, cb){
-        if (file.fieldname === "roomimage") { 
-          cb(null, 'roomimage/');
-        }
-        else
-          {
-        cb(null, 'images/')
-          }
-      },
-      filename :function(req , file,cb){
-        cb(null , Date.now()+'_'+file.originalname)
+    destination: function(req ,file, cb){
+      if (file.fieldname === "roomimage") { // if uploading resume
+        cb(null, 'roomimage/');
       }
-  })
-  const upload = multer({storage:storage})
+      else
+        {
+      cb(null, 'images/')
+        }
+    },
+    filename :function(req , file,cb){
+      cb(null , Date.now()+'_'+file.originalname)
+    }
+})
+const upload = multer({storage: storage})
+
 
 router.post('/create', upload.fields([{name: 'image', maxCount: 5},{name: 'roomimage', maxCount: 5}]), propertyController.create)
 router.post('/get', propertyController.getProperty)

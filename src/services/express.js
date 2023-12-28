@@ -26,7 +26,8 @@ app.use(cors())
 app.use(helmet())
 const path = require('path')
 
-app.use('/profile',express.static('images'))
+app.use('/profile', express.static('images'))
+app.use('/roomimage', express.static('roomimage'))
 console.log(path.join(__dirname, 'public'));
 // eslint-disable-next-line no-path-concat
 

@@ -2,7 +2,7 @@
 const httpStatus = require('http-status')
 const mongoose = require('mongoose')
 const APIError = require('../utils/APIError')
-const boolean = require('joi/lib/types/boolean')
+const object = require('joi/lib/types/object')
 const Schema = mongoose.Schema
 
 const propertySchema = new Schema({

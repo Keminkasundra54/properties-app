@@ -1,0 +1,174 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+
+
+* {
+box-sizing: border-box;
+-webkit-box-sizing: border-box;
+-moz-box-sizing: border-box;
+}
+
+body {
+margin: 0;
+padding: 0;
+font-size: 16px;
+font-weight: 400;
+color: #413d4b;
+line-height: 1.5;
+font-family: "poppins";
+}
+
+/*typography css */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+margin: 0;line-height: 1.2;
+}
+
+h1,
+.h1 {
+font-size: 40px;
+font-weight: 700;
+}
+
+h2,
+.h2 {
+font-size: 34px;
+font-weight: 700;
+}
+
+h3,
+.h3 {
+font-size: 28px;
+font-weight: 700;
+}
+
+h4,
+.h4 {
+font-size: 24px;
+font-weight: 700;
+
+}
+
+h5,
+.h5 {
+font-size: 20PX;
+font-weight: 600;
+}
+
+h6,
+.h6 {
+font-size: 16px;
+font-weight: 400;
+}
+
+.wrapper {
+max-width: 1300px;
+margin: 0 auto;
+}
+
+.listing-section {
+padding: 100px;
+}
+
+.mainGroup {
+display: flex;
+flex-wrap: wrap;
+padding-top: 50px;
+margin: 0 -20px;
+}
+
+.propBox {
+width: 33.33%;
+padding: 10px 20px;
+}
+
+.propInr {
+padding: 20px 30px;
+background: #80808017;
+border-radius: 8px;
+}
+
+.prop-two-col .ul {
+padding: 0;
+margin:  0;
+}
+.prop-two-col .ul li {
+list-style: none;
+
+}
+.propTwo-header{
+display: flex;
+border-bottom: 1px solid grey;
+padding-bottom: 10px;
+}
+.propTwo-left-header{
+width:40%
+}
+.propTwo-right-header{
+width:60%
+}
+.prop-two-col {
+display: flex;
+width: 100%;
+}
+.prop-two-col {
+padding-top: 20px;
+}
+.prop-two-col + .prop-two-col {
+padding-top: 10px;
+}
+.prop-left-col {
+width: 40%;
+
+}
+.prop-right-col {
+width: 60%;
+
+}
+
+
+
+/* main css */
+
+.content-wrapper {max-width: 1260px;margin: 0 auto;padding: 0 15px;}
+.prop-rowin {display: flex;flex-wrap: wrap;background-color: #f4f4f4;padding: 20px;border-radius: 5px;border: 1px solid #eee;}
+.pro-left {width: 25%;}
+.prop-rht {width: 75%;padding-left: 30px;}
+.prop-main {height: 170px;background-repeat: no-repeat;background-position: center center;background-size: cover;border-radius: 5px;}
+.prop-imaglist {display: flex;flex-wrap: wrap;margin:0 -5px;padding-top: 5px;}
+.prop-imgbox {width: 33.3333%;padding: 5px;}
+.prop-img {width: auto;height: 70px;background-repeat: no-repeat;background-position: center center;background-size: cover;border-radius: 5px;}
+.prop-rhtin {display: flex;flex-wrap: wrap;height: 100%;}
+.prop-details {width: 72%;padding-right: 20px;}
+.prop-descri {width: 28%;text-align: right;display: flex;flex-direction: column;justify-content: space-between;padding-left: 15px;border-left: 1px solid #c9c9c9;}
+.prop-location ul {list-style: none;padding: 0;margin: 0;}
+.prop-location {padding-top: 20px;}
+.prop-location ul li+li {margin-top: 5px;}
+.prop-price span {font-size: 13px;font-weight: 600;}
+.prop-other ul {list-style: none;padding: 0;margin: 0;}
+.prop-other {padding-top: 15px;}
+.prop-link {padding-top: 25px;}
+.prop-link a {text-decoration: none;text-transform: uppercase;font-weight: 700;    display: inline-block;    color: #0718fd;    transition: all ease .3s;}
+.prop-link a:hover {color: #413d4b;}
+.prop-text p {margin: 0;}
+.prop-text *+p {padding-top: 6px;}
+.prop-text {padding-top: 20px;}
+.prop-sec {padding: 80px 0;}
+.prop-row+ .prop-row {padding-top: 30px;}
+
+@media(max-width:991px){
+
+.pro-left {width: 100%;}
+.prop-rht {padding: 0;width: 100%;padding-top: 30px;}
+.prop-main {padding-bottom: 46.6%;}
+.prop-img {height: auto;padding-bottom: 56.6%;}
+}
+
+@media(max-width:767px){
+
+.prop-details {width: 100%;padding: 0;}
+.prop-descri {width: 100%;padding: 0;border: none;text-align: left;padding-top: 25px;}
+}

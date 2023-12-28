@@ -14,7 +14,7 @@ exports.create = async (req, res, next) => {
     let imagevar = []
     let roomimagevar = []
     const room_information = []
-  
+
     const roomjsondata = JSON.parse(req.body.room_information)
     const img = req.files.roomimage
     const myimg = req.files.image
@@ -44,7 +44,7 @@ exports.create = async (req, res, next) => {
           const roomdata = new Image({
             fieldname: teamObj.fieldname,
             filename: teamObj.filename ,
-         
+
           });
           roomimagevar.push(roomdata.filename)
         }
@@ -53,7 +53,7 @@ exports.create = async (req, res, next) => {
   }
     const pricedata = {
       "price" : req.body.price,
-      "price_qualifier" :req.body.price_qualifier , 
+      "price_qualifier" :req.body.price_qualifier ,
       "deposit" : req.body.deposit,
       "administration_fee" :req.body.administration_fee
     }
@@ -67,7 +67,7 @@ exports.create = async (req, res, next) => {
 			"latitude" : req.body.latitude,
 			"longitude" : req.body.longitude,
     }
-  
+
        for(let i=0; i< roomjsondata.length ; i++){
            const obj = {
             "room_name": roomjsondata[i].room_name,
@@ -104,7 +104,6 @@ exports.create = async (req, res, next) => {
       // to the HubSpot API
       // res.redirect(`/`)
     } else {
-    
       res.status(httpStatus.PRECONDITION_FAILED)
       res.send('Failed')
     }
@@ -139,6 +138,7 @@ exports.pushToHive = async (req, res, next) => {
     const axiosInstance = axios.create({ headers: { 'User-Agent': 'rightmove-datafeed/1.0' }, httpsAgent })
     const preparePropertyPayload = getPropertyPayload(property)
     const result = axiosInstance.post(url, preparePropertyPayload, { httpsAgent }).then(async ({ data }) => {
+      console.log(data)
       if (data && data.success) {
         const property = await Property.findOneAndUpdate({_id: req.body._id}, {pushedToHive: true})
         return res.json({ message: 'OK', data: result })
@@ -147,10 +147,11 @@ exports.pushToHive = async (req, res, next) => {
       }
     })
       .catch((_error) => {
+        console.log(_error)
         return res.json({ message: 'Failed', data: {} })
       })
-      .finally(() => {
-        console.log('finally')
+      .finally((data) => {
+        console.log('finally', data)
       })
   } catch (error) {
     next(error)
@@ -158,58 +159,30 @@ exports.pushToHive = async (req, res, next) => {
 }
 exports.updateProperty = async (req, res, next) => {
   try {
-
-    const {price,price_qualifier, deposit ,administration_fee ,postcode_1,postcode_2 ,display_address, latitude ,longitude, marketingStatus,owner ,minimumeTenancy, letType ,description,summary ,house_name_number ,town  } = req.body
-    // const myimage = req.files
-    // let image = []
-    // if (myimage.length > 0) {
-    //   for (const i in myimage) {
-    //     const teamObj = myimage[i]
-    //     const mydata = new Image({
-    //       fieldname: teamObj.fieldname,
-    //       originalname: teamObj.originalname,
-    //       encoding: teamObj.encoding,
-    //       mimetype: teamObj.mimetype,
-    //       destination: teamObj.destination,
-    //       filename: teamObj.filename,
-    //       path: teamObj.path,
-    //       size: teamObj.size,
-    //       token: req.body.token,
-    //       url:  teamObj.filename,
-    //       userId: req.body.userId
-    //     });
-    //     image.push(mydata.url)
-    //   }
-    // }
-    const property = await Property.findOneAndUpdate({_id: req.body._id},{ $set: {
-      'price_information.price': price,
-      'price_information.price_qualifier':price_qualifier,
-      "price_information.deposit": deposit,
-      "price_information.administration_fee":administration_fee,
-      "marketingStatus": marketingStatus,
-      "owner": owner,
-      "minimumeTenancy": minimumeTenancy,
-      "letType": letType,
-      "description": description,
-      "summary": summary,
-      "address.house_name_number": house_name_number,
-      "address.town": town,
-      "address.postcode_1": postcode_1,
-      "address.postcode_2": postcode_2,
-      "address.display_address": display_address,
-      "address.latitude": latitude,
-      "address.longitude": longitude,
-
-
-      // "room_information.room_name": room_name,
-      // "room_information.room_description": room_description,
-      // "room_information.room_length": room_length,
-      // "room_information.room_dimension_unit": room_dimension_unit,
-      // "room_information.room_dimension_text": room_dimension_text,
-      // "room_information.roomimage": roomImage
-      
-      
-      }})
+    const {price, marketingStatus,owner, minimumeTenancy ,letType} = req.body
+    const myimage = req.files
+    let image = []
+    if (myimage.length > 0) {
+      for (const i in myimage) {
+        const teamObj = myimage[i]
+        const mydata = new Image({
+          fieldname: teamObj.fieldname,
+          originalname: teamObj.originalname,
+          encoding: teamObj.encoding,
+          mimetype: teamObj.mimetype,
+          destination: teamObj.destination,
+          filename: teamObj.filename,
+          path: teamObj.path,
+          size: teamObj.size,
+          token: req.body.token,
+          url:  teamObj.filename,
+          userId: req.body.userId
+        });
+        image.push(mydata.url)
+      }
+    }
+    const property = await Property.findOneAndUpdate({_id: req.body._id},
+      { $set: {price: price, marketingStatus: marketingStatus ,owner:owner, minimumeTenancy:minimumeTenancy ,letType:letType , image :image }})
     return res.json({ message: 'OK', data: property })
   } catch (error) {
     next(error)
@@ -235,6 +208,22 @@ exports.deleteProperty = async (req, res, next) => {
   }
 }
 function getPropertyPayload (property) {
+  let rooms = property.room_information.map((room) => {
+    room.room_photo_urls = room.roomimage.map(url => {
+      return 'https://propertyapp.hubresolution.com/roomimage/' + url
+    })
+    room.room_dimension_unit = 5
+    return room
+  })
+  let medias = property.image.map(media => {
+    return {
+      'media_type': 2,
+      'media_url': 'https://propertyapp.hubresolution.com/profile/' + media,
+      'caption': 'Floor plan',
+      'sort_order': 1,
+      'media_update_date': '01-03-2017 10:00:00'
+    }
+  })
   return {
     'network': {
       'network_id': 13076
@@ -245,7 +234,7 @@ function getPropertyPayload (property) {
       'overseas': false
     },
     'property': {
-      'agent_ref': 'testproperty5',
+      'agent_ref': 'Prperty' + Date.now(),
       'published': true,
       'property_type': 8,
       'status': 1,
@@ -255,13 +244,13 @@ function getPropertyPayload (property) {
       'update_date': '01-03-2017 10:00:00',
       'date_available': '01-04-2017',
       'address': {
-        'house_name_number': '34 Soho Square',
-        'town': 'London',
-        'postcode_1': 'W1D',
-        'postcode_2': '3QU',
-        'display_address': 'Soho Square, London',
-        'latitude': 51.514899,
-        'longitude': -0.132587,
+        'house_name_number': property.address.house_name_number,
+        'town': property.address.town,
+        'postcode_1': property.address.postcode_1,
+        'postcode_2': property.address.postcode_2,
+        'display_address': property.address.display_address,
+        'latitude': property.address.latitude,
+        'longitude': property.address.longitude,
         'pov_latitude': 51.51482,
         'pov_longitude': -0.13249,
         'pov_pitch': -16.78,
@@ -269,14 +258,14 @@ function getPropertyPayload (property) {
         'pov_zoom': 0
       },
       'price_information': {
-        'price': 5000,
+        'price': property.price_information.price,
         'price_qualifier': 0,
-        'deposit': 1000,
-        'administration_fee': "TENANTS CHARGES</u></b><br>&nbsp;<br>Single tenant £185.00 application fee<br>Additional tenants £50.00 each<br>Guarantors (if required) £50.00 each<br><br>Deposit - one and a half months rent<br>Rent payable monthly in advance<br>Housing Benefit Applicants - Two months' rent in advance plus a suitable guarantor<br><br>For more information regarding our charges please contact the office or visit our website.<br><br><br>"
+        'deposit': property.price_information.deposit,
+        'administration_fee': property.price_information.administration_fee
       },
       'details': {
-        'summary': 'Beautiful And Test Branch, spacious, 1-bedroom apartment in Soho',
-        'description': '<p><span>This beautiful, spacious, 1-bedroom apartment, created entirely for test purposes, is situated in the stunning location of Soho Square. It has a light, sunny aspect with views over the this incredible city.<\/span><\/p>',
+        'summary': property.summary,
+        'description': property.description,
         'features': [
           'Brand New',
           'Private Parking',
@@ -301,79 +290,9 @@ function getPropertyPayload (property) {
         'sharers_considered': false,
         'all_bills_inc': false,
         'council_tax_inc': true,
-        'rooms': [{
-          'room_name': 'Lounge',
-          'room_description': 'Bay window at the front, radiator, fitted carpet, electric fireplace, and dado rail',
-          'room_length': 3.6,
-          'room_width': 4.61,
-          'room_dimension_unit': 5,
-          'room_dimension_text': "12'0 x 15'1 (3.66m  x 4.61m)",
-          'room_photo_urls': [
-            'https://www.test-properties.co.uk/uploads/testproperty2/lounge1.jpg',
-            'https://www.test-properties.co.uk/uploads/testproperty2/lounge2.jpg'
-          ]
-        }, {
-          'room_name': 'Kitchen',
-          'room_description': 'Fitted with matching range of base and eye level units with a marble worktop, stainless steel sink unit and aga. Ample space for fridge/freezer, washing machine and dishwasher. Window above sink allowing lots of light in, radiator and tiled flooring',
-          'room_length': 2.21,
-          'room_width': 3.16,
-          'room_dimension_unit': 5,
-          'room_dimension_text': "7'3 x 10'4 (2.21m  x 3.16m)",
-          'room_photo_urls': [
-            'https://www.test-properties.co.uk/uploads/testproperty2/kitchen1.jpg',
-            'https://www.test-properties.co.uk/uploads/testproperty2/kitchen2.jpg'
-          ]
-        }, {
-          'room_name': 'Bedroom',
-          'room_description': 'Beautiful bay window fitted with curved radiator, fitted carpet',
-          'room_length': 3.3,
-          'room_width': 3.14,
-          'room_dimension_unit': 5,
-          'room_dimension_text': "10'10 x 10'4 (3.30m  x 3.14m)",
-          'room_photo_urls': [
-            'https://www.test-properties.co.uk/uploads/testproperty2/bedroom1.jpg',
-            'https://www.test-properties.co.uk/uploads/testproperty2/bedroom2.jpg'
-          ]
-        }, {
-          'room_name': 'Bathroom',
-          'room_description': 'Fitted with 3 piece suite comprising of panelled walk-in bath complete with power shower, wash hand basin and close couple WC. Full height tiling, window to rear, radiator and vinyl flooring',
-          'room_length': 2.21,
-          'room_width': 3.16,
-          'room_dimension_unit': 5,
-          'room_dimension_text': "7'3 x 10'4 (2.21m  x 3.16m)",
-          'room_photo_urls': [
-            'https://www.test-properties.co.uk/uploads/testproperty2/bathroom1.jpg',
-            'https://www.test-properties.co.uk/uploads/testproperty2/bathroom2.jpg'
-          ]
-        }, {
-          'room_name': 'Hallway',
-          'room_description': 'Elegant hallway with radiator and fitted carpet',
-          'room_length': 2.9,
-          'room_width': 1.5,
-          'room_dimension_unit': 5,
-          'room_dimension_text': "9'5 x 4'9 (2.9m x 1.5m)",
-          'room_photo_urls': ['https://www.test-properties.co.uk/uploads/testproperty2/hallway1.jpg']
-        }]
+        'rooms': rooms
       },
-      'media': [{
-        'media_type': 2,
-        'media_url': 'https://www.test-properties.co.uk/uploads/testproperty2/floorplan.jpg',
-        'caption': 'Floor plan',
-        'sort_order': 1,
-        'media_update_date': '01-03-2017 10:00:00'
-      }, {
-        'media_type': 3,
-        'media_url': 'https://www.test-properties.co.uk/uploads/testproperty2/brochure.jpg',
-        'caption': 'Brochure',
-        'sort_order': 2,
-        'media_update_date': '01-03-2017 10:00:00'
-      }, {
-        'media_type': 6,
-        'media_url': 'https://www.test-properties.co.uk/uploads/testproperty2/epc.jpg',
-        'caption': 'EPC',
-        'sort_order': 3,
-        'media_update_date': '01-03-2017 10:00:00'
-      }],
+      'media': medias,
       'principal': {
         'principal_email_address': 'info@test-properties.co.uk',
         'auto_email_when_live': false,
