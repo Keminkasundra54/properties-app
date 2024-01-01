@@ -101,6 +101,24 @@
       slidesToShow: 1
     });
   }
+
+  $(document).on('click', '.deleteProp', function () {
+    let _id = $(this).attr('data-id')
+    $.ajax({
+      url: "/api/property/delete",
+      method: 'post',
+      data: JSON.stringify({ _id: _id }),
+      contentType: 'application/json',
+      success: function (result) {
+        // console.log(result)
+        location.reload();
+      },
+      error: function (result) {
+        console.log("error", result)
+      }
+    });
+
+  });
   $(document).on('click', '.pushToHive', function () {
     let _id = $(this).attr('data-id')
     $.ajax({
@@ -110,7 +128,7 @@
       contentType: 'application/json',
       success: function (result) {
         // console.log(result)
-        // location.reload();
+        location.reload();
       },
       error: function (result) {
         console.log("error", result)
@@ -165,7 +183,7 @@
       processData: false,
       success: function (result) {
         // console.log(result)
-        // location.reload();
+        location.reload();
       },
       error: function (result) {
         console.log("error", result)
