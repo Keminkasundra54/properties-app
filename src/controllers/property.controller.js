@@ -191,6 +191,7 @@ exports.updateProperty = async (req, res, next) => {
 exports.getAllProperty = async (req, res, next) => {
   try {
     const property = await Property.find()
+    
     return res.json({ message: 'OK', data: property })
   } catch (error) {
     next(error)
@@ -198,13 +199,14 @@ exports.getAllProperty = async (req, res, next) => {
 }
 exports.deleteProperty = async (req, res, next) => {
   try {
-    await Property.removeProperty(req.body._id)
+    const id = req.body._id
+    console.log(id)
+    await Property.findOneAndDelete({_id:id})
     return res.json({ message: 'OK', data: {message: 'Success'} })
   } catch (error) {
     next(error)
   }
 }
-
 function getPropertyPayload (property) {
   let rooms = property.room_information.map((room) => {
     room.room_photo_urls = room.roomimage.map(url => {
@@ -299,3 +301,32 @@ function getPropertyPayload (property) {
     }
   }
 }
+
+// console.log(req.body._id)
+//     const property = await Property.findOne({ _id: req.body._id })
+
+    // const propertiedata = {
+    //   "_id": property._id,
+    //   "price": property.price_information.price,
+    //   "price_qualifier": property.price_information.price_qualifier,
+    //   "deposit": property.price_information.deposit,
+    //   "administration_fee": property.price_information.administration_fee,
+    //   "marketingStatus": property.marketingStatus,
+    //   "owner": property.owner,
+    //   "minimumeTenancy": property.minimumeTenancy,
+    //   "letType": property.letType,
+    //   "description": property.description,
+    //   "summary": property.summary,
+    //   "house_name_number": property.address.house_name_number,
+    //   "town": property.address.town,
+    //   "postcode_1": property.address.postcode_1,
+    //   "postcode_2": property.address.postcode_2,
+    //   "display_address": property.address.display_address,
+    //   "latitude": property.address.latitude,
+    //   "longitude": property.address.longitude,
+    //   "room_name": property.room_information.room_name,
+    //   "room_description": property.room_information.room_description,
+    //   "room_length": property.room_information.room_length,
+    //   "room_dimension_unit": property.room_information.room_dimension_unit,
+    //   "room_dimension_text": property.room_information.room_dimension_text,
+    //   "roomimage": property.room_information.roomImage
