@@ -23,7 +23,7 @@
 var hostAddress = 'https://propertyapp.hubresolution.com';
 const hubresolution = {
 property: {
-    listing: function () {
+    listing: function (option) {
 
         fetch(hostAddress+'/api/property/getAll')
             .then(response => response.json())
@@ -31,7 +31,7 @@ property: {
                 // hubresolution.property.listing(data);
                 if (data && data.data && Array.isArray(data.data)) {
                     console.log('Data received:', data.data);
-                    createPropertyList(data.data);
+                    createPropertyList(data.data,option);
                 } else {
                     console.error('Data is empty or invalid:', response);
                 }
@@ -43,7 +43,7 @@ property: {
 }
 };
 
-function createPropertyList(data) {
+function createPropertyList(data,option) {
 
 const section = document.createElement('div')
 section.className = 'prop-sec'
@@ -68,7 +68,7 @@ section.innerHTML = `
 // div2.className = 'mainGroup'
 // div.appendChild(div2);
 
-// document.body.appendChild(section);
+document.body.querySelector('.'+option.classSelector).appendChild(section);
 
 data.forEach(property => {
     // const li = document.createElement('li');
@@ -196,7 +196,6 @@ setTimeout(function() {
                 slidesToScroll: 1
                 });
     }, 2000);
-    document.write(section);
 
 }
 
