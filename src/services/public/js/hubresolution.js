@@ -68,7 +68,7 @@ section.innerHTML = `
 // div2.className = 'mainGroup'
 // div.appendChild(div2);
 
-document.body.appendChild(section);
+// document.body.appendChild(section);
 
 data.forEach(property => {
     // const li = document.createElement('li');
