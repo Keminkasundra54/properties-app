@@ -75,7 +75,7 @@ data.forEach(property => {
     // li.textContent = `Name: ${property.name}, Address: ${property.address}, Price: ${property.price}`;
     // ul.appendChild(li);
 
-    const newData = document.getElementsByClassName('prop-in')[0]
+    const newData = section.querySelector('.prop-in');
     const box = document.createElement('div')
     box.className = 'prop-row'
     let belowImageString = [];
@@ -169,7 +169,7 @@ data.forEach(property => {
                             <rect width="30" height="30" fill="white"/>
                             </clipPath>
                             </defs>
-                            </svg></span><span class="r-s">${property.minimumeTenancy} Month</span></li>
+                            </svg></span><span class="r-s">${property.minimumeTenancy}</span></li>
                         </ul>
                     </div>
 
@@ -196,5 +196,7 @@ setTimeout(function() {
                 slidesToScroll: 1
                 });
     }, 2000);
+    document.write(section);
+
 }
 
