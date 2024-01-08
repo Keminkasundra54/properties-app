@@ -35,7 +35,11 @@ exports.create = async (req, res, next) => {
               path: teamObj.path,
               size: teamObj.size,
             });
-            imagevar.push(imgdata.filename)
+            const obj = {
+              "image":imgdata.filename,
+              "imagetype":req.body.imagetype[i]
+            }
+            imagevar.push(obj)
           }
         }
       }
@@ -48,7 +52,6 @@ exports.create = async (req, res, next) => {
             const roomdata = new Image({
               fieldname: teamObj.fieldname,
               filename: teamObj.filename,
-
             });
             roomimagevar.push(roomdata.filename)
           }
@@ -92,14 +95,25 @@ exports.create = async (req, res, next) => {
       "per_quater":req.body.per_quater ,
       "per_annum":req.body.per_annum
     }
+  
 
     for (let i = 0; i < roomjsondata.length; i++) {
+      const lastdata = []
+    
+      for(let j=0 ; j < roomjsondata[i].roomImage.length ; j++){
+        
+        let newdata = roomimagevar[i].split("_").pop()
+        if(newdata == roomjsondata[i].roomImage[j]){
+           lastdata.push(roomimagevar[i]) 
+        }
+      }
+    
       const obj = {
         "summary_description": roomjsondata[i].summary_description,
         "unique_features": roomjsondata[i].unique_features,
         "room_decription": roomjsondata[i].room_decription,
         "room_dimension": roomjsondata[i].room_dimension,
-        "room_image": roomjsondata[i].roomImage
+        "room_image": lastdata
       }
       room_information.push(obj)
     }

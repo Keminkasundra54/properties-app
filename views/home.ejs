@@ -59,20 +59,20 @@ input[type=number] {-moz-appearance:textfield; appearance: none;}
     }
 
     function onFileSelected(event) {
-      const myimage = []
       selectedFiles = event.target.files;
       if (selectedFiles.length) {
-        for (let i = 0; i < selectedFiles.length; i++){
-            
-            formdata.append('image', selectedFiles[i]);
-            $(".fieldset-fourcolumn").append('<div class="right-cols"><input type="radio" id="jpg" name="'+ selectedFiles[i].name+'" value="Floor plan"><label for="jpg">Floor plan</label><br><input type="radio" id="jpeg" name="'+ selectedFiles[i].name+'" value="EPC"><label for="jpeg">EPC</label><br></div><div class="form-field left-colr">' + selectedFiles[i].name + '"</div></fieldset>')
-           
-          $(document).on('change', '.right-cols input:radio', function () {
-          var value = $( this ).val();
-    });
-          }
+        for (let i = 0; i < selectedFiles.length; i++) {
+
+        $(".fieldset-fourcolumn").append('<div class="right-cols"><input type="radio" id="jpg" name="'+ selectedFiles[i].name+'" value="Floor plan"><label for="jpg">Floor plan</label><br><input type="radio" id="jpeg" name="'+ selectedFiles[i].name+'" value="EPC"><label for="jpeg">EPC</label><br></div><div class="form-field left-colr">' + selectedFiles[i].name + '"</div></fieldset>')
+        formdata.append('image' , selectedFiles[i])
+        }
       } 
-    } 
+    }
+    $(document).on('change', '.right-cols input:radio:checked', function () {
+          var value = $( this ).val();
+          formdata.append('imagetype', value);
+        });
+
     let myfeaturesdata = []
     function myfeatures(event) {
       const features = $(event.target).parents('.roomFields ').find('.form-field:nth-child(3) input').val()
@@ -90,6 +90,7 @@ input[type=number] {-moz-appearance:textfield; appearance: none;}
         $(document).find('div .residentail_letting').hide()
       }
     }
+    
     function myfunction(event) {
       let roomImages = []
       const imagelength = $(event.target).parents('.roomFields').find('.form-field:nth-child(7) .fileinput').prop('files').length;
@@ -107,7 +108,7 @@ input[type=number] {-moz-appearance:textfield; appearance: none;}
         "room_description": $(event.target).parents('.roomFields').find('.form-field:nth-child(6) input').val(),
         "roomImage": roomImages
       }
-    myfeaturesdata = []
+       myfeaturesdata = []
       
       $(event.target).parents('.roomFields').find('.form-field input').val('');
       var clonner = $('.newform-two-clr').eq(0).clone();
@@ -119,12 +120,12 @@ input[type=number] {-moz-appearance:textfield; appearance: none;}
       clonner.find('.form-left-rq').eq(5).find('.data').text(myarray.roomImage.length);
       $('.newform-two-clr:last').after(clonner);
       roomes.push(myarray);
-      $('.first-bg-s').slick({
-        dots: false,
-        infinite: true,
-        speed: 300,
-        slidesToShow: 1
-      });
+      // $('.first-bg-s').slick({
+      //   dots: false,
+      //   infinite: true,
+      //   speed: 300,
+      //   slidesToShow: 1
+      // });
     }
     $(document).on('click', '.deleteProp', function () {
       let _id = $(this).attr('data-id')
@@ -169,6 +170,7 @@ input[type=number] {-moz-appearance:textfield; appearance: none;}
       }
 
       const mydata = JSON.stringify(roomes)
+      console.log(mydata)
       for (let j = 0; j < myfile.length; j++) {
         formdata.append('roomimage', myfile[j]);
       }
@@ -253,6 +255,7 @@ input[type=number] {-moz-appearance:textfield; appearance: none;}
       });
       return indexed_array;
     }
+    
     $(document).ready(function () {
       $('.filter-img-s').slick({
         dots: false,
