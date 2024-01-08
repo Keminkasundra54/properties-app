@@ -17,7 +17,7 @@ const passport = require('passport')
 const passportJwt = require('../services/passport')
 const app = express()
 const process = require('process')
-const Property = require('../models/property.model')
+const Property = require('../models/property_description.model')
 
 app.use(bodyParser.json({limit: '50mb'}));
 app.use(bodyParser.urlencoded({ extended: false, limit: '50mb', parameterLimit: 50000 }));

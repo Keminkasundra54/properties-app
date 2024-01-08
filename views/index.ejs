@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Table Filter</title>
+<link rel="stylesheet" type="text/css" href="/static/style.css">
+<style>
+  fieldset.fieldset-twocolumn .form-field {
+    width: 50%
+  }
+
+  fieldset.fieldset-twocolumn {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  fieldset.fieldset-twocolumn {
+    border: 1px solid black;
+    padding: 9px;
+    border-radius: 5px;
+  }
+
+  .popupBoxs {
+    max-width: 600px;
+  }
+
+  fieldset.fieldset-threecolumn {
+    display: flex;
+  }
+
+  .form-field.radio-btn {
+    display: flex;
+    align-items: center;
+    padding-left: 20px;
+  }
+
+  .form-field.radio-btn label {
+    font-size: 17px;
+    color: dimgray;
+    padding: 5px;
+  }
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="/static/js/main.js"></script>
+
+<script>
+  const formdata = new FormData()
+  let selectedFiles = [];
+  let selectedRoom = [];
+  let myfile = []
+  let roomes = []
+
+  function onFileSelected(event) {
+    selectedFiles = event.target.files;
+    if (selectedFiles.length) {
+      for (let i = 0; i < selectedFiles.length; i++) {
+        formdata.append('image', selectedFiles[i]);
+        $(".fieldset-fourcolumn").append('<div class="right-cols"><input type="radio" id="jpg" name="'+ selectedFiles[i].name+'fp" value="Floor plan"><label for="jpg">Floor plan</label><br><input type="radio" id="png" name="'+ selectedFiles[i].name+'b" value="Brochure"><label for="css">Brochure</label><br><input type="radio" id="jpeg" name="'+ selectedFiles[i].name+'epc" value="EPC"><label for="jpeg">EPC</label><br></div><div class="form-field left-colr">' + selectedFiles[i].name + '"</div></fieldset>')
+      }
+    }
+  }
+  function myfunction(event) {
+    let roomImages = []
+    const imagelength = $(event.target).parents('.roomFields').find('.form-field:nth-child(7) .fileinput').prop('files').length;
+
+    for (let i = 0; i < imagelength; i++) {
+      var imagename = $(event.target).parents('.roomFields').find('.form-field:nth-child(7) .fileinput').prop('files')[i].name
+      var imagedata = $(event.target).parents('.roomFields').find('.form-field:nth-child(7) .fileinput').prop('files')[i]
+      myfile.push(imagedata)
+      roomImages.push(imagename)
+    }
+
+    const myarray = {
+      "room_name": $(event.target).parents('.roomFields ').find('.form-field:nth-child(1) input').val(),
+      "room_description": $(event.target).parents('.roomFields ').find('.form-field:nth-child(2) input').val(),
+      "room_length": $(event.target).parents('.roomFields ').find('.form-field:nth-child(3) input').val(),
+      "room_width": $(event.target).parents('.roomFields ').find('.form-field:nth-child(4) input').val(),
+      "room_dimension_unit": $(event.target).parents('.roomFields').find('.form-field:nth-child(5) input').val(),
+      "room_dimension_text": $(event.target).parents('.roomFields').find('.form-field:nth-child(6) input').val(),
+      "roomImage": roomImages
+    }
+    $(event.target).parents('.roomFields').find('.form-field input').val('');
+    var clonner = $('.newform-two-clr').eq(0).clone();
+    clonner.find('.form-left-rq').eq(0).find('.data').text(myarray.room_name);
+    clonner.find('.form-left-rq').eq(1).find('.data').text(myarray.room_description);
+    clonner.find('.form-left-rq').eq(2).find('.data').text(myarray.room_length);
+    clonner.find('.form-left-rq').eq(3).find('.data').text(myarray.room_dimension_unit);
+    clonner.find('.form-left-rq').eq(4).find('.data').text(myarray.room_width);
+    clonner.find('.form-left-rq').eq(5).find('.data').text(myarray.room_dimension_text);
+    clonner.find('.form-left-rq').eq(6).find('.data').text(myarray.roomImage.length);
+    $('.newform-two-clr:last').after(clonner);
+    roomes.push(myarray);
+    $('.first-bg-s').slick({
+      dots: false,
+      infinite: true,
+      speed: 300,
+      slidesToShow: 1
+    });
+  }
+
+  $(document).on('click', '.deleteProp', function () {
+    let _id = $(this).attr('data-id')
+    $.ajax({
+      url: "/api/property/delete",
+      method: 'post',
+      data: JSON.stringify({ _id: _id }),
+      contentType: 'application/json',
+      success: function (result) {
+        // console.log(result)
+        location.reload();
+      },
+      error: function (result) {
+        console.log("error", result)
+      }
+    });
+
+  });
+  $(document).on('click', '.pushToHive', function () {
+    let _id = $(this).attr('data-id')
+    $.ajax({
+      url: "/api/property/pushToHive",
+      method: 'post',
+      data: JSON.stringify({ _id: _id }),
+      contentType: 'application/json',
+      success: function (result) {
+        // console.log(result)
+        location.reload();
+      },
+      error: function (result) {
+        console.log("error", result)
+      }
+    });
+
+  });
+  $(document).on('submit', 'form.propertyForm ', function (e) {
+    e.preventDefault();
+    var data = getFormData($('form.propertyForm'));
+    data['userId'] = 1;
+    let idToUpdate = data._id;
+    if (idToUpdate) {
+    } else {
+      delete data._id;
+    }
+
+    const mydata = JSON.stringify(roomes)
+    for (let j = 0; j < myfile.length; j++) {
+      formdata.append('roomimage', myfile[j]);
+    }
+
+    formdata.append('price', data.price);
+    formdata.append('name', data.name);
+    formdata.append('price_qualifier', data.price_qualifier);
+    formdata.append('deposit', data.deposit);
+    formdata.append('administration_fee', data.administration_fee);
+    formdata.append('address', data.address);
+    formdata.append('marketingStatus', data.marketingStatus);
+    formdata.append('owner', data.owner);
+    formdata.append('letType', data.letType);
+    formdata.append('minimumeTenancy', data.minimumeTenancy);
+    formdata.append('userId', data.userId);
+    formdata.append('house_name_number', data.house_name_number);
+    formdata.append('town', data.town);
+    formdata.append('postcode_1', data.postcode_1);
+    formdata.append('postcode_2', data.postcode_2);
+    formdata.append('display_address', data.display_address);
+    formdata.append('longitude', data.longitude);
+    formdata.append('latitude', data.latitude)
+    formdata.append('summary', data.summary);
+    formdata.append('description', data.description);
+    formdata.append('room_information', mydata)
+
+
+    const urlEncoded = new URLSearchParams(formdata).toString()
+    $.ajax({
+      url: idToUpdate ? "/api/property/update" : "/api/property/create",
+      method: 'post',
+      data: formdata,
+      contentType: false, //this is requireded please see answers above
+      processData: false,
+      success: function (result) {
+        // console.log(result)
+        location.reload();
+      },
+      error: function (result) {
+        console.log("error", result)
+      }
+    });
+  })
+  function getFormData($form) {
+    var unindexed_array = $form.serializeArray();
+    var indexed_array = {};
+    $.map(unindexed_array, function (n, i) {
+      indexed_array[n['name']] = n['value'];
+    });
+    return indexed_array;
+  }
+
+  $(document).ready(function () {
+    $('.filter-img-s').slick({
+      dots: false,
+      infinite: true,
+      speed: 300,
+      slidesToShow: 1
+    });
+  })
+
+</script>
+
+</head>
+
+<body>
+<div class="popupSec" id="popupBox">
+  <div class="popupsecinr">
+    <div class="popupBoxs">
+      <div class="close-rq">
+      <div class="closeBTn">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24">
+          <path
+            d="M23 20.168l-8.185-8.187 8.185-8.174-2.832-2.807-8.182 8.179-8.176-8.179-2.81 2.81 8.186 8.196-8.186 8.184 2.81 2.81 8.203-8.192 8.18 8.192z" />
+        </svg>
+      </div></div>
+      <div class="popupItem">
+        <form class="propertyForm" enctype="multipart/form-data">
+          <div class="form-title">
+            <h4>Title</h4>
+          </div>
+          <div class="address-clr">
+          <fieldset class="fieldset-onecolumn">
+            <div class="form-field">
+              <label>Title</label>
+              <input type="text" name="name" placeholder="Title">
+            </div>
+          </fieldset>
+          <fieldset class="fieldset-onecolumn">
+            <div class="form-field">
+              <label>Marketing Status</label>
+              <input type="text" name="marketingStatus" placeholder="Marketing Status">
+            </div>
+          </fieldset>
+          <fieldset class="fieldset-onecolumn">
+            <div class="form-field">
+              <label>Owner / Landlord</label>
+              <input type="text" name="owner" placeholder="Owner / Landlord">
+            </div>
+          </fieldset>
+          <fieldset class="fieldset-onecolumn">
+            <div class="form-field">
+              <label>Let Type</label>
+              <input type="text" name="letType" placeholder="Let Type">
+            </div>
+          </fieldset>
+          <fieldset class="fieldset-onecolumn">
+            <div class="form-field">
+              <label>Minimum Tenancy</label>
+              <input type="text" name="minimumeTenancy" placeholder="Minimum Tenancy">
+            </div>
+          </fieldset>
+          <fieldset class="fieldset-onecolumn" style="display: none;">
+            <div class="form-field">
+              <label>Minimum Tenancy</label>
+              <input type="text" name="_id" placeholder="Minimum Tenancy">
+            </div>
+          </fieldset>
+          <fieldset class="fieldset-onecolumn">
+            <div class="form-field">
+              <label>summary</label>
+              <input type="text" name="summary" placeholder="Summary">
+            </div>
+          </fieldset>
+          <fieldset class="fieldset-onecolumn">
+            <div class="form-field">
+              <label>description</label>
+              <input type="text" name="description" placeholder="Description">
+            </div>
+          </fieldset>
+        </div>
+
+          <!-- Price Information -->
+          <div class="form-title">
+            <h4>Price Information</h4>
+          </div>
+          <fieldset class="fieldset-twocolumn">
+
+            <div class="form-field">
+              <label>Price</label>
+              <input type="text" name="price" placeholder="Price">
+            </div>
+            <div class="form-field">
+              <label>price qualifier</label>
+              <input type="text" name="price_qualifier" placeholder="Price Qualifier">
+            </div>
+            <div class="form-field">
+              <label>deposit</label>
+              <input type="text" name="deposit" placeholder="Deposit">
+            </div>
+            <div class="form-field">
+              <label>administration fee</label>
+              <input type="text" name="administration_fee" placeholder="Administration Fee">
+            </div>
+          </fieldset>
+
+          <!-- Address -->
+          <div class="form-title">
+            <h4>Address</h4>
+          </div>
+
+          <fieldset class="fieldset-twocolumn">
+
+            <div class="form-field">
+              <label>house name number</label>
+              <input type="text" name="house_name_number" placeholder="House Name Number">
+            </div>
+            <div class="form-field">
+              <label>town</label>
+              <input type="text" name="town" placeholder="Town">
+            </div>
+            <div class="form-field">
+              <label>postcode 1</label>
+              <input type="text" name="postcode_1" placeholder="Postcode 1">
+            </div>
+            <div class="form-field">
+              <label>postcode 2</label>
+              <input type="text" name="postcode_2" placeholder="Postcode 2">
+            </div>
+            <div class="form-field">
+              <label>display address</label>
+              <input type="text" name="display_address" placeholder="Display Address">
+            </div>
+            <div class="form-field">
+              <label>latitude</label>
+              <input type="text" name="latitude" placeholder="Latitude">
+            </div>
+            <div class="form-field">
+              <label>longitude</label>
+              <input type="text" name="longitude" placeholder="Longitude">
+            </div>
+          </fieldset>
+
+
+          <!-- Room information -->
+          <div class="form-title">
+            <h4>Room information</h4>
+          </div>
+
+          <fieldset class="fieldset-twocolumn roomFields">
+
+            <div class="form-field">
+              <label>room name</label>
+              <input type="text" name="room_name" placeholder="Room Name">
+            </div>
+            <div class="form-field">
+              <label>room description</label>
+              <input type="text" name="room_description" placeholder="Room Description">
+            </div>
+            <div class="form-field">
+              <label>room length</label>
+              <input type="text" name="room_length" placeholder="Room Length">
+            </div>
+            <div class="form-field">
+              <label>room width</label>
+              <input type="text" name="room_width" placeholder="Room Width">
+            </div>
+            <div class="form-field">
+              <label>room dimension unit</label>
+              <input type="text" name="room_dimension_unit" placeholder="Room Dimension Unit">
+            </div>
+            <div class="form-field">
+              <label>room dimension text</label>
+              <input type="text" name="room_dimension_text" placeholder="Room Dimension Text">
+            </div>
+            <div class="form-field">
+              <label>roomimage</label>
+              <input type="file" class="fileinput" name="roomimage" placeholder="roomimage" multiple="multiple">
+            </div>
+            <div>
+              <label> &nbsp; </label>
+              <button class="addroom" type="button" onclick="myfunction(event)">add room</button>
+            </div>
+          </fieldset>
+
+          <div class="newform">
+            <div class="new-form-inr">
+
+              <div class="newform-two-clr changes-s">
+                <div class="bottom-clrq">
+                  <div class="first-bg-s">
+
+                    <div>
+                      <div class="fst-bg-img" style="background-image: url('https://propertyapp.hubresolution.com/profile/1703570719122_0asd.jpg');">
+
+                      </div>
+                    </div>
+                    <div>
+                      <div class="fst-bg-img" style="background-image: url('https://propertyapp.hubresolution.com/profile/1703570719122_0asd.jpg');">
+
+                      </div>
+                    </div>
+                    <div>
+                      <div class="fst-bg-img" style="background-image: url('https://propertyapp.hubresolution.com/profile/1703570719122_0asd.jpg');">
+
+                      </div>
+                    </div>
+
+                  </div>
+                <div class="change-clr">
+
+                <div class="form-left-rq">
+
+                  <div class="data">
+
+                  </div>
+                </div>
+                <div class="form-left-rq">
+                  <div class="data">
+
+                  </div>
+                </div>
+                <div class="form-left-rq">
+                  <div class="data">
+
+                  </div>
+                </div>
+                <div class="form-left-rq">
+                  <div class="data">
+
+                  </div>
+                </div>
+                <div class="form-left-rq">
+                  <div class="data">
+
+                  </div>
+                </div>
+                <div class="form-left-rq">
+                  <div class="data">
+
+                  </div>
+                </div>
+                <div class="form-left-rq">
+                  <div class="data">
+
+                  </div>
+                </div>
+              </div>
+            </div>
+
+              </div>
+
+
+            </div>
+          </div>
+
+
+          <!-- Property media -->
+          <div class="form-title">
+            <h4>Media</h4>
+          </div>
+          <div class="media-clr">
+          <fieldset class="fieldset-threecolumn">
+            <div class="form-field">
+              <input type="file" id="image" name="image" class="imageadd" multiple="multiple"
+                onchange="onFileSelected(event)" />
+            </div>
+          </fieldset>
+        </div>
+          <fieldset class="fieldset-fourcolumn">
+          </fieldset>
+
+
+
+          <!-- Submit -->
+          <div class="submit-btn">
+            <input type="submit" value="Submit">
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<a href="javascript:void(0)" class="addProperty">Add</a>
+<section class="new-filter-section">
+  <div class="wrapper">
+    <div class="new-filter-inr">
+      <!-- <div class="filter-cols">
+        <% properties.forEach((item)=>{%>
+          <div class="filter-box">
+            <div class="filter-box-inr">
+              <div class="filter-img-s">
+                <% item.image.forEach((image)=>{%>
+                  <%- image %>
+                    <div>
+                      <div class="filer-bg-img"
+                        style="background-image: url(https://propertyapp.hubresolution.com/profile/<%-image%>);"></div>
+                    </div>
+                    <%});%>
+
+
+
+              </div>
+              <div class="filter-bottom-s">
+                <div class="content-s">
+                  <h2><%- item.name %>&nbsp;</h2>
+                </div>
+                <span class="summary-con">
+                  <p><%- item.summary %></p>
+                </span>
+                <h5 class="price-title">
+
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                    <path
+                      d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm1 16.947v1.053h-1v-.998c-1.035-.018-2.106-.265-3-.727l.455-1.644c.956.371 2.229.765 3.225.54 1.149-.26 1.384-1.442.114-2.011-.931-.434-3.778-.805-3.778-3.243 0-1.363 1.039-2.583 2.984-2.85v-1.067h1v1.018c.724.019 1.536.145 2.442.42l-.362 1.647c-.768-.27-1.617-.515-2.443-.465-1.489.087-1.62 1.376-.581 1.916 1.712.805 3.944 1.402 3.944 3.547.002 1.718-1.343 2.632-3 2.864z">
+                    </path>
+                  </svg>
+                  <span>
+                    <% if(item.price_information) { %>
+                      <%- item.price_information.price%>
+                        <% } else{ %>
+                          &nbsp;
+                          <% } %>
+                  </span>
+                </h5>
+                <h5 class="price-title">
+                  <svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd"
+                    clip-rule="evenodd">
+                    <path
+                      d="M24 19v-7h-23v-7h-1v14h1v-2h22v2h1zm-20-12c1.104 0 2 .896 2 2s-.896 2-2 2-2-.896-2-2 .896-2 2-2zm19 4c0-1.657-1.343-3-3-3h-13v3h16z" />
+                  </svg>
+                  <span>
+                    <% if(item.room_information) { %>
+                      <%- item.room_information.length%>
+                    <% } else{ %>
+                      0
+                    <% } %>
+                  </span>
+                </h5>
+
+                <div class="button-s">
+                <div class="button">
+            <a href="javascript:void(0)"  class="editProp" data-id="<%- item._id %>">
+              <svg clip-rule="evenodd" fill-rule="evenodd" stroke-linejoin="round" stroke-miterlimit="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="m11.25 6c.398 0 .75.352.75.75 0 .414-.336.75-.75.75-1.505 0-7.75 0-7.75 0v12h17v-8.749c0-.414.336-.75.75-.75s.75.336.75.75v9.249c0 .621-.522 1-1 1h-18c-.48 0-1-.379-1-1v-13c0-.481.38-1 1-1zm1.521 9.689 9.012-9.012c.133-.133.217-.329.217-.532 0-.179-.065-.363-.218-.515l-2.423-2.415c-.143-.143-.333-.215-.522-.215s-.378.072-.523.215l-9.027 8.996c-.442 1.371-1.158 3.586-1.264 3.952-.126.433.198.834.572.834.41 0 .696-.099 4.176-1.308zm-2.258-2.392 1.17 1.171c-.704.232-1.274.418-1.729.566zm.968-1.154 7.356-7.331 1.347 1.342-7.346 7.347z" fill-rule="nonzero"></path>
+              </svg></a>
+          </div> 
+                  <div class="button">
+                    <a href="javascript:void(0)" class="deleteProp" data-id="<%- item._id %>">
+                      <svg clip-rule="evenodd" fill-rule="evenodd" stroke-linejoin="round" stroke-miterlimit="2"
+                        viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                          d="m20.015 6.506h-16v14.423c0 .591.448 1.071 1 1.071h14c.552 0 1-.48 1-1.071 0-3.905 0-14.423 0-14.423zm-5.75 2.494c.414 0 .75.336.75.75v8.5c0 .414-.336.75-.75.75s-.75-.336-.75-.75v-8.5c0-.414.336-.75.75-.75zm-4.5 0c.414 0 .75.336.75.75v8.5c0 .414-.336.75-.75.75s-.75-.336-.75-.75v-8.5c0-.414.336-.75.75-.75zm-.75-5v-1c0-.535.474-1 1-1h4c.526 0 1 .465 1 1v1h5.254c.412 0 .746.335.746.747s-.334.747-.746.747h-16.507c-.413 0-.747-.335-.747-.747s.334-.747.747-.747zm4.5 0v-.5h-3v.5z"
+                          fill-rule="nonzero" />
+                      </svg>
+                    </a>
+                  </div>
+
+                  <% if(item.pushedToHive) { %>
+                    <div class="button">
+                      <a href="javascript:void(0)" class="pushToHive" data-id="<%-item._id%>">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                          <path
+                            d="M19.479 10.092c-.212-3.951-3.473-7.092-7.479-7.092-4.005 0-7.267 3.141-7.479 7.092-2.57.463-4.521 2.706-4.521 5.408 0 3.037 2.463 5.5 5.5 5.5h13c3.037 0 5.5-2.463 5.5-5.5 0-2.702-1.951-4.945-4.521-5.408zm-7.479-1.092l4 4h-3v4h-2v-4h-3l4-4z" />
+                        </svg>
+                      </a>
+                    </div>
+                  <% } else{ %>
+
+                  <% } %>
+
+                </div>
+              </div>
+            </div>
+          </div>
+          <%});%>
+
+      </div>
+    </div> -->
+  </div>
+</section>
+
+</body>
+
+</html>

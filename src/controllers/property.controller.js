@@ -1,7 +1,11 @@
 /* eslint-disable no-unused-vars */
 'use strict'
 require('dotenv').config()
-const Property = require('../models/property.model')
+// const Property = require('../models/property.model')
+const Property = require('../models/property_description.model')
+const OutsideSpace = require('../models/outside-space.model') 
+const Parking = require('../models/parking.model')
+const PropertyType = require('../models/property_type.model')
 const httpStatus = require('http-status')
 const Image = require('../models/Image.model')
 const fs = require('fs')
@@ -19,84 +23,138 @@ exports.create = async (req, res, next) => {
     const img = req.files.roomimage
     const myimg = req.files.image
 
-  if( myimg != undefined){
-    if (myimg.length > 0 ) {
-      for (const i in myimg) {
-        const teamObj = myimg[i]
-        if(teamObj.fieldname == "image"){
-          const imgdata = new Image({
-            fieldname: teamObj.fieldname,
-            destination: teamObj.destination,
-            filename: teamObj.filename,
-            path: teamObj.path,
-            size: teamObj.size,
-          });
-          imagevar.push(imgdata.filename)
+    if (myimg != undefined) {
+      if (myimg.length > 0) {
+        for (const i in myimg) {
+          const teamObj = myimg[i]
+          if (teamObj.fieldname == "image") {
+            const imgdata = new Image({
+              fieldname: teamObj.fieldname,
+              destination: teamObj.destination,
+              filename: teamObj.filename,
+              path: teamObj.path,
+              size: teamObj.size,
+            });
+            imagevar.push(imgdata.filename)
+          }
         }
       }
     }
-  }
-  if(img != undefined){
-    if (img.length > 0) {
-      for (const i in img) {
-        const teamObj = img[i]
-        if(teamObj.fieldname == "roomimage"){
-          const roomdata = new Image({
-            fieldname: teamObj.fieldname,
-            filename: teamObj.filename ,
+    if (img != undefined) {
+      if (img.length > 0) {
+        for (const i in img) {
+          const teamObj = img[i]
+          if (teamObj.fieldname == "roomimage") {
+            const roomdata = new Image({
+              fieldname: teamObj.fieldname,
+              filename: teamObj.filename,
 
-          });
-          roomimagevar.push(roomdata.filename)
+            });
+            roomimagevar.push(roomdata.filename)
+          }
         }
       }
     }
-  }
     const pricedata = {
-      "price" : req.body.price,
-      "price_qualifier" :req.body.price_qualifier ,
-      "deposit" : req.body.deposit,
-      "administration_fee" :req.body.administration_fee
+      "orio": req.body.orio,
+      "offers_over": req.body.offers_over,
+      "guide_price": req.body.guide_price,
+      "fixed_price": req.body.fixed_price
+    }
+    const details_pricedata = {
+      "residentail_orio": req.body.residentail_orio,
+      "residentail_offers_over": req.body.residentail_offers_over,
+      "residentail_guide_price": req.body.residentail_guide_price,
+      "residentail_fix_price": req.body.residentail_fix_price,
+      "residentail_price_on_application": req.body.residentail_price_on_application,
+    }
+    const deatils_tenuredata = {
+      "residentail_free_hold": req.body.residentail_free_hold,
+      "residentail_less_hold": req.body.residentail_less_hold
     }
     const addressdata = {
-
-      "house_name_number" : req.body.house_name_number,
-			"town" : req.body.town,
-			"postcode_1": req.body.postcode_1,
-			"postcode_2": req.body.postcode_2,
-			"display_address" : req.body.display_address,
-			"latitude" : req.body.latitude,
-			"longitude" : req.body.longitude,
+      "building_name": req.body.building_name,
+      "street": req.body.street,
+      "addrress_line_2": req.body.addrress_line_2,
+      "town": req.body.town,
+      "country": req.body.country,
+      "passcode": req.body.passcode,
+      "location_map": req.body.location_map,
+    }
+    const tenuredata = {
+      "free_hold": req.body.free_hold,
+      "less_hold": req.body.less_hold,
+    }
+    const rent ={
+      "per_person_per_week": req.body.per_person_per_week,
+      "per_week":req.body.per_week,
+      "per_calander_month":req.body.per_calander_month,
+      "per_quater":req.body.per_quater ,
+      "per_annum":req.body.per_annum
     }
 
-       for(let i=0; i< roomjsondata.length ; i++){
-           const obj = {
-            "room_name": roomjsondata[i].room_name,
-            "room_description": roomjsondata[i].room_description,
-            "room_length": roomjsondata[i].room_length,
-            "room_dimension_unit": roomjsondata[i].room_dimension_unit,
-            "room_dimension_text": roomjsondata[i].room_dimension_text,
-            "roomimage":roomjsondata[i].roomImage
-           }
-           room_information.push(obj)
-       }
-
+    for (let i = 0; i < roomjsondata.length; i++) {
+      const obj = {
+        "summary_description": roomjsondata[i].summary_description,
+        "unique_features": roomjsondata[i].unique_features,
+        "room_decription": roomjsondata[i].room_decription,
+        "room_dimension": roomjsondata[i].room_dimension,
+        "room_image": roomjsondata[i].roomImage
+      }
+      room_information.push(obj)
+    }
     if (body) {
-          const propertySave = new Property({
-            name: req.body.name,
-            address : addressdata,
-            price_information: pricedata,
-            marketingStatus: req.body.marketingStatus,
-            owner: req.body.owner,
-            minimumeTenancy:req.body.minimumeTenancy,
-            letType: req.body.letType,
-            image:imagevar,
-            userId :req.body.userId,
-            room_information :room_information,
-            description:req.body.description,
-            summary:req.body.summary,
-            // room_photo_urls:room_photo_urls
-          });
-        await propertySave.save()
+      const propertySave = new Property({
+        type:req.body.type,
+        owner_contect_details: req.body.owner_contect_details,
+        address: addressdata,
+        location_map: req.body.location_map,
+        price: pricedata,
+        tenure: tenuredata,
+
+        badrooms: req.body.badrooms,
+        bathrooms: req.body.bathrooms,
+        reception_rooms: req.body.reception_rooms,
+        property_type: req.body.property_type,
+        parking: req.body.parking,
+        outside_space:req.body.outside_space,
+        council_tax_band: req.body.council_tax_band,
+        image: imagevar,
+
+        active: req.body.active,
+        featured: req.body.featured,
+        availability: req.body.availability,
+
+        property_description: room_information,
+
+        details_price: details_pricedata,
+        deatils_tenure: deatils_tenuredata,
+
+        rent:rent,
+        deposit:req.body.deposit,
+        furnishing:req.body.furnishing,
+        availabale_date:req.body.availabale_date,
+        minimume_tenancy:req.body.minimume_tenancy
+      });
+      await propertySave.save()
+
+      const outsideSpacedata = new OutsideSpace({
+        propertyId : propertySave._id,
+        outsideSpace_name :req.body.outside_space
+      })
+      await outsideSpacedata.save()
+
+      const parkingdata =   new Parking({
+        propertyId : propertySave._id,
+        parking_name:req.body.parking
+      })
+      await parkingdata.save()
+
+      const PropertyTypedata =   new PropertyType({
+        propertyId : propertySave._id,
+        property_type_name :req.body.property_type
+      })
+      await PropertyTypedata.save()
 
       res.status(httpStatus.CREATED)
       res.send(propertySave.transform())
@@ -115,7 +173,7 @@ exports.create = async (req, res, next) => {
 }
 exports.getProperty = async (req, res, next) => {
   try {
-    const property = await Property.findOne({_id: req.body._id})
+    const property = await Property.findOne({ _id: req.body._id })
     return res.json({ message: 'OK', data: property })
   } catch (error) {
     next(error)
@@ -123,7 +181,7 @@ exports.getProperty = async (req, res, next) => {
 }
 exports.pushToHive = async (req, res, next) => {
   try {
-    const property = await Property.findOne({_id: req.body._id})
+    const property = await Property.findOne({ _id: req.body._id })
     const key = fs.readFileSync('./certs/burrowstest.pem')
     const ca = fs.readFileSync('./certs/burrowstest.jks')
 
@@ -140,7 +198,7 @@ exports.pushToHive = async (req, res, next) => {
     const result = axiosInstance.post(url, preparePropertyPayload, { httpsAgent }).then(async ({ data }) => {
       console.log(data)
       if (data && data.success) {
-        const property = await Property.findOneAndUpdate({_id: req.body._id}, {pushedToHive: true})
+        const property = await Property.findOneAndUpdate({ _id: req.body._id }, { pushedToHive: true })
         return res.json({ message: 'OK', data: result })
       } else {
         return res.json({ message: 'Failed', data: {} })
@@ -159,30 +217,60 @@ exports.pushToHive = async (req, res, next) => {
 }
 exports.updateProperty = async (req, res, next) => {
   try {
-    const {price, marketingStatus,owner, minimumeTenancy ,letType} = req.body
-    const myimage = req.files
-    let image = []
-    if (myimage.length > 0) {
-      for (const i in myimage) {
-        const teamObj = myimage[i]
-        const mydata = new Image({
-          fieldname: teamObj.fieldname,
-          originalname: teamObj.originalname,
-          encoding: teamObj.encoding,
-          mimetype: teamObj.mimetype,
-          destination: teamObj.destination,
-          filename: teamObj.filename,
-          path: teamObj.path,
-          size: teamObj.size,
-          token: req.body.token,
-          url:  teamObj.filename,
-          userId: req.body.userId
-        });
-        image.push(mydata.url)
+
+    const { price, price_qualifier, deposit, administration_fee, postcode_1, postcode_2, display_address, latitude, longitude, marketingStatus, owner, minimumeTenancy, letType, description, summary, house_name_number, town } = req.body
+    // const myimage = req.files
+    // let image = []
+    // if (myimage.length > 0) {
+    //   for (const i in myimage) {
+    //     const teamObj = myimage[i]
+    //     const mydata = new Image({
+    //       fieldname: teamObj.fieldname,
+    //       originalname: teamObj.originalname,
+    //       encoding: teamObj.encoding,
+    //       mimetype: teamObj.mimetype,
+    //       destination: teamObj.destination,
+    //       filename: teamObj.filename,
+    //       path: teamObj.path,
+    //       size: teamObj.size,
+    //       token: req.body.token,
+    //       url:  teamObj.filename,
+    //       userId: req.body.userId
+    //     });
+    //     image.push(mydata.url)
+    //   }
+    // }
+    const property = await Property.findOneAndUpdate({ _id: req.body._id }, {
+      $set: {
+        'price_information.price': price,
+        'price_information.price_qualifier': price_qualifier,
+        "price_information.deposit": deposit,
+        "price_information.administration_fee": administration_fee,
+        "marketingStatus": marketingStatus,
+        "owner": owner,
+        "minimumeTenancy": minimumeTenancy,
+        "letType": letType,
+        "description": description,
+        "summary": summary,
+        "address.house_name_number": house_name_number,
+        "address.town": town,
+        "address.postcode_1": postcode_1,
+        "address.postcode_2": postcode_2,
+        "address.display_address": display_address,
+        "address.latitude": latitude,
+        "address.longitude": longitude,
+
+
+        // "room_information.room_name": room_name,
+        // "room_information.room_description": room_description,
+        // "room_information.room_length": room_length,
+        // "room_information.room_dimension_unit": room_dimension_unit,
+        // "room_information.room_dimension_text": room_dimension_text,
+        // "room_information.roomimage": roomImage
+
+
       }
-    }
-    const property = await Property.findOneAndUpdate({_id: req.body._id},
-      { $set: {price: price, marketingStatus: marketingStatus ,owner:owner, minimumeTenancy:minimumeTenancy ,letType:letType , image :image }})
+    })
     return res.json({ message: 'OK', data: property })
   } catch (error) {
     next(error)
@@ -191,7 +279,7 @@ exports.updateProperty = async (req, res, next) => {
 exports.getAllProperty = async (req, res, next) => {
   try {
     const property = await Property.find()
-    
+
     return res.json({ message: 'OK', data: property })
   } catch (error) {
     next(error)
@@ -201,13 +289,17 @@ exports.deleteProperty = async (req, res, next) => {
   try {
     const id = req.body._id
     console.log(id)
-    await Property.findOneAndDelete({_id:id})
-    return res.json({ message: 'OK', data: {message: 'Success'} })
+    await Property.findOneAndDelete({ _id: id })
+    await Parking.findOneAndDelete({propertyId:id})
+    await OutsideSpace.findOneAndDelete({propertyId:id})
+    await PropertyType.findOneAndDelete({propertyId:id})
+
+    return res.json({ message: 'OK', data: { message: 'Success' } })
   } catch (error) {
     next(error)
   }
 }
-function getPropertyPayload (property) {
+function getPropertyPayload(property) {
   let rooms = property.room_information.map((room) => {
     room.room_photo_urls = room.roomimage.map(url => {
       return 'https://propertyapp.hubresolution.com/roomimage/' + url
@@ -305,28 +397,28 @@ function getPropertyPayload (property) {
 // console.log(req.body._id)
 //     const property = await Property.findOne({ _id: req.body._id })
 
-    // const propertiedata = {
-    //   "_id": property._id,
-    //   "price": property.price_information.price,
-    //   "price_qualifier": property.price_information.price_qualifier,
-    //   "deposit": property.price_information.deposit,
-    //   "administration_fee": property.price_information.administration_fee,
-    //   "marketingStatus": property.marketingStatus,
-    //   "owner": property.owner,
-    //   "minimumeTenancy": property.minimumeTenancy,
-    //   "letType": property.letType,
-    //   "description": property.description,
-    //   "summary": property.summary,
-    //   "house_name_number": property.address.house_name_number,
-    //   "town": property.address.town,
-    //   "postcode_1": property.address.postcode_1,
-    //   "postcode_2": property.address.postcode_2,
-    //   "display_address": property.address.display_address,
-    //   "latitude": property.address.latitude,
-    //   "longitude": property.address.longitude,
-    //   "room_name": property.room_information.room_name,
-    //   "room_description": property.room_information.room_description,
-    //   "room_length": property.room_information.room_length,
-    //   "room_dimension_unit": property.room_information.room_dimension_unit,
-    //   "room_dimension_text": property.room_information.room_dimension_text,
-    //   "roomimage": property.room_information.roomImage
+// const propertiedata = {
+//   "_id": property._id,
+//   "price": property.price_information.price,
+//   "price_qualifier": property.price_information.price_qualifier,
+//   "deposit": property.price_information.deposit,
+//   "administration_fee": property.price_information.administration_fee,
+//   "marketingStatus": property.marketingStatus,
+//   "owner": property.owner,
+//   "minimumeTenancy": property.minimumeTenancy,
+//   "letType": property.letType,
+//   "description": property.description,
+//   "summary": property.summary,
+//   "house_name_number": property.address.house_name_number,
+//   "town": property.address.town,
+//   "postcode_1": property.address.postcode_1,
+//   "postcode_2": property.address.postcode_2,
+//   "display_address": property.address.display_address,
+//   "latitude": property.address.latitude,
+//   "longitude": property.address.longitude,
+//   "room_name": property.room_information.room_name,
+//   "room_description": property.room_information.room_description,
+//   "room_length": property.room_information.room_length,
+//   "room_dimension_unit": property.room_information.room_dimension_unit,
+//   "room_dimension_text": property.room_information.room_dimension_text,
+//   "roomimage": property.room_information.roomImage
