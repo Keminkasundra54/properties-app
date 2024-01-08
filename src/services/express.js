@@ -42,6 +42,10 @@ app.get('/', async (req, res, next) => {
   const properties = await Property.find();
   return res.render('home', {properties: properties});
 });
+app.get('/mypage.ejs' , async(req , res)=>{
+  const properties = await Property.find({});
+  return res.render('mypage', {properties: properties});
+})
 app.get('/get-card', async (req, res, next) => {
   return res.json(
     {

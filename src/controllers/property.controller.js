@@ -104,7 +104,7 @@ exports.create = async (req, res, next) => {
         
         let newdata = roomimagevar[i].split("_").pop()
         if(newdata == roomjsondata[i].roomImage[j]){
-           lastdata.push(roomimagevar[i]) 
+           lastdata.push(roomimagevar[j]) 
         }
       }
     
@@ -409,7 +409,7 @@ function getPropertyPayload(property) {
 }
 
 // console.log(req.body._id)
-//     const property = await Property.findOne({ _id: req.body._id })
+// const property = await Property.findOne({ _id: req.body._id })
 
 // const propertiedata = {
 //   "_id": property._id,
