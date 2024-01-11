@@ -13,7 +13,8 @@
       -webkit-appearance: none;
       margin: 0;
     }
-
+    div #tolet_availability
+    {display: none}
     input[type=number] {
       -moz-appearance: textfield;
       appearance: none;
@@ -118,8 +119,8 @@
     function onFileSelected(event) {
       selectedFiles = event.target.files;
       if (selectedFiles.length) {
-        for (let i = 0; i < selectedFiles.length; i++) {
-          $(".fieldset-fourcolumn").append('<div class="right-cols"><input type="radio" id="jpg" name="' + selectedFiles[i].name + '" value="Floor_plan"><label for="jpg">Floor plan</label><br><input type="radio" id="jpeg" name="' + selectedFiles[i].name + '" value="EPC"><label for="jpeg">EPC</label><br></div><div class="form-field left-colr">' + selectedFiles[i].name + '"</div></fieldset>')
+        for (let i = 0; i < selectedFiles.length; i++){
+          $(".fieldset-fourcolumn").append('<div class="right-cols"><input type="radio" id="jpg" name="'+ selectedFiles[i].name+'" value="Floor_plan"><label for="Floor_plan">Floor plan</label><br><input type="radio" id="jpeg" name="'+ selectedFiles[i].name+'" value="EPC"><label for="EPC">EPC</label><br></div><div class="form-field left-colr">' + selectedFiles[i].name + '"</div></fieldset>')
           formdata.append('image', selectedFiles[i])
         }
       }
@@ -140,10 +141,16 @@
       if (myvalue == 'to_let') {
         $(document).find('div .residentail_sale').hide()
         $(document).find('div .residentail_letting').show()
+        $(document).find('div #tolet_availability').show()
+        $(document).find('div #availability').hide()
+
       }
       if (myvalue == 'for_sale') {
         $(document).find('div .residentail_sale').show()
         $(document).find('div .residentail_letting').hide()
+        $(document).find('div  #availability').show()
+        $(document).find('div #tolet_availability').hide()
+
       }
     }
     function getBase64(file) {
@@ -327,7 +334,7 @@
         cache: false,
         success: function (result) {
           // console.log(result)
-          // location.reload();
+          location.reload();
         },
         error: function (result) {
           console.log("error", result)
@@ -424,7 +431,8 @@
               </div>
             </fieldset>
 
-            <div class="form-title">
+
+            <!-- <div class="form-title">
               <h4>price</h4>
             </div>
             <fieldset class="fieldset-twocolumn">
@@ -460,7 +468,7 @@
                 <label>less hold</label>
                 <input type="text" name="less_hold" placeholder="less hold">
               </div>
-            </fieldset>
+            </fieldset> -->
             <!-- propety summary end -->
 
             <!-- property deatils -->
@@ -547,6 +555,13 @@
                   <option name="availability" value="under_offer">under_offer</option>
                   <option name="availability" value="sold_stc">sold_stc</option>
                   <option name="availability" value="sold">sold</option>
+                </select>
+                <select id="tolet_availability">
+                  <option name="availability" value="">choose availability</option>
+                  <option name="availability" value="to_let">to_let</option>
+                  <option name="availability" value="let_agreed">let agreed</option>
+                  <option name="availability" value="let">let</option>
+
                 </select>
               </div>
             </fieldset>

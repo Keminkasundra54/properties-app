@@ -19,6 +19,7 @@ exports.create = async (req, res, next) => {
     let roomimagevar = []
     const room_information = []
 
+     console.log(req.body.imagetype)  
     const roomjsondata = JSON.parse(req.body.room_information)
     const img = req.files.roomimage
     const myimg = req.files.image
@@ -80,12 +81,12 @@ exports.create = async (req, res, next) => {
         }
       }
     }
-    const pricedata = {
-      "orio": req.body.orio,
-      "offers_over": req.body.offers_over,
-      "guide_price": req.body.guide_price,
-      "fixed_price": req.body.fixed_price
-    }
+    // const pricedata = {
+    //   "orio": req.body.orio,
+    //   "offers_over": req.body.offers_over,
+    //   "guide_price": req.body.guide_price,
+    //   "fixed_price": req.body.fixed_price
+    // }
     const details_pricedata = {
       "residentail_orio": req.body.residentail_orio,
       "residentail_offers_over": req.body.residentail_offers_over,
@@ -105,10 +106,10 @@ exports.create = async (req, res, next) => {
       "country": req.body.country,
       "passcode": req.body.passcode,
     }
-    const tenuredata = {
-      "free_hold": req.body.free_hold,
-      "less_hold": req.body.less_hold,
-    }
+    // const tenuredata = {
+    //   "free_hold": req.body.free_hold,
+    //   "less_hold": req.body.less_hold,
+    // }
     const rent = {
       "per_person_per_week": req.body.per_person_per_week,
       "per_week": req.body.per_week,
@@ -122,8 +123,8 @@ exports.create = async (req, res, next) => {
         owner_contect_details: req.body.owner_contect_details,
         address: addressdata,
         location_map: req.body.location_map,
-        price: pricedata,
-        tenure: tenuredata,
+        // price: pricedata,
+        // tenure: tenuredata,
 
         bedrooms: req.body.bedrooms,
         bathrooms: req.body.bathrooms,
@@ -199,13 +200,13 @@ exports.getProperty = async (req, res, next) => {
       "country": property.address.country,
       "passcode": property.address.passcode,
       "location_map": property.location_map,
-      "orio": property.price.orio,
-      "offers_over": property.price.offers_over,
-      "guide_price": property.price.guide_price,
-      "fixed_price": property.price.fixed_price,
 
-      "free_hold": property.tenure.free_hold,
-      "less_hold": property.tenure.less_hold,
+      // "orio": property.price.orio,
+      // "offers_over": property.price.offers_over,
+      // "guide_price": property.price.guide_price,
+      // "fixed_price": property.price.fixed_price,
+      // "free_hold": property.tenure.free_hold,
+      // "less_hold": property.tenure.less_hold,
 
       "bedrooms": property.bedrooms,
       "bathrooms": property.bathrooms,
@@ -294,6 +295,9 @@ exports.updateProperty = async (req, res, next) => {
     let roomimagevar = []
     const room_information = []
     const myimg = req.files.image
+
+    console.log(req.body.imagetype)
+
     //  for roomimage add and update 
     const roomjsondata = JSON.parse(req.body.room_information)
     const img = req.files.roomimage
@@ -375,11 +379,24 @@ exports.updateProperty = async (req, res, next) => {
               path: teamObj.path,
               size: teamObj.size,
             });
+            if(req.body.imagetype.length <= 0 ){
+              console.log("i am if")
             const obj = {
+              
               "imagedata": imgdata.filename,
               "imagetype": req.body.imagetype[i]
             }
             imagevar.push(obj)
+            }
+            else{
+              console.log("i am else")
+              const obj = {
+                "imagedata": imgdata.filename,
+                "imagetype": req.body.imagetype
+              }
+              imagevar.push(obj)
+            }
+            
           }
         }
       }
@@ -400,13 +417,13 @@ exports.updateProperty = async (req, res, next) => {
 
         "location_map": req.body.location_map,
 
-        'price.orio': req.body.orio,
-        'price.offers_over': req.body.offers_over,
-        'price.guide_price': req.body.guide_price,
-        "price.fixed_price": req.body.fixed_price,
+        // 'price.orio': req.body.orio,
+        // 'price.offers_over': req.body.offers_over,
+        // 'price.guide_price': req.body.guide_price,
+        // "price.fixed_price": req.body.fixed_price,
 
-        'tenure.guide_price': req.body.free_hold,
-        "tenure.fixed_price": req.body.less_hold,
+        // 'tenure.guide_price': req.body.free_hold,
+        // "tenure.fixed_price": req.body.less_hold,
 
         "bedrooms": req.body.bedrooms,
         "bathrooms": req.body.bathrooms,
