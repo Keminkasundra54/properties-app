@@ -72,11 +72,23 @@ exports.create = async (req, res, next) => {
               path: teamObj.path,
               size: teamObj.size,
             });
+            if(req.body.imagetype.length <= 0 ){
+              console.log("i am if")
             const obj = {
+              
               "imagedata": imgdata.filename,
               "imagetype": req.body.imagetype[i]
             }
             imagevar.push(obj)
+            }
+            else{
+              console.log("i am else")
+              const obj = {
+                "imagedata": imgdata.filename,
+                "imagetype": req.body.imagetype
+              }
+              imagevar.push(obj)
+            }
           }
         }
       }
@@ -117,9 +129,17 @@ exports.create = async (req, res, next) => {
       "per_quater": req.body.per_quater,
       "per_annum": req.body.per_annum
     }
+    let mytype;
+    if(req.body.propertytype == undefined || req.body.propertytype == "for_sale")
+    {
+      mytype = "for_sale" 
+    }
+    else{
+      mytype = "to_let"
+    }
     if (body) {
       const propertySave = new Property({
-        propertytype: req.body.propertytype,
+        propertytype: mytype,
         owner_contect_details: req.body.owner_contect_details,
         address: addressdata,
         location_map: req.body.location_map,
@@ -296,8 +316,6 @@ exports.updateProperty = async (req, res, next) => {
     const room_information = []
     const myimg = req.files.image
 
-    console.log(req.body.imagetype)
-
     //  for roomimage add and update 
     const roomjsondata = JSON.parse(req.body.room_information)
     const img = req.files.roomimage
@@ -401,7 +419,6 @@ exports.updateProperty = async (req, res, next) => {
         }
       }
     }
-
     //image update end
 
     const property = await Property.findOneAndUpdate({ _id: req.body.id }, {
@@ -434,6 +451,7 @@ exports.updateProperty = async (req, res, next) => {
         "property_description": req.body.property_description,
 
         "availability": req.body.availability,
+
         "property_type": req.body.property_type,
         "parking": req.body.parking,
         "outside_space": req.body.outside_space,
@@ -460,7 +478,12 @@ exports.updateProperty = async (req, res, next) => {
         "property_description": room_information,
       }
     })
-    return res.json({ message: 'OK', data: property })
+
+    await Parking.findOneAndUpdate({propertyId:req.body.id}, {$set :{"parking_name" :  req.body.parking}})
+    await OutsideSpace.findOneAndUpdate({propertyId:req.body.id},{$set:{"outsideSpace_name" : req.body.outside_space}})
+    await PropertyType.findOneAndUpdate({propertyId:req.body.id},{$set:{"property_type_name" : req.body.property_type}})
+
+     return res.json({ message: 'OK', data: property })
   } catch (error) {
     console.log(error)
     next(error)

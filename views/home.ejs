@@ -266,7 +266,7 @@
      // radio button
       formdata.append('active', $('input[name="active"]:checked').val());
       formdata.append('featured',$('input[name="featured"]:checked').val())
-      formdata.append('propertytype',$('input[name="propertytype"]:checked').val())
+      formdata.append('propertytype',$('input[name="propertytype"]:checked').val());
       formdata.append('furnishing', $('input[name="furnishing"]:checked').val());
 
       //select button
@@ -287,14 +287,14 @@
       formdata.append('passcode', data.passcode);
       formdata.append('location_map', data.location_map);
 
-      formdata.append('price', data.price);
-      formdata.append('orio', data.orio);
-      formdata.append('offers_over', data.offers_over);
-      formdata.append('guide_price', data.guide_price);
-      formdata.append('fixed_price', data.fixed_price);
+      // formdata.append('price', data.price);
+      // formdata.append('orio', data.orio);
+      // formdata.append('offers_over', data.offers_over);
+      // formdata.append('guide_price', data.guide_price);
+      // formdata.append('fixed_price', data.fixed_price);
 
-      formdata.append('free_hold', data.free_hold);
-      formdata.append('less_hold', data.less_hold);
+      // formdata.append('free_hold', data.free_hold);
+      // formdata.append('less_hold', data.less_hold);
 
       // property deatils
       formdata.append('bedrooms', data.bedrooms);
@@ -334,7 +334,7 @@
         cache: false,
         success: function (result) {
           // console.log(result)
-          location.reload();
+          // location.reload();
         },
         error: function (result) {
           console.log("error", result)
@@ -528,8 +528,6 @@
             </fieldset>
             <!-- property deatils end-->
 
-
-
             <!-- property marketing-->
             <div class="form-title">
               <h4>property marketing</h4>
@@ -561,7 +559,6 @@
                   <option name="availability" value="to_let">to_let</option>
                   <option name="availability" value="let_agreed">let agreed</option>
                   <option name="availability" value="let">let</option>
-
                 </select>
               </div>
             </fieldset>
