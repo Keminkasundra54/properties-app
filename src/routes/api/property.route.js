@@ -25,9 +25,10 @@ const upload = multer({storage: storage})
 router.post('/create', upload.fields([{name: 'image', maxCount: 5},{name: 'roomimage', maxCount: 5}]), propertyController.create)
 router.post('/get', propertyController.getProperty)
 router.post('/pushToHive', propertyController.pushToHive)
-router.post('/update', propertyController.updateProperty)
+router.post('/update',upload.fields([{name: 'image', maxCount: 5},{name: 'roomimage', maxCount: 5}]),  propertyController.updateProperty)
 router.get('/getAll', propertyController.getAllProperty)
 router.post('/delete', propertyController.deleteProperty)
 
 // router.post('/addImage',propertyController.addImage)
 module.exports = router
+

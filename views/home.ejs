@@ -7,6 +7,7 @@
   <title>Table Filter</title>
   <link rel="stylesheet" type="text/css" href="/static/style.css">
   <style>
+    .forid{display: none;}
     input::-webkit-outer-spin-button,
     input::-webkit-inner-spin-button {
       -webkit-appearance: none;
@@ -92,6 +93,9 @@
       align-items: stretch;
       justify-content: center;
     }
+    /* #availability option:first-child{
+        display: none;
+    } */
   </style>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
   <script src="/static/js/main.js"></script>
@@ -101,34 +105,12 @@
     let selectedRoom = [];
     let myfile = []
     let roomes = []
-    let avldata = []
-    let parkingvalue = []
-    let outsidevalue = []
-    let typevalue = []
-
-    function getparkingdata(check) {
-      var data = check.value;
-      parkingvalue.push(data)
-    }
-    function getoutsidedata(check) {
-      var data = check.value;
-      outsidevalue.push(data)
-    }
-    function gettypedata(check) {
-      var data = check.value;
-      typevalue.push(data)
-    }
-    function getavldata(val) {
-      var data = val.value;
-      avldata.push(data)
-    }
 
     function onFileSelected(event) {
       selectedFiles = event.target.files;
       if (selectedFiles.length) {
         for (let i = 0; i < selectedFiles.length; i++) {
-
-          $(".fieldset-fourcolumn").append('<div class="right-cols"><input type="radio" id="jpg" name="' + selectedFiles[i].name + '" value="Floor plan"><label for="jpg">Floor plan</label><br><input type="radio" id="jpeg" name="' + selectedFiles[i].name + '" value="EPC"><label for="jpeg">EPC</label><br></div><div class="form-field left-colr">' + selectedFiles[i].name + '"</div></fieldset>')
+          $(".fieldset-fourcolumn").append('<div class="right-cols"><input type="radio" id="jpg" name="' + selectedFiles[i].name + '" value="Floor_plan"><label for="jpg">Floor plan</label><br><input type="radio" id="jpeg" name="' + selectedFiles[i].name + '" value="EPC"><label for="jpeg">EPC</label><br></div><div class="form-field left-colr">' + selectedFiles[i].name + '"</div></fieldset>')
           formdata.append('image', selectedFiles[i])
         }
       }
@@ -137,7 +119,6 @@
       var value = $(this).val();
       formdata.append('imagetype', value);
     });
-
     let myfeaturesdata = []
     function myfeatures(event) {
       const features = $(event.target).parents('.roomFields ').find('.form-field:nth-child(3) input').val()
@@ -146,6 +127,7 @@
     }
     function myvalue(event) {
       const myvalue = $(event.target).closest('input').val()
+   
       if (myvalue == 'to_let') {
         $(document).find('div .residentail_sale').hide()
         $(document).find('div .residentail_letting').show()
@@ -156,7 +138,7 @@
       }
     }
 
-    function myfunction(event) {
+    function myroomdata(event) {
       let roomImages = []
       const imagelength = $(event.target).parents('.roomFields').find('.form-field:nth-child(7) .fileinput').prop('files').length;
       for (let i = 0; i < imagelength; i++) {
@@ -208,23 +190,6 @@
         }
       });
     });
-    $(document).on('click', '.showProp', function () {
-      console.log("i am call")
-      let _id = $(this).attr('data-id')
-      $.ajax({
-        url: "/api/property/get",
-        method: 'post',
-        data: JSON.stringify({ _id: _id }),
-        contentType: 'application/json',
-        success: function (result) {
-          // console.log(result)
-          // location.reload();
-        },
-        error: function (result) {
-          console.log("error", result)
-        }
-      });
-    })
     $(document).on('click', '.pushToHive', function () {
       let _id = $(this).attr('data-id')
       $.ajax({
@@ -245,19 +210,32 @@
       e.preventDefault();
       var data = getFormData($('form.propertyForm'));
       data['userId'] = 1;
-      let idToUpdate = data._id;
+     
+      let idToUpdate = data.id;
+      
+      
       if (idToUpdate) {
       } else {
-        delete data._id;
+        delete data.id;
       }
-
       const mydata = JSON.stringify(roomes)
-      console.log(mydata)
       for (let j = 0; j < myfile.length; j++) {
         formdata.append('roomimage', myfile[j]);
       }
+     // radio button
+      formdata.append('active', $('input[name="active"]:checked').val());
+      formdata.append('featured',$('input[name="featured"]:checked').val()) 
+      formdata.append('propertytype',$('input[name="propertytype"]:checked').val())
+      formdata.append('furnishing', $('input[name="furnishing"]:checked').val());
+
+      //select button
+      formdata.append('parking',  $('#parking option:selected').val());
+      formdata.append('outside_space',  $('#outside_space option:selected').val());
+      formdata.append('availability',  $('#availability option:selected').val());
+      formdata.append('property_type',  $('#property_type option:selected').val());
+
       // propety summary 
-      formdata.append('type', data.mybutton)
+    
       formdata.append('owner_contect_details', data.owner_contect_details);
 
       formdata.append('building_name', data.building_name);
@@ -266,7 +244,6 @@
       formdata.append('town', data.town);
       formdata.append('country', data.country);
       formdata.append('passcode', data.passcode);
-
       formdata.append('location_map', data.location_map);
 
       formdata.append('price', data.price);
@@ -281,16 +258,8 @@
       // property deatils 
       formdata.append('bedrooms', data.bedrooms);
       formdata.append('bathrooms', data.bathrooms);
-      formdata.append('reception_room', data.reception_room)
-      formdata.append('property_type', typevalue);
-      formdata.append('parking', parkingvalue);
-      formdata.append('outside_space', outsidevalue)
+      formdata.append('reception_rooms', data.reception_rooms)
       formdata.append('council_tax_band', data.council_tax_band);
-
-      // property marketing
-      formdata.append('active', data.active);
-      formdata.append('featured', data.featured)
-      formdata.append('availability', avldata);
 
       //residentail sales details
       formdata.append('residentail_orio', data.residentail_orio);
@@ -308,18 +277,20 @@
       formdata.append('per_quater', data.per_quater);
       formdata.append('per_annum', data.per_annum);
       formdata.append('deposit', data.deposit)
-      formdata.append('furnishing', data.furnishing);
       formdata.append('availabale_date', data.availabale_date);
       formdata.append('minimume_tenancy', data.minimume_tenancy)
 
       formdata.append('room_information', mydata)
+      formdata.append('id', data.id)
+      console.log(data)
       const urlEncoded = new URLSearchParams(formdata).toString()
       $.ajax({
         url: idToUpdate ? "/api/property/update" : "/api/property/create",
         method: 'post',
         data: formdata,
-        contentType: false, //this is requireded please see answers above
+        contentType:   false , //"application/x-www-form-urlencoded", //this is requireded please see answers above
         processData: false,
+        cache: false,
         success: function (result) {
           // console.log(result)
           // location.reload();
@@ -334,7 +305,7 @@
       var indexed_array = {};
       $.map(unindexed_array, function (n, i) {
         indexed_array[n['name']] = n['value'];
-      });
+      }); 
       return indexed_array;
     }
 
@@ -363,9 +334,11 @@
         </div>
         <div class="popupItem">
           <form class="propertyForm" enctype="multipart/form-data">
+
+
             <div class="mybutton" onchange="myvalue(event)">
-              <h6>for sale</h6><input type="radio" id="for_sale" name="mybutton" value="for_sale">
-              <h6>to let</h6><input type="radio" id="to_let" name="mybutton" value="to_let">
+              <h6>for sale</h6><input type="radio" id="mybutton1" class="mybutton" name="propertytype" value="for_sale">
+              <h6>to let</h6><input type="radio"  id="mybutton2" class="mybutton" name="propertytype" value="to_let">
             </div>
             <!-- propety summary -->
             <div class="form-title">
@@ -474,29 +447,33 @@
               </div>
               <div class="form-field">
                 <label>reception rooms</label>
-                <input type="number" name="reception_room" placeholder="reception rooms">
+                <input type="number" name="reception_rooms" placeholder="reception rooms">
               </div>
             </fieldset>
+
             <fieldset class="fieldset-threecolumn">
-              <div class="form-field">
-                <label for="parking">property type:</label>
-                <select id="parking" onchange="gettypedata(this)">
+              <div class="form-field property_type" >
+                <label for="property_type">property type:</label>
+                <select id="property_type">
+                  <option name="property_type" value="">choose property type</option>
                   <option name="property_type" value="apartment">apartment</option>
                   <option name="property_type" value="bungalow">bungalow</option>
                   <option name="property_type" value="cottage">cottage</option>
                 </select>
               </div>
-              <div class="form-field">
+              <div class="form-field parking">
                 <label for="parking">parking:</label>
-                <select id="parking" onchange="getparkingdata(this)">
+                <select id="parking" >
+                  <option name="parking" value="">choose parking</option>
                   <option name="parking" value="grage">grage</option>
                   <option name="parking" value="carport">carport</option>
                   <option name="parking" value="off-street">off-street</option>
                 </select>
               </div>
-              <div class="form-field">
+              <div class="form-field outside_space">
                 <label>outside_space</label>
-                <select id="outside_space" onchange="getoutsidedata(this)">
+                <select id="outside_space">
+                  <option name="outside_space" value="">choose outside space</option>
                   <option name="outside_space" value="rear_garden">rear garden</option>
                   <option name="outside_space" value="front_garden">front garden</option>
                   <option name="outside_space" value="courtyard">courtyard</option>
@@ -521,19 +498,20 @@
             <fieldset class="fieldset-threecolumn">
               <div class="form-field">
                 <label>active</label>
-                <h6>yes</h6><input type="radio" id="yes" name="active" value="yes">
-                <h6>no</h6><input type="radio" id="yes" name="active" value="no">
+                <h6>yes</h6><input type="radio" class="active" id="active1" name="active" value="yes">
+                <h6>no</h6><input type="radio" class="active" id="active2" name="active" value="no">
               </div>
 
               <div class="form-field">
                 <label>featured</label>
-                <h6>yes</h6><input type="radio" id="yes" name="featured" value="yes">
-                <h6>no</h6><input type="radio" id="yes" name="featured" value="no">
+                <h6>yes</h6><input type="radio" class="featured" id="featured1" name="featured" value="yes">
+                <h6>no</h6><input type="radio" class="featured" id="featured2" name="featured" value="no">
               </div>
 
-              <div class="form-field">
+              <div class="form-field availability">
                 <label for="availability">availability:</label>
-                <select id="availability" onchange="getavldata(this)">
+                <select id="availability">
+                  <option name="availability" value="">choose availability</option>
                   <option name="availability" value="for_sale">for_sale</option>
                   <option name="availability" value="under_offer">under_offer</option>
                   <option name="availability" value="sold_stc">sold_stc</option>
@@ -577,7 +555,7 @@
                 <input type="file" class="fileinput" name="roomimage" placeholder="roomimage" multiple="multiple">
               </div>
               <div><label> &nbsp; </label>
-                <button class="addroom" type="button" onclick="myfunction(event)">add room</button>
+                <button class="addroom" type="button" onclick="myroomdata(event)">add room</button>
               </div>
             </fieldset>
             <!-- propery decription end-->
@@ -723,6 +701,7 @@
               <fieldset class="fieldset-onecolumn">
                 <div class="form-field">
                   <input type="date" name="availabale_date">
+                  <div class="availabale_date"></div>
                 </div>
               </fieldset>
               <fieldset class="fieldset-onecolumn">
@@ -748,7 +727,10 @@
             <fieldset class="fieldset-fourcolumn">
             </fieldset>
             <!-- Property media end -->
-
+             
+            <div class="form-field forid">
+              <input type="text" name="id" placeholder="id">
+            </div>
 
             <!-- Submit -->
             <div class="submit-btn">
@@ -760,6 +742,7 @@
     </div>
   </div>
   <a href="javascript:void(0)" class="addProperty">Add</a>
+  <a href="mypage.ejs" class="showProp">see details</a>
   <section class="new-filter-section">
     <div class="wrapper">
       <div class="new-filter-inr">
@@ -769,15 +752,19 @@
               <div class="filter-box-inr">
                 <div class="filter-img-s">
                   <% item.image.forEach((image)=>{%>
-                    <%- image %>
-                    <div>
-                      <div class="filer-bg-img" style="background-image: url(/profile/<%-image%>);">
-                        <!-- style="background-image: url(https://propertyapp.hubresolution.com/profile/<%-image%>);">  -->
+                    <%- image.image %>
+                      <div>
+                        <div class="filer-bg-img" style="background-image: url(/profile/<%-image.imagedata%>);">
+                          <!--style="background-image: url(https://propertyapp.hubresolution.com/profile/<%-image.image%>);">  -->
+
+                        </div>
                       </div>
-                    </div>
-                    <%});%>
+                      <%});%>
                 </div>
                 <div class="filter-bottom-s">
+                  <div class="content-s forid">
+                    <h2><%- item._id %>&nbsp;</h2>
+                  </div>
                   <div class="content-s">
                     <h2><%- item.owner_contect_details %>&nbsp;</h2>
                   </div>
@@ -821,29 +808,21 @@
                   </h5>
 
                   <div class="button-s">
-                    <!-- <div class="button">
-            <a href="javascript:void(0)"  class="editProp" data-id="<%- item._id %>">
-              <svg clip-rule="evenodd" fill-rule="evenodd" stroke-linejoin="round" stroke-miterlimit="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path d="m11.25 6c.398 0 .75.352.75.75 0 .414-.336.75-.75.75-1.505 0-7.75 0-7.75 0v12h17v-8.749c0-.414.336-.75.75-.75s.75.336.75.75v9.249c0 .621-.522 1-1 1h-18c-.48 0-1-.379-1-1v-13c0-.481.38-1 1-1zm1.521 9.689 9.012-9.012c.133-.133.217-.329.217-.532 0-.179-.065-.363-.218-.515l-2.423-2.415c-.143-.143-.333-.215-.522-.215s-.378.072-.523.215l-9.027 8.996c-.442 1.371-1.158 3.586-1.264 3.952-.126.433.198.834.572.834.41 0 .696-.099 4.176-1.308zm-2.258-2.392 1.17 1.171c-.704.232-1.274.418-1.729.566zm.968-1.154 7.356-7.331 1.347 1.342-7.346 7.347z" fill-rule="nonzero"></path>
-              </svg></a>
-          </div> -->
+                    <div class="button">
+                      <a href="javascript:void(0)" class="editProp" data-id="<%- item._id %>" >
+                        <svg clip-rule="evenodd" fill-rule="evenodd" stroke-linejoin="round" stroke-miterlimit="2"
+                          viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                          <path
+                            d="m11.25 6c.398 0 .75.352.75.75 0 .414-.336.75-.75.75-1.505 0-7.75 0-7.75 0v12h17v-8.749c0-.414.336-.75.75-.75s.75.336.75.75v9.249c0 .621-.522 1-1 1h-18c-.48 0-1-.379-1-1v-13c0-.481.38-1 1-1zm1.521 9.689 9.012-9.012c.133-.133.217-.329.217-.532 0-.179-.065-.363-.218-.515l-2.423-2.415c-.143-.143-.333-.215-.522-.215s-.378.072-.523.215l-9.027 8.996c-.442 1.371-1.158 3.586-1.264 3.952-.126.433.198.834.572.834.41 0 .696-.099 4.176-1.308zm-2.258-2.392 1.17 1.171c-.704.232-1.274.418-1.729.566zm.968-1.154 7.356-7.331 1.347 1.342-7.346 7.347z"
+                            fill-rule="nonzero"></path>
+                        </svg></a>
+                    </div>
                     <div class="button">
                       <a href="javascript:void(0)" class="deleteProp" data-id="<%- item._id %>">
                         <svg clip-rule="evenodd" fill-rule="evenodd" stroke-linejoin="round" stroke-miterlimit="2"
                           viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                           <path
                             d="m20.015 6.506h-16v14.423c0 .591.448 1.071 1 1.071h14c.552 0 1-.48 1-1.071 0-3.905 0-14.423 0-14.423zm-5.75 2.494c.414 0 .75.336.75.75v8.5c0 .414-.336.75-.75.75s-.75-.336-.75-.75v-8.5c0-.414.336-.75.75-.75zm-4.5 0c.414 0 .75.336.75.75v8.5c0 .414-.336.75-.75.75s-.75-.336-.75-.75v-8.5c0-.414.336-.75.75-.75zm-.75-5v-1c0-.535.474-1 1-1h4c.526 0 1 .465 1 1v1h5.254c.412 0 .746.335.746.747s-.334.747-.746.747h-16.507c-.413 0-.747-.335-.747-.747s.334-.747.747-.747zm4.5 0v-.5h-3v.5z"
-                            fill-rule="nonzero" />
-                        </svg>
-                      </a>
-                    </div>
-
-                    <div class="button">
-                      <a href="mypage.ejs" class="showProp" data-id="<%- item._id %>">
-                        <svg clip-rule="evenodd" fill-rule="evenodd" stroke-linejoin="round" stroke-miterlimit="2"
-                          viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                          <path
-                            d="m11.998 5c-4.078 0-7.742 3.093-9.853 6.483-.096.159-.145.338-.145.517s.048.358.144.517c2.112 3.39 5.776 6.483 9.854 6.483 4.143 0 7.796-3.09 9.864-6.493.092-.156.138-.332.138-.507s-.046-.351-.138-.507c-2.068-3.403-5.721-6.493-9.864-6.493zm.002 3c2.208 0 4 1.792 4 4s-1.792 4-4 4-4-1.792-4-4 1.792-4 4-4zm0 1.5c1.38 0 2.5 1.12 2.5 2.5s-1.12 2.5-2.5 2.5-2.5-1.12-2.5-2.5 1.12-2.5 2.5-2.5z"
                             fill-rule="nonzero" />
                         </svg>
                       </a>

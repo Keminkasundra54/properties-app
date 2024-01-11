@@ -1,40 +1,116 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>my all properties</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Table Filter</title>
-    <link rel="stylesheet" type="text/css" href="/static/style.css">
-    <style>
-  input::-webkit-outer-spin-button,input::-webkit-inner-spin-button {-webkit-appearance: none;margin: 0;}
-  input[type=number] {-moz-appearance:textfield; appearance: none;}
-  
-      fieldset{border: none;}
-      fieldset.fieldset-twocolumn .form-field {width: 50%}
-      fieldset.fieldset-threecolumn .form-field {width: 30%;}
-      fieldset.fieldset-twocolumn {display: flex;flex-wrap: wrap;}
-      fieldset.fieldset-twocolumn {border: 1px solid black;padding: 9px;border-radius: 5px;}
-      .popupBoxs {max-width: 600px;}
-      fieldset.fieldset-threecolumn {display: flex;justify-content: space-evenly;}
-      .form-field.radio-btn {display: flex;align-items: center;padding-left: 20px;}
-      .form-field.radio-btn label {font-size: 17px;color: dimgray;padding: 5px;}
-      select {width: 100%;padding: 12px 15px;border-radius: 5px;}
-      .form-field h6 { display: inline; }
-      input[type="number"] {width: 100%;padding: 12px 15px;border-radius: 5px;}
-      input#yes {vertical-align: middle;}
-      .residentail_letting{display: none;}
-      .mybutton {display: flex;flex-direction: row;align-items: stretch;justify-content: center;
-  }
-  
-    </style>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    <script src="/static/js/main.js"></script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Table Filter</title>
+  <link rel="stylesheet" type="text/css" href="/static/style.css">
+  <style>
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    input[type=number] {
+      -moz-appearance: textfield;
+      appearance: none;
+    }
+
+    fieldset {
+      border: none;
+    }
+
+    fieldset.fieldset-twocolumn .form-field {
+      width: 50%
+    }
+
+    fieldset.fieldset-threecolumn .form-field {
+      width: 30%;
+    }
+
+    fieldset.fieldset-twocolumn {
+      display: flex;
+      flex-wrap: wrap;
+    }
+
+    fieldset.fieldset-twocolumn {
+      border: 1px solid black;
+      padding: 9px;
+      border-radius: 5px;
+    }
+
+    .popupBoxs {
+      max-width: 600px;
+    }
+
+    fieldset.fieldset-threecolumn {
+      display: flex;
+      justify-content: space-evenly;
+    }
+
+    .form-field.radio-btn {
+      display: flex;
+      align-items: center;
+      padding-left: 20px;
+    }
+
+    .form-field.radio-btn label {
+      font-size: 17px;
+      color: dimgray;
+      padding: 5px;
+    }
+
+    select {
+      width: 100%;
+      padding: 12px 15px;
+      border-radius: 5px;
+    }
+
+    .form-field h6 {
+      display: inline;
+    }
+
+    input[type="number"] {
+      width: 100%;
+      padding: 12px 15px;
+      border-radius: 5px;
+    }
+
+    input#yes {
+      vertical-align: middle;
+    }
+
+    .residentail_letting {
+      display: none;
+    }
+
+    .mybutton {
+      display: flex;
+      flex-direction: row;
+      align-items: stretch;
+      justify-content: center;
+    }
+  </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script src="/static/js/main.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script src="/static/js/main.js"></script>
+  <script>
+    $(document).ready(function () {
+      $('.filter-img-s').slick({
+        dots: false,
+        infinite: true,
+        speed: 300,
+        slidesToShow: 1
+      });
+    })
+  </script>
 </head>
+
 <body>
- <section class="new-filter-section">
+  <section class="new-filter-section">
     <div class="wrapper">
       <div class="new-filter-inr">
         <div class="filter-cols">
@@ -43,51 +119,57 @@
               <div class="filter-box-inr">
                 <div class="filter-img-s">
                   <% item.image.forEach((image)=>{%>
-                    <!-- <%- image %> -->
-                      <div>
-                        <div class="filer-bg-img" style="background-image: url(/profile/<%-image%>);"> 
-                          <!-- style="background-image: url(https://propertyapp.hubresolution.com/profile/<%-image%>);">  -->
-                         </div>
+                    <!-- <%- image.image %> -->
+                    <div>
+                      <div class="filer-bg-img" style="background-image: url(/profile/<%-image.imagedata%>);">
+                        <!--style="background-image: url(https://propertyapp.hubresolution.com/profile/<%-image.image%>);">  -->
+
                       </div>
-                      <%});%>
+                    </div>
+                    <%});%>
                 </div>
                 <div class="filter-bottom-s">
+                  <div class="content-s">
+                    <h2><%- item.type %>&nbsp;</h2>
+                  </div>
                   <div class="content-s">
                     <h2><%- item.owner_contect_details %>&nbsp;</h2>
                   </div>
                   <div class="summary-con">
-                    <h2><%- item.address.building_name %>&nbsp;</h2>
-                    <h2><%- item.address.street %>&nbsp;</h2>
-                    <h2><%- item.address.addrress_line_2 %>&nbsp;</h2>
-                    <h2><%- item.address.town %>&nbsp;</h2>
-                    <h2><%- item.address.country %>&nbsp;</h2>
-                    <h2><%- item.address.passcode %>&nbsp;</h2>
-                    <h2><%- item.address.location_map %>&nbsp;</h2>
-
+                    <h3><%- item.address.building_name %>&nbsp;</h3>
+                    <h3><%- item.address.street %>&nbsp;</h3>
+                    <h3><%- item.address.addrress_line_2 %>&nbsp;</h3>
+                    <h3><%- item.address.town %>&nbsp;</h3>
+                    <h3><%- item.address.country %>&nbsp;</h3>
+                    <h3><%- item.address.passcode %>&nbsp;</h3>
                   </div>
                   <div class="summary-con">
-                    <h2><%- item.price.orio %>&nbsp;</h2>
-                    <h2><%- item.price.offers_over %>&nbsp;</h2>
-                    <h2><%- item.price.guide_price %>&nbsp;</h2>
-                    <h2><%- item.price.fixed_price %>&nbsp;</h2>
+                    <h3><%- item.price.orio %>&nbsp;</h3>
+                    <h3><%- item.price.offers_over %>&nbsp;</h3>
+                    <h3><%- item.price.guide_price %>&nbsp;</h3>
+                    <h3><%- item.price.fixed_price %>&nbsp;</h3>
                   </div>
                   <div class="summary-con">
-                    <h2><%- item.location_map %>&nbsp;</h2>
-                  </div>
-                  
-                  <div class="summary-con">
-                    <h2><%- item.tenure.free_hold %>&nbsp;</h2>
-                    <h2><%- item.tenure.less_hold %>&nbsp;</h2>
-                  </div>
-                  <div class="summary-con">
-                    <p><%- item.location_map %></p>
+                    <h3><%- item.location_map %>&nbsp;</h3>
                   </div>
 
                   <div class="summary-con">
-                    <h2><%- item.badrooms %>&nbsp;</h2>
+                    <h3><%- item.tenure.free_hold %>&nbsp;</h3>
+                    <h3><%- item.tenure.less_hold %>&nbsp;</h3>
+                  </div>
+
+                  <div class="summary-con">
+                    <h3><svg width="20" height="20" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd"
+                      clip-rule="evenodd">
+                      <path
+                        d="M24 19v-7h-23v-7h-1v14h1v-2h22v2h1zm-20-12c1.104 0 2 .896 2 2s-.896 2-2 2-2-.896-2-2 .896-2 2-2zm19 4c0-1.657-1.343-3-3-3h-13v3h16z" />
+                    </svg><%- item.bedrooms %>&nbsp;</h3>
                   </div>
                   <div class="summary-con">
-                    <h2><%- item.bathrooms %>&nbsp;</h2>
+                    <h3><%- item.bathrooms %>&nbsp;</h3>
+                  </div>
+                  <div class="summary-con">
+                    <h3><%- item.reception_rooms %>&nbsp;</h3>
                   </div>
                   <div class="summary-con">
                     <h2><%- item.property_type %>&nbsp;</h2>
@@ -96,7 +178,10 @@
                     <h2><%- item.parking %>&nbsp;</h2>
                   </div>
                   <div class="summary-con">
-                    <p><%- item.council_tax_band %></p>
+                    <h2><%- item.outside_space %>&nbsp;</h2>
+                  </div>
+                  <div class="summary-con">
+                    <h3><%- item.council_tax_band %></h3>
                   </div>
 
                   <div class="summary-con">
@@ -111,47 +196,54 @@
                   <!-- <div class="summary-con">
                     <h2><%- item.send_to_portal %>&nbsp;</h2>
                   </div> -->
+                  <% if(item.type=="for_sale" ) { %>
+                    <div class="summary-con">
+                      <h3><%- item.details_price.residentail_orio %>&nbsp;</h3>
+                      <h3><%- item.details_price.residentail_offers_over %>&nbsp;</h3>
+                      <h3><%- item.details_price.residentail_guide_price %>&nbsp;</h3>
+                      <h3><%- item.details_price.residentail_fix_price %>&nbsp;</h3>
+                      <h3><%- item.details_price.residentail_price_on_application %>&nbsp;</h3>
+                    </div>
+                    <div class="summary-con">
+                      <h3><%- item.deatils_tenure.residentail_free_hold %>&nbsp;</h3>
+                      <h3><%- item.deatils_tenure.residentail_less_hold %>&nbsp;</h3>
+                    </div>
+                    <% } else{ %>
+                      <% } %>
 
-                  <div class="summary-con">
-                    <h2><%- item.details_price.residentail_orio %>&nbsp;</h2>
-                    <h2><%- item.details_price.residentail_offers_over %>&nbsp;</h2>
-                    <h2><%- item.details_price.residentail_guide_price %>&nbsp;</h2>
-                    <h2><%- item.details_price.residentail_fix_price %>&nbsp;</h2>
-                    <h2><%- item.details_price.residentail_price_on_application %>&nbsp;</h2>
-                  </div>
-                  <div class="summary-con">
-                    <h2><%- item.deatils_tenure.residentail_free_hold %>&nbsp;</h2>
-                    <h2><%- item.deatils_tenure.residentail_less_hold %>&nbsp;</h2>
-                  </div>
-                  <div class="summary-con">
-                    <h2><%- item.rent %>&nbsp;</h2>
-                  </div>
-                  <div class="summary-con">
-                    <h2><%- item.deposit %>&nbsp;</h2>
-                  </div>
-                  <div class="summary-con">
-                    <p><%- item.furnishing %></p>
-                  </div>
-                  <div class="summary-con">
-                    <h2><%- item.availabale_date %>&nbsp;</h2>
-                  </div>
-                  <div class="summary-con">
-                    <p><%- item.minimume_tenancy %></p>
-                  </div>
+                        <% if(item.type=="to_let" ) { %>
+                          <div class="summary-con">
+                            <h3><%- item.rent.per_person_per_week %>&nbsp;</h3>
+                          </div>
+                          <div class="summary-con">
+                            <h3><%- item.deposit %>&nbsp;</h3>
+                          </div>
+                          <div class="summary-con">
+                            <h3><%- item.furnishing %></h3>
+                          </div>
+                          <div class="summary-con">
+                            <h3><%- item.availabale_date %>&nbsp;</h3>
+                          </div>
+                          <div class="summary-con">
+                            <h3><%- item.minimume_tenancy %></h3>
+                          </div>
+                          <% } else{ %>
+                            <% } %>
 
-                  <div class="button-s"> 
-                    <% if(item.pushedToHive) { %>
-                      <div class="button">
-                        <a href="javascript:void(0)" class="pushToHive" data-id="<%- item._id %>">
-                          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-                            <path
-                              d="M19.479 10.092c-.212-3.951-3.473-7.092-7.479-7.092-4.005 0-7.267 3.141-7.479 7.092-2.57.463-4.521 2.706-4.521 5.408 0 3.037 2.463 5.5 5.5 5.5h13c3.037 0 5.5-2.463 5.5-5.5 0-2.702-1.951-4.945-4.521-5.408zm-7.479-1.092l4 4h-3v4h-2v-4h-3l4-4z" />
-                          </svg>
-                        </a>
-                      </div>
-                      <% } else{ %>
-                        <% } %>
-                  </div>
+                              <div class="button-s">
+                                <% if(item.pushedToHive) { %>
+                                  <div class="button">
+                                    <a href="javascript:void(0)" class="pushToHive" data-id="<%- item._id %>">
+                                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                        viewBox="0 0 24 24">
+                                        <path
+                                          d="M19.479 10.092c-.212-3.951-3.473-7.092-7.479-7.092-4.005 0-7.267 3.141-7.479 7.092-2.57.463-4.521 2.706-4.521 5.408 0 3.037 2.463 5.5 5.5 5.5h13c3.037 0 5.5-2.463 5.5-5.5 0-2.702-1.951-4.945-4.521-5.408zm-7.479-1.092l4 4h-3v4h-2v-4h-3l4-4z" />
+                                      </svg>
+                                    </a>
+                                  </div>
+                                  <% } else{ %>
+                                    <% } %>
+                              </div>
                 </div>
               </div>
             </div>
@@ -159,6 +251,7 @@
         </div>
       </div>
     </div>
-</section> 
+  </section>
 </body>
+
 </html>

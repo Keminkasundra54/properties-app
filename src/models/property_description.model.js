@@ -7,9 +7,9 @@ const string = require('joi/lib/types/string')
 const Schema = mongoose.Schema
 
 const propertySchema = new Schema({
-  type:{
+  propertytype:{
    type:String,
-   default: 'for_sale'
+   default:"for_sale"
   },
   owner_contect_details: {
     type: String,
@@ -27,7 +27,7 @@ const propertySchema = new Schema({
     type: Object,
   },
 
-  badrooms: {
+  bedrooms: {
     type: Number,
   },
   bathrooms: {
@@ -37,13 +37,16 @@ const propertySchema = new Schema({
     type: Number
   },
   property_type: {
-    type: String
+    type: String,
+    default:"apartment"
   },
   parking: {
-    type: Object,
+    type: String,
+    default:"grage"
   },
   outside_space: {
-    type: Object,
+    type: String,
+    default:"rear garden"
   },
   council_tax_band: {
     type: Object,
@@ -54,12 +57,15 @@ const propertySchema = new Schema({
 
   active: {
     type: String,
+    default: "yes"
   },
   featured: {
-    type: String
+    type: String,
+    default: "yes"
   },
   availability: {
-    type: String
+    type: String,
+    default:"for_sale"
   },
   send_to_portal: {
     type: String
@@ -103,8 +109,8 @@ const propertySchema = new Schema({
 propertySchema.method({
   transform() {
     const transformed = {}
-    const fields = ['owner_contect_details', 'address', 'price', 'location_map', 'tenure',
-      'badrooms', 'bathrooms', 'reception_room', 'propery_type', 'parking', 'outside_space', 'price', 'council_tax_band', 'image',
+    const fields = ['_id' , 'propertytype' ,  'owner_contect_details', 'address', 'price', 'location_map', 'tenure',
+      'bedrooms', 'bathrooms', 'reception_rooms', 'propery_type', 'parking', 'outside_space', 'price', 'council_tax_band', 'image',
       'active', 'featured', , 'availability', 'send_to_portal',
       'property_description',
       'details_price', 'deatils_tenure',
