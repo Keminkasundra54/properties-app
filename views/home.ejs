@@ -99,6 +99,12 @@
 .myimgtype {width: 20%;text-align: left;padding-left: 10px;}
 .main div{width: calc(100% - 55%);}
 .main div svg {height: 17px;width: 20px;}
+    .first-bg-s > div:first-child{
+      display: none;
+    }
+    /* #availability option:first-child{
+        display: none;
+    } */
   </style>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
   <script src="/static/js/main.js"></script>
@@ -130,7 +136,7 @@
     }
     function myvalue(event) {
       const myvalue = $(event.target).closest('input').val()
-   
+
       if (myvalue == 'to_let') {
         $(document).find('div .residentail_sale').hide()
         $(document).find('div .residentail_letting').show()
@@ -140,14 +146,30 @@
         $(document).find('div .residentail_letting').hide()
       }
     }
-    function myroomdata(event) {
-      let roomImages = []
+    function getBase64(file) {
+      return new Promise((resolve) => {
+        var reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = function () {
+          resolve(reader.result);
+        };
+        reader.onerror = function (error) {
+          resolve('Error: '+error);
+        };
+      });
+
+    }
+    async function myroomdata(event) {
+      let roomImages = [];
+      let imageBase64 = [];
       const imagelength = $(event.target).parents('.roomFields').find('.form-field:nth-child(7) .fileinput').prop('files').length;
       for (let i = 0; i < imagelength; i++) {
         var imagename = $(event.target).parents('.roomFields').find('.form-field:nth-child(7) .fileinput').prop('files')[i].name
         var imagedata = $(event.target).parents('.roomFields').find('.form-field:nth-child(7) .fileinput').prop('files')[i]
         myfile.push(imagedata)
         roomImages.push(imagename)
+        let fileBase = await getBase64($(event.target).parents('.roomFields').find('.form-field:nth-child(7) .fileinput').prop('files')[i]);
+        imageBase64.push(fileBase)
       }
       const myarray = {
         "summary_description": $(event.target).parents('.roomFields ').find('.form-field:nth-child(1) input').val(),
@@ -161,20 +183,30 @@
 
       $(event.target).parents('.roomFields').find('.form-field input').val('');
       var clonner = $('.newform-two-clr').eq(0).clone();
+
+      $(clonner).find('.first-bg-s > div:gt(0)').remove();
+      console.log(imageBase64);
+      for (let image of imageBase64) {
+        var imageClon = $(clonner).find('.first-bg-s div').eq(0).clone();
+        $(imageClon).find('.fst-bg-img').attr('style', "background-image: url('"+image+"')")
+        $(clonner).find('.first-bg-s').append(imageClon);
+      }
       clonner.find('.form-left-rq').eq(0).find('.data').text(myarray.summary_description);
       clonner.find('.form-left-rq').eq(1).find('.data').text(myarray.unique_features.length);
       clonner.find('.form-left-rq').eq(2).find('.data').text(myarray.room_name);
       clonner.find('.form-left-rq').eq(3).find('.data').text(myarray.room_dimension);
       clonner.find('.form-left-rq').eq(4).find('.data').text(myarray.room_description);
       clonner.find('.form-left-rq').eq(5).find('.data').text(myarray.roomImage.length);
+      $(clonner).find('.first-bg-s > div:eq(0)').remove();
       $('.newform-two-clr:last').after(clonner);
+      $('.newform-two-clr:last .first-bg-s').slick({
+        dots: false,
+        infinite: true,
+        speed: 300,
+        slidesToShow: 1
+      });
       roomes.push(myarray);
-      // $('.first-bg-s').slick({
-      //   dots: false,
-      //   infinite: true,
-      //   speed: 300,
-      //   slidesToShow: 1
-      // });
+
     }
     $(document).on('click', '.deleteProp', function () {
       let _id = $(this).attr('data-id')
@@ -226,7 +258,7 @@
       }
      // radio button
       formdata.append('active', $('input[name="active"]:checked').val());
-      formdata.append('featured',$('input[name="featured"]:checked').val()) 
+      formdata.append('featured',$('input[name="featured"]:checked').val())
       formdata.append('propertytype',$('input[name="propertytype"]:checked').val())
       formdata.append('furnishing', $('input[name="furnishing"]:checked').val());
 
@@ -236,8 +268,8 @@
       formdata.append('availability',  $('#availability').val());
       formdata.append('property_type',  $('#property_type option:selected').val());
 
-      // propety summary 
-    
+      // propety summary
+
       formdata.append('owner_contect_details', data.owner_contect_details);
 
       formdata.append('building_name', data.building_name);
@@ -257,7 +289,7 @@
       formdata.append('free_hold', data.free_hold);
       formdata.append('less_hold', data.less_hold);
 
-      // property deatils 
+      // property deatils
       formdata.append('bedrooms', data.bedrooms);
       formdata.append('bathrooms', data.bathrooms);
       formdata.append('reception_rooms', data.reception_rooms)
@@ -307,7 +339,7 @@
       var indexed_array = {};
       $.map(unindexed_array, function (n, i) {
         indexed_array[n['name']] = n['value'];
-      }); 
+      });
       return indexed_array;
     }
     $(document).ready(function () {
@@ -711,7 +743,7 @@
             <fieldset class="fieldset-fourcolumn">
             </fieldset>
             <!-- Property media end -->
-             
+
             <div class="form-field forid">
               <input type="text" name="id" placeholder="id">
             </div>
