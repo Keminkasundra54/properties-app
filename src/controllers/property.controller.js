@@ -214,18 +214,13 @@ exports.getProperty = async (req, res, next) => {
       "parking": property.parking,
       "outside_space": property.outside_space,
       "council_tax_band": property.council_tax_band,
-      // "image": property.image,
+      "image": property.image,
 
       "active": property.active,
       "featured": property.featured,
       "availability": property.availability,
+      "property_description":property.property_description,
 
-      // "room_name":property.property_description[0].room_name,
-      // "summary_description": property.property_description[0].summary_description,
-      // "unique_features": property.property_description[0].unique_features[0],
-      // "room_description": property.property_description[0].room_description,
-      // "room_dimension": property.property_description[0].room_dimension,
-      // "room_image": property.property_description.room_image[0],
 
       "residentail_orio": property.details_price.residentail_orio,
       "residentail_offers_over": property.details_price.residentail_offers_over,
@@ -303,11 +298,10 @@ exports.updateProperty = async (req, res, next) => {
     const roomjsondata = JSON.parse(req.body.room_information)
     const img = req.files.roomimage
     const olddata = await Property.findOne({ _id: req.body.id })
-    if(olddata.property_description.length > 0)
-    {
-       for(let v= 0 ; v< olddata.property_description.length ; v++){
+    if (olddata.property_description.length > 0) {
+      for (let v = 0; v < olddata.property_description.length; v++) {
         room_information.push(olddata.property_description[v])
-       }
+      }
     }
     for (let a = 0; a < olddata.property_description.length; a++) {
       if (olddata.property_description[a].room_image.length) {
@@ -347,7 +341,6 @@ exports.updateProperty = async (req, res, next) => {
           }
         }
       }
-
       const obj = {
         "room_name": roomjsondata[i].room_name,
         "summary_description": roomjsondata[i].summary_description,

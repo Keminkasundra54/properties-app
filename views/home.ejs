@@ -93,9 +93,12 @@
       align-items: stretch;
       justify-content: center;
     }
-    /* #availability option:first-child{
-        display: none;
-    } */
+.main {width: 100%;display: flex;}
+.myimage {width: 35%;text-align: left;}
+.main div svg {height: 17px;width: 20px;}
+.myimgtype {width: 20%;text-align: left;padding-left: 10px;}
+.main div{width: calc(100% - 55%);}
+.main div svg {height: 17px;width: 20px;}
   </style>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
   <script src="/static/js/main.js"></script>
@@ -137,7 +140,6 @@
         $(document).find('div .residentail_letting').hide()
       }
     }
-
     function myroomdata(event) {
       let roomImages = []
       const imagelength = $(event.target).parents('.roomFields').find('.form-field:nth-child(7) .fileinput').prop('files').length;
@@ -210,14 +212,14 @@
       e.preventDefault();
       var data = getFormData($('form.propertyForm'));
       data['userId'] = 1;
-     
+     console.log(data)
       let idToUpdate = data.id;
-      
       
       if (idToUpdate) {
       } else {
         delete data.id;
       }
+      console.log(roomes)
       const mydata = JSON.stringify(roomes)
       for (let j = 0; j < myfile.length; j++) {
         formdata.append('roomimage', myfile[j]);
@@ -231,7 +233,7 @@
       //select button
       formdata.append('parking',  $('#parking option:selected').val());
       formdata.append('outside_space',  $('#outside_space option:selected').val());
-      formdata.append('availability',  $('#availability option:selected').val());
+      formdata.append('availability',  $('#availability').val());
       formdata.append('property_type',  $('#property_type option:selected').val());
 
       // propety summary 
@@ -308,7 +310,6 @@
       }); 
       return indexed_array;
     }
-
     $(document).ready(function () {
       $('.filter-img-s').slick({
         dots: false,
@@ -334,8 +335,6 @@
         </div>
         <div class="popupItem">
           <form class="propertyForm" enctype="multipart/form-data">
-
-
             <div class="mybutton" onchange="myvalue(event)">
               <h6>for sale</h6><input type="radio" id="mybutton1" class="mybutton" name="propertytype" value="for_sale">
               <h6>to let</h6><input type="radio"  id="mybutton2" class="mybutton" name="propertytype" value="to_let">
@@ -564,21 +563,6 @@
                 <div class="newform-two-clr changes-s">
                   <div class="bottom-clrq">
                     <div class="first-bg-s">
-                      <div>
-                        <div class="fst-bg-img"
-                          style="background-image: url('https://propertyapp.hubresolution.com/profile/1703570719122_0asd.jpg');">
-                        </div>
-                      </div>
-                      <div>
-                        <div class="fst-bg-img"
-                          style="background-image: url('https://propertyapp.hubresolution.com/profile/1703570719122_0asd.jpg');">
-                        </div>
-                      </div>
-                      <div>
-                        <div class="fst-bg-img"
-                          style="background-image: url('https://propertyapp.hubresolution.com/profile/1703570719122_0asd.jpg');">
-                        </div>
-                      </div>
                     </div>
                     <div class="change-clr">
                       <div class="form-left-rq">
