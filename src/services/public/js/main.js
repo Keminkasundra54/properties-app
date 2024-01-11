@@ -61,11 +61,10 @@ $(document).ready(function () {
             clonner.find('.form-left-rq').eq(4).find('.data').text(myarray[i].room_description);
        
             for (let j = 0; j < myarray[i].room_image.length; j++) {
-           clonner.find('.first-bg-s').append('<div><div class="fst-bg-img"style="background-image:url('+"/profile/"+ myarray[i].room_image[j] +'")></div></div>')
+           clonner.find('.first-bg-s').append('<div><div class="fst-bg-img"style="background-image:url('+"/roomimage/"+ myarray[i].room_image[j] +'")></div></div>')
             }
             $('.newform-two-clr:last').after(clonner);
           }
-
           $('.first-bg-s').slick({
             dots: false,
             infinite: true,
