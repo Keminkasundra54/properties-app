@@ -147,6 +147,7 @@ $(document).ready(function () {
   $('.closeBTn').on('click', function (e) {
     e.preventDefault();
     $('.popupSec').fadeOut(1000);
+    location.reload();
   })
   $(".popupSec").click(function (e) {
     e.preventDefault();
