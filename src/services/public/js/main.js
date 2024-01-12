@@ -148,7 +148,7 @@ $(document).ready(function () {
         dataType: "json",
         contentType: "application/json; charset=utf-8",
         success: function (result) {
-           location.reload()
+
         }
       })
     }
@@ -156,18 +156,18 @@ $(document).ready(function () {
   })
 
 
-  // $('.closeBTn').on('click', function (e) {
-  //   e.preventDefault();
-  //   $('.popupSec').fadeOut(1000);
-  // })
-  // $(".popupSec").click(function (e) {
-  //   // e.preventDefault();
-  //   $(this).fadeOut(1000);
-  // });
-  // // Prevent events from getting pass .popup
-  // $(".popupBoxs").click(function (e) {
-  //   // e.stopPropagation();
-  // });
+  $('.closeBTn').on('click', function (e) {
+    e.preventDefault();
+    $('.popupSec').fadeOut(1000);
+  })
+  $(".popupSec").click(function (e) {
+    // e.preventDefault();
+    // $(this).fadeOut(1000);
+  });
+  // Prevent events from getting pass .popup
+  $(".popupBoxs").click(function (e) {
+    // e.stopPropagation();
+  });
 });
 
 
