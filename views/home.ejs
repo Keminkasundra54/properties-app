@@ -252,7 +252,7 @@
       var data = getFormData($('form.propertyForm'));
       data['userId'] = 1;
       let idToUpdate = data.id;
-      
+
       if (idToUpdate) {
       } else {
         delete data.id;
@@ -330,7 +330,7 @@
         cache: false,
         success: function (result) {
           // console.log(result)
-          // location.reload();
+          location.reload();
         },
         error: function (result) {
           console.log("error", result)
