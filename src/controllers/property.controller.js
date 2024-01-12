@@ -19,6 +19,7 @@ exports.create = async (req, res, next) => {
     let roomimagevar = []
     const room_information = []
 
+     console.log(req.body.imagetype)
     const roomjsondata = JSON.parse(req.body.room_information)
     const img = req.files.roomimage
     const myimg = req.files.image
@@ -71,21 +72,33 @@ exports.create = async (req, res, next) => {
               path: teamObj.path,
               size: teamObj.size,
             });
+            if(req.body.imagetype.length <= 0 ){
+              console.log("i am if")
             const obj = {
+
               "imagedata": imgdata.filename,
               "imagetype": req.body.imagetype[i]
             }
             imagevar.push(obj)
+            }
+            else{
+              console.log("i am else")
+              const obj = {
+                "imagedata": imgdata.filename,
+                "imagetype": req.body.imagetype
+              }
+              imagevar.push(obj)
+            }
           }
         }
       }
     }
-    const pricedata = {
-      "orio": req.body.orio,
-      "offers_over": req.body.offers_over,
-      "guide_price": req.body.guide_price,
-      "fixed_price": req.body.fixed_price
-    }
+    // const pricedata = {
+    //   "orio": req.body.orio,
+    //   "offers_over": req.body.offers_over,
+    //   "guide_price": req.body.guide_price,
+    //   "fixed_price": req.body.fixed_price
+    // }
     const details_pricedata = {
       "residentail_orio": req.body.residentail_orio,
       "residentail_offers_over": req.body.residentail_offers_over,
@@ -105,10 +118,10 @@ exports.create = async (req, res, next) => {
       "country": req.body.country,
       "passcode": req.body.passcode,
     }
-    const tenuredata = {
-      "free_hold": req.body.free_hold,
-      "less_hold": req.body.less_hold,
-    }
+    // const tenuredata = {
+    //   "free_hold": req.body.free_hold,
+    //   "less_hold": req.body.less_hold,
+    // }
     const rent = {
       "per_person_per_week": req.body.per_person_per_week,
       "per_week": req.body.per_week,
@@ -116,14 +129,24 @@ exports.create = async (req, res, next) => {
       "per_quater": req.body.per_quater,
       "per_annum": req.body.per_annum
     }
+    let mytype;
+    if(req.body.propertytype == "undefined" || req.body.propertytype == "for_sale")
+    {
+       console.log("i am if")
+      mytype = "for_sale"
+    }
+    else{
+      console.log("i am else")
+      mytype = "to_let"
+    }
     if (body) {
       const propertySave = new Property({
-        propertytype: req.body.propertytype,
+        propertytype: mytype,
         owner_contect_details: req.body.owner_contect_details,
         address: addressdata,
         location_map: req.body.location_map,
-        price: pricedata,
-        tenure: tenuredata,
+        // price: pricedata,
+        // tenure: tenuredata,
 
         bedrooms: req.body.bedrooms,
         bathrooms: req.body.bathrooms,
@@ -199,13 +222,13 @@ exports.getProperty = async (req, res, next) => {
       "country": property.address.country,
       "passcode": property.address.passcode,
       "location_map": property.location_map,
-      "orio": property.price.orio,
-      "offers_over": property.price.offers_over,
-      "guide_price": property.price.guide_price,
-      "fixed_price": property.price.fixed_price,
 
-      "free_hold": property.tenure.free_hold,
-      "less_hold": property.tenure.less_hold,
+      // "orio": property.price.orio,
+      // "offers_over": property.price.offers_over,
+      // "guide_price": property.price.guide_price,
+      // "fixed_price": property.price.fixed_price,
+      // "free_hold": property.tenure.free_hold,
+      // "less_hold": property.tenure.less_hold,
 
       "bedrooms": property.bedrooms,
       "bathrooms": property.bathrooms,
@@ -214,18 +237,13 @@ exports.getProperty = async (req, res, next) => {
       "parking": property.parking,
       "outside_space": property.outside_space,
       "council_tax_band": property.council_tax_band,
-      // "image": property.image,
+      "image": property.image,
 
       "active": property.active,
       "featured": property.featured,
       "availability": property.availability,
+      "property_description":property.property_description,
 
-      // "room_name":property.property_description[0].room_name,
-      // "summary_description": property.property_description[0].summary_description,
-      // "unique_features": property.property_description[0].unique_features[0],
-      // "room_description": property.property_description[0].room_description,
-      // "room_dimension": property.property_description[0].room_dimension,
-      // "room_image": property.property_description.room_image[0],
 
       "residentail_orio": property.details_price.residentail_orio,
       "residentail_offers_over": property.details_price.residentail_offers_over,
@@ -299,15 +317,15 @@ exports.updateProperty = async (req, res, next) => {
     let roomimagevar = []
     const room_information = []
     const myimg = req.files.image
+
     //  for roomimage add and update
     const roomjsondata = JSON.parse(req.body.room_information)
     const img = req.files.roomimage
     const olddata = await Property.findOne({ _id: req.body.id })
-    if(olddata.property_description.length > 0)
-    {
-       for(let v= 0 ; v< olddata.property_description.length ; v++){
+    if (olddata.property_description.length > 0) {
+      for (let v = 0; v < olddata.property_description.length; v++) {
         room_information.push(olddata.property_description[v])
-       }
+      }
     }
     for (let a = 0; a < olddata.property_description.length; a++) {
       if (olddata.property_description[a].room_image.length) {
@@ -347,7 +365,6 @@ exports.updateProperty = async (req, res, next) => {
           }
         }
       }
-
       const obj = {
         "room_name": roomjsondata[i].room_name,
         "summary_description": roomjsondata[i].summary_description,
@@ -382,16 +399,28 @@ exports.updateProperty = async (req, res, next) => {
               path: teamObj.path,
               size: teamObj.size,
             });
+            if(req.body.imagetype.length <= 0 ){
+              console.log("i am if")
             const obj = {
+
               "imagedata": imgdata.filename,
               "imagetype": req.body.imagetype[i]
             }
             imagevar.push(obj)
+            }
+            else{
+              console.log("i am else")
+              const obj = {
+                "imagedata": imgdata.filename,
+                "imagetype": req.body.imagetype
+              }
+              imagevar.push(obj)
+            }
+
           }
         }
       }
     }
-
     //image update end
 
     const property = await Property.findOneAndUpdate({ _id: req.body.id }, {
@@ -407,13 +436,13 @@ exports.updateProperty = async (req, res, next) => {
 
         "location_map": req.body.location_map,
 
-        'price.orio': req.body.orio,
-        'price.offers_over': req.body.offers_over,
-        'price.guide_price': req.body.guide_price,
-        "price.fixed_price": req.body.fixed_price,
+        // 'price.orio': req.body.orio,
+        // 'price.offers_over': req.body.offers_over,
+        // 'price.guide_price': req.body.guide_price,
+        // "price.fixed_price": req.body.fixed_price,
 
-        'tenure.guide_price': req.body.free_hold,
-        "tenure.fixed_price": req.body.less_hold,
+        // 'tenure.guide_price': req.body.free_hold,
+        // "tenure.fixed_price": req.body.less_hold,
 
         "bedrooms": req.body.bedrooms,
         "bathrooms": req.body.bathrooms,
@@ -424,6 +453,7 @@ exports.updateProperty = async (req, res, next) => {
         "property_description": req.body.property_description,
 
         "availability": req.body.availability,
+
         "property_type": req.body.property_type,
         "parking": req.body.parking,
         "outside_space": req.body.outside_space,
@@ -450,7 +480,12 @@ exports.updateProperty = async (req, res, next) => {
         "property_description": room_information,
       }
     })
-    return res.json({ message: 'OK', data: property })
+
+    await Parking.findOneAndUpdate({propertyId:req.body.id}, {$set :{"parking_name" :  req.body.parking}})
+    await OutsideSpace.findOneAndUpdate({propertyId:req.body.id},{$set:{"outsideSpace_name" : req.body.outside_space}})
+    await PropertyType.findOneAndUpdate({propertyId:req.body.id},{$set:{"property_type_name" : req.body.property_type}})
+
+     return res.json({ message: 'OK', data: property })
   } catch (error) {
     console.log(error)
     next(error)

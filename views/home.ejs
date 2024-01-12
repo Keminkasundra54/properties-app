@@ -13,7 +13,8 @@
       -webkit-appearance: none;
       margin: 0;
     }
-
+    div #tolet_availability
+    {display: none}
     input[type=number] {
       -moz-appearance: textfield;
       appearance: none;
@@ -93,6 +94,12 @@
       align-items: stretch;
       justify-content: center;
     }
+.main {width: 100%;display: flex;}
+.myimage {width: 35%;text-align: left;}
+.main div svg {height: 17px;width: 20px;}
+.myimgtype {width: 20%;text-align: left;padding-left: 10px;}
+.main div{width: calc(100% - 55%);}
+.main div svg {height: 17px;width: 20px;}
     .first-bg-s > div:first-child{
       display: none;
     }
@@ -112,8 +119,8 @@
     function onFileSelected(event) {
       selectedFiles = event.target.files;
       if (selectedFiles.length) {
-        for (let i = 0; i < selectedFiles.length; i++) {
-          $(".fieldset-fourcolumn").append('<div class="right-cols"><input type="radio" id="jpg" name="' + selectedFiles[i].name + '" value="Floor_plan"><label for="jpg">Floor plan</label><br><input type="radio" id="jpeg" name="' + selectedFiles[i].name + '" value="EPC"><label for="jpeg">EPC</label><br></div><div class="form-field left-colr">' + selectedFiles[i].name + '"</div></fieldset>')
+        for (let i = 0; i < selectedFiles.length; i++){
+          $(".fieldset-fourcolumn").append('<div class="right-cols"><input type="radio" id="jpg" name="'+ selectedFiles[i].name+'" value="Floor_plan"><label for="Floor_plan">Floor plan</label><br><input type="radio" id="jpeg" name="'+ selectedFiles[i].name+'" value="EPC"><label for="EPC">EPC</label><br></div><div class="form-field left-colr">' + selectedFiles[i].name + '"</div></fieldset>')
           formdata.append('image', selectedFiles[i])
         }
       }
@@ -134,10 +141,16 @@
       if (myvalue == 'to_let') {
         $(document).find('div .residentail_sale').hide()
         $(document).find('div .residentail_letting').show()
+        $(document).find('div #tolet_availability').show()
+        $(document).find('div #availability').hide()
+
       }
       if (myvalue == 'for_sale') {
         $(document).find('div .residentail_sale').show()
         $(document).find('div .residentail_letting').hide()
+        $(document).find('div  #availability').show()
+        $(document).find('div #tolet_availability').hide()
+
       }
     }
     function getBase64(file) {
@@ -238,10 +251,8 @@
       e.preventDefault();
       var data = getFormData($('form.propertyForm'));
       data['userId'] = 1;
-
       let idToUpdate = data.id;
-
-
+      
       if (idToUpdate) {
       } else {
         delete data.id;
@@ -253,19 +264,18 @@
      // radio button
       formdata.append('active', $('input[name="active"]:checked').val());
       formdata.append('featured',$('input[name="featured"]:checked').val())
-      formdata.append('propertytype',$('input[name="propertytype"]:checked').val())
+      formdata.append('propertytype',$('input[name="propertytype"]:checked').val());
       formdata.append('furnishing', $('input[name="furnishing"]:checked').val());
 
       //select button
-      formdata.append('parking',  $('#parking option:selected').val());
-      formdata.append('outside_space',  $('#outside_space option:selected').val());
-      formdata.append('availability',  $('#availability option:selected').val());
-      formdata.append('property_type',  $('#property_type option:selected').val());
+      formdata.append('parking',  $('#parking').val());
+      formdata.append('outside_space',  $('#outside_space').val());
+      formdata.append('availability',  $('#availability').val());
+      formdata.append('property_type',  $('#property_type').val());
 
       // propety summary
 
       formdata.append('owner_contect_details', data.owner_contect_details);
-
       formdata.append('building_name', data.building_name);
       formdata.append('street', data.street);
       formdata.append('addrress_line_2', data.addrress_line_2);
@@ -274,14 +284,14 @@
       formdata.append('passcode', data.passcode);
       formdata.append('location_map', data.location_map);
 
-      formdata.append('price', data.price);
-      formdata.append('orio', data.orio);
-      formdata.append('offers_over', data.offers_over);
-      formdata.append('guide_price', data.guide_price);
-      formdata.append('fixed_price', data.fixed_price);
+      // formdata.append('price', data.price);
+      // formdata.append('orio', data.orio);
+      // formdata.append('offers_over', data.offers_over);
+      // formdata.append('guide_price', data.guide_price);
+      // formdata.append('fixed_price', data.fixed_price);
 
-      formdata.append('free_hold', data.free_hold);
-      formdata.append('less_hold', data.less_hold);
+      // formdata.append('free_hold', data.free_hold);
+      // formdata.append('less_hold', data.less_hold);
 
       // property deatils
       formdata.append('bedrooms', data.bedrooms);
@@ -310,7 +320,6 @@
 
       formdata.append('room_information', mydata)
       formdata.append('id', data.id)
-      console.log(data)
       const urlEncoded = new URLSearchParams(formdata).toString()
       $.ajax({
         url: idToUpdate ? "/api/property/update" : "/api/property/create",
@@ -336,7 +345,6 @@
       });
       return indexed_array;
     }
-
     $(document).ready(function () {
       $('.new-filter-inr .filter-img-s').slick({
         dots: false,
@@ -362,8 +370,6 @@
         </div>
         <div class="popupItem">
           <form class="propertyForm" enctype="multipart/form-data">
-
-
             <div class="mybutton" onchange="myvalue(event)">
               <h6>for sale</h6><input type="radio" id="mybutton1" class="mybutton" name="propertytype" value="for_sale">
               <h6>to let</h6><input type="radio"  id="mybutton2" class="mybutton" name="propertytype" value="to_let">
@@ -421,7 +427,8 @@
               </div>
             </fieldset>
 
-            <div class="form-title">
+
+            <!-- <div class="form-title">
               <h4>price</h4>
             </div>
             <fieldset class="fieldset-twocolumn">
@@ -457,7 +464,7 @@
                 <label>less hold</label>
                 <input type="text" name="less_hold" placeholder="less hold">
               </div>
-            </fieldset>
+            </fieldset> -->
             <!-- propety summary end -->
 
             <!-- property deatils -->
@@ -517,8 +524,6 @@
             </fieldset>
             <!-- property deatils end-->
 
-
-
             <!-- property marketing-->
             <div class="form-title">
               <h4>property marketing</h4>
@@ -544,6 +549,12 @@
                   <option name="availability" value="under_offer">under_offer</option>
                   <option name="availability" value="sold_stc">sold_stc</option>
                   <option name="availability" value="sold">sold</option>
+                </select>
+                <select id="tolet_availability">
+                  <option name="availability" value="">choose availability</option>
+                  <option name="availability" value="to_let">to_let</option>
+                  <option name="availability" value="let_agreed">let agreed</option>
+                  <option name="availability" value="let">let</option>
                 </select>
               </div>
             </fieldset>
@@ -593,18 +604,7 @@
                   <div class="bottom-clrq">
                     <div class="first-bg-s">
                       <div>
-                        <div class="fst-bg-img"
-                          style="background-image: url('https://propertyapp.hubresolution.com/profile/1703570719122_0asd.jpg');">
-                        </div>
-                      </div>
-                      <div>
-                        <div class="fst-bg-img"
-                          style="background-image: url('https://propertyapp.hubresolution.com/profile/1703570719122_0asd.jpg');">
-                        </div>
-                      </div>
-                      <div>
-                        <div class="fst-bg-img"
-                          style="background-image: url('https://propertyapp.hubresolution.com/profile/1703570719122_0asd.jpg');">
+                        <div class="fst-bg-img" style="background-image: url('https://propertyapp.hubresolution.com/profile/1703570719122_0asd.jpg');">
                         </div>
                       </div>
                     </div>
