@@ -19,7 +19,7 @@ exports.create = async (req, res, next) => {
     let roomimagevar = []
     const room_information = []
 
-     console.log(req.body.imagetype)  
+    //  console.log(req.body.imagetype)  
     const roomjsondata = JSON.parse(req.body.room_information)
     const img = req.files.roomimage
     const myimg = req.files.image
@@ -62,6 +62,7 @@ exports.create = async (req, res, next) => {
     }
     if (myimg != undefined) {
       if (myimg.length > 0) {
+        console.log(myimg, "img")
         for (const i in myimg) {
           const teamObj = myimg[i]
           if (teamObj.fieldname == "image") {
@@ -72,16 +73,18 @@ exports.create = async (req, res, next) => {
               path: teamObj.path,
               size: teamObj.size,
             });
-            if(req.body.imagetype.length <= 0 ){
-              console.log("i am if")
-            const obj = {
-              
-              "imagedata": imgdata.filename,
-              "imagetype": req.body.imagetype[i]
-            }
-            imagevar.push(obj)
-            }
-            else{
+            if (Array.isArray(req.body.imagetype)) {
+
+              if (req.body.imagetype.length) {
+
+                const obj = {
+
+                  "imagedata": imgdata.filename,
+                  "imagetype": req.body.imagetype[i]
+                }
+                imagevar.push(obj)
+              }
+            }else {
               console.log("i am else")
               const obj = {
                 "imagedata": imgdata.filename,
@@ -130,12 +133,11 @@ exports.create = async (req, res, next) => {
       "per_annum": req.body.per_annum
     }
     let mytype;
-    if(req.body.propertytype == "undefined" || req.body.propertytype == "for_sale")
-    {
-       console.log("i am if")
-      mytype = "for_sale" 
+    if (req.body.propertytype == "undefined" || req.body.propertytype == "for_sale") {
+      console.log("i am if")
+      mytype = "for_sale"
     }
-    else{
+    else {
       console.log("i am else")
       mytype = "to_let"
     }
@@ -242,7 +244,7 @@ exports.getProperty = async (req, res, next) => {
       "active": property.active,
       "featured": property.featured,
       "availability": property.availability,
-      "property_description":property.property_description,
+      "property_description": property.property_description,
 
 
       "residentail_orio": property.details_price.residentail_orio,
@@ -318,6 +320,7 @@ exports.updateProperty = async (req, res, next) => {
     const room_information = []
     const myimg = req.files.image
 
+
     //  for roomimage add and update 
     const roomjsondata = JSON.parse(req.body.room_information)
     const img = req.files.roomimage
@@ -389,6 +392,7 @@ exports.updateProperty = async (req, res, next) => {
     }
     if (myimg != undefined) {
       if (myimg.length > 0) {
+        console.log(myimg, 'imgggggg');
         for (const i in myimg) {
           const teamObj = myimg[i]
           if (teamObj.fieldname == "image") {
@@ -399,24 +403,23 @@ exports.updateProperty = async (req, res, next) => {
               path: teamObj.path,
               size: teamObj.size,
             });
-            if(req.body.imagetype.length <= 0 ){
-              console.log("i am if")
-            const obj = {
-              
-              "imagedata": imgdata.filename,
-              "imagetype": req.body.imagetype[i]
-            }
-            imagevar.push(obj)
-            }
-            else{
-              console.log("i am else")
+
+            if (Array.isArray(req.body.imagetype)) {
+              if (req.body.imagetype.length) {
+                const obj = {
+                  "imagedata": imgdata.filename,
+                  "imagetype": req.body.imagetype[i]
+                }
+                imagevar.push(obj)
+              }
+            }else {
               const obj = {
                 "imagedata": imgdata.filename,
                 "imagetype": req.body.imagetype
               }
               imagevar.push(obj)
             }
-            
+
           }
         }
       }
@@ -481,11 +484,11 @@ exports.updateProperty = async (req, res, next) => {
       }
     })
 
-    await Parking.findOneAndUpdate({propertyId:req.body.id}, {$set :{"parking_name" :  req.body.parking}})
-    await OutsideSpace.findOneAndUpdate({propertyId:req.body.id},{$set:{"outsideSpace_name" : req.body.outside_space}})
-    await PropertyType.findOneAndUpdate({propertyId:req.body.id},{$set:{"property_type_name" : req.body.property_type}})
+    await Parking.findOneAndUpdate({ propertyId: req.body.id }, { $set: { "parking_name": req.body.parking } })
+    await OutsideSpace.findOneAndUpdate({ propertyId: req.body.id }, { $set: { "outsideSpace_name": req.body.outside_space } })
+    await PropertyType.findOneAndUpdate({ propertyId: req.body.id }, { $set: { "property_type_name": req.body.property_type } })
 
-     return res.json({ message: 'OK', data: property })
+    return res.json({ message: 'OK', data: property })
   } catch (error) {
     console.log(error)
     next(error)

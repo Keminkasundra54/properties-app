@@ -4,9 +4,11 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
   <title>Table Filter</title>
   <link rel="stylesheet" type="text/css" href="/static/style.css">
   <style>
+    #ui-datepicker-div{display: none;}
     .forid{display: none;}
     input::-webkit-outer-spin-button,
     input::-webkit-inner-spin-button {
@@ -99,7 +101,7 @@
 .main div svg {height: 17px;width: 20px;}
 .myimgtype {width: 20%;text-align: left;padding-left: 10px;}
 .main div{width: calc(100% - 55%);}
-.main div svg {height: 17px;width: 20px;}
+.main input[type="button"] svg {height: 17px;width: 20px;}
     .first-bg-s > div:first-child{
       display: none;
     }
@@ -107,6 +109,11 @@
         display: none;
     } */
   </style>
+
+
+
+<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+<script src="http://code.jquery.com/ui/1.11.0/jquery-ui.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
   <script src="/static/js/main.js"></script>
   <script>
@@ -129,6 +136,7 @@
       var value = $(this).val();
       formdata.append('imagetype', value);
     });
+
     let myfeaturesdata = []
     function myfeatures(event) {
       const features = $(event.target).parents('.roomFields ').find('.form-field:nth-child(3) input').val()
@@ -164,7 +172,6 @@
           resolve('Error: '+error);
         };
       });
-
     }
     async function myroomdata(event) {
       let roomImages = [];
@@ -206,7 +213,8 @@
       clonner.find('.form-left-rq').eq(5).find('.data').text(myarray.roomImage.length);
       $(clonner).find('.first-bg-s > div:eq(0)').remove();
       $('.newform-two-clr:last').after(clonner);
-      $('.newform-two-clr:last .first-bg-s').slick({
+      // $('.newform-two-clr:last .first-bg-s').slick({
+      $('.first-img-s').slick({
         dots: false,
         infinite: true,
         speed: 300,
@@ -251,12 +259,14 @@
       e.preventDefault();
       var data = getFormData($('form.propertyForm'));
       data['userId'] = 1;
+     console.log(data)
       let idToUpdate = data.id;
       
       if (idToUpdate) {
       } else {
         delete data.id;
       }
+      console.log(roomes)
       const mydata = JSON.stringify(roomes)
       for (let j = 0; j < myfile.length; j++) {
         formdata.append('roomimage', myfile[j]);
@@ -276,6 +286,7 @@
       // propety summary
 
       formdata.append('owner_contect_details', data.owner_contect_details);
+
       formdata.append('building_name', data.building_name);
       formdata.append('street', data.street);
       formdata.append('addrress_line_2', data.addrress_line_2);
@@ -320,6 +331,7 @@
 
       formdata.append('room_information', mydata)
       formdata.append('id', data.id)
+      console.log(data)
       const urlEncoded = new URLSearchParams(formdata).toString()
       $.ajax({
         url: idToUpdate ? "/api/property/update" : "/api/property/create",
@@ -607,6 +619,7 @@
                         <div class="fst-bg-img" style="background-image: url('https://propertyapp.hubresolution.com/profile/1703570719122_0asd.jpg');">
                         </div>
                       </div>
+                    
                     </div>
                     <div class="change-clr">
                       <div class="form-left-rq">
@@ -728,8 +741,8 @@
               </fieldset>
               <fieldset class="fieldset-onecolumn">
                 <div class="form-field">
-                  <input type="date" name="availabale_date">
-                  <div class="availabale_date"></div>
+                  <input type="date" name="availabale_date" class="availabale_date">
+                  <!-- <div class="availabale_date"></div> -->
                 </div>
               </fieldset>
               <fieldset class="fieldset-onecolumn">

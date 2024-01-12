@@ -74,17 +74,20 @@ $(document).ready(function () {
           });
           let myimage = result.data.image
           for (let a = 0; a < myimage.length; a++) {
-            $(".fieldset-fourcolumn").append('<div class="main"><div class="myimgtype">' + myimage[a].imagetype + '</div><div class="myimage">' + myimage[a].imagedata + '</div><div ><svg clip-rule="evenodd" fill-rule="evenodd" stroke-linejoin="round" stroke-miterlimit="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="m12.002 2.005c5.518 0 9.998 4.48 9.998 9.997 0 5.518-4.48 9.998-9.998 9.998-5.517 0-9.997-4.48-9.997-9.998 0-5.517 4.48-9.997 9.997-9.997zm0 8.933-2.721-2.722c-.146-.146-.339-.219-.531-.219-.404 0-.75.324-.75.749 0 .193.073.384.219.531l2.722 2.722-2.728 2.728c-.147.147-.22.34-.22.531 0 .427.35.75.751.75.192 0 .384-.073.53-.219l2.728-2.728 2.729 2.728c.146.146.338.219.53.219.401 0 .75-.323.75-.75 0-.191-.073-.384-.22-.531l-2.727-2.728 2.717-2.717c.146-.147.219-.338.219-.531 0-.425-.346-.75-.75-.75-.192 0-.385.073-.531.22z" fill-rule="nonzero"/></svg></div></div><br><br>')
+            $(".fieldset-fourcolumn").append('<div class="main"><div class="myimgtype">' + myimage[a].imagetype + '</div><div class="myimage">' + myimage[a].imagedata + '</div><div ><a href="#" class="delimg">remove</a></div><br><br>')
           }
           if (result.data.propertytype == 'to_let') {
             $(document).find('div .residentail_sale').hide()
             $(document).find('div .residentail_letting').show()
+            $(document).find('div #tolet_availability').show()
+            $(document).find('div #availability').hide()
           }
           if (result.data.propertytype == 'for_sale') {
             $(document).find('div .residentail_sale').show()
             $(document).find('div .residentail_letting').hide()
+            $(document).find('div  #availability').show()
+            $(document).find('div #tolet_availability').hide()
           }
-
           // radio button value
           $('input[name=active][value="' + result.data.active + '"]').attr("checked", true)
           $('input[name=propertytype][value="' + result.data.propertytype + '"]').attr("checked", true)
@@ -97,10 +100,16 @@ $(document).ready(function () {
           $("div .property_type > select > option[value=" + result.data.property_type + "]").prop("selected", true);
           $("div .outside_space > select > option[value=" + result.data.outside_space + "]").prop("selected", true);
 
-          $("div .availabale_date").text(result.data.availabale_date)
+          // $("div .availabale_date").text(result.data.availabale_date)
+          $('#ui-datepicker-div').hide()
+          var $j = jQuery.noConflict()
+          const day = new Date(result.data.availabale_date).getDate()
+          const month = new Date(result.data.availabale_date).getMonth()
+          const year = new Date(result.data.availabale_date).getFullYear()
+          $("div .availabale_date").datepicker({dateFormat: "yy-mm-dd"}).datepicker("setDate",  new Date(year, month, day))
+          
 
           if (result && result.data) {
-
             for (let key in result.data) {
               if (key != "image" && key != "property_description" && key != "_id") {
                 $('input[name="' + key + '"][type="text"], input[name="' + key + '"][type="number"],textarea[name="' + key + '"]').val(result.data[key]);
@@ -110,11 +119,16 @@ $(document).ready(function () {
         }
       });
     }
+    console.log($('.fieldset-fourcolumn'))  
   })
+
+  $(document).on('click', '.delimg', function(e){
+    console.log("hyyyyyy")
+  })
+
   $('.closeBTn').on('click', function (e) {
     e.preventDefault();
     $('.popupSec').fadeOut(1000);
-
   })
   $(".popupSec").click(function (e) {
     e.preventDefault();
