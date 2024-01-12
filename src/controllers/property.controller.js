@@ -19,7 +19,7 @@ exports.create = async (req, res, next) => {
     let roomimagevar = []
     const room_information = []
 
-     console.log(req.body.imagetype)
+    console.log(req.body.imagetype)
     const roomjsondata = JSON.parse(req.body.room_information)
     const img = req.files.roomimage
     const myimg = req.files.image
@@ -84,7 +84,7 @@ exports.create = async (req, res, next) => {
                 }
                 imagevar.push(obj)
               }
-            }else {
+            } else {
               console.log("i am else")
               const obj = {
                 "imagedata": imgdata.filename,
@@ -412,7 +412,7 @@ exports.updateProperty = async (req, res, next) => {
                 }
                 imagevar.push(obj)
               }
-            }else {
+            } else {
               const obj = {
                 "imagedata": imgdata.filename,
                 "imagetype": req.body.imagetype
@@ -623,5 +623,24 @@ function getPropertyPayload(property) {
         'auto_email_updates': false
       }
     }
+  }
+}
+exports.removeimage = async (req, res, next) => {
+  try {
+    const imageName = req.body.imageName
+    let modifydata = []
+    const removeimg = await Property.findOne({ "image.imagedata": imageName })
+   
+    for (let j = 0; j < removeimg.image.length; j++) {
+      if (removeimg.image[j].imagedata != imageName) {
+        modifydata.push(removeimg.image[j])
+      }
+    }
+    await Property.findOneAndUpdate({ image: modifydata })
+
+    return res.json({ message: 'OK', data: { message: 'Remove' } })
+
+  } catch (e) {
+    next(error)
   }
 }

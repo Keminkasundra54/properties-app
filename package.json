@@ -45,6 +45,8 @@
     "helmet": "^3.21.1",
     "http-status": "^1.0.1",
     "joi": "^13.1.2",
+    "jquery": "^3.7.1",
+    "jsdom": "^23.2.0",
     "jsonwebtoken": "^8.1.1",
     "moment": "^2.29.4",
     "mongoose": "^5.0.7",
