@@ -212,14 +212,16 @@
       clonner.find('.form-left-rq').eq(4).find('.data').text(myarray.room_description);
       clonner.find('.form-left-rq').eq(5).find('.data').text(myarray.roomImage.length);
       $(clonner).find('.first-bg-s > div:eq(0)').remove();
+   
       $('.newform-two-clr:last').after(clonner);
+      console.log($('.newform-two-clr:last .first-bg-s'))
       // $('.newform-two-clr:last .first-bg-s').slick({
-        // $('.fst-bg-img').slick({
-        // dots: false,
-        // infinite: true,
-        // speed: 300,
-        // slidesToShow: 1
-      // });
+          $('.newform-two-clr:last .first-bg-s').slick({
+        dots: false,
+        infinite: true,
+        speed: 300,
+        slidesToShow: 1
+      });
       roomes.push(myarray);
 
     }
@@ -358,7 +360,7 @@
       return indexed_array;
     }
     $(document).ready(function () {
-      $('.filter-img-s').slick({
+      $(' .filter-img-s').slick({
         dots: false,
         infinite: true,
         speed: 300,
@@ -619,7 +621,6 @@
                         <div class="fst-bg-img" style="background-image: url('https://propertyapp.hubresolution.com/profile/1703570719122_0asd.jpg');">
                         </div>
                       </div>
-
                     </div>
                     <div class="change-clr">
                       <div class="form-left-rq">
@@ -783,6 +784,7 @@
     </div>
   </div>
   <a href="javascript:void(0)" class="addProperty">Add</a>
+  <a href="mypage.ejs" class="showProp">see details</a>
   <section class="new-filter-section">
     <div class="wrapper">
       <div class="new-filter-inr">

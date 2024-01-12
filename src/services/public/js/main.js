@@ -63,17 +63,19 @@ $(document).ready(function () {
             clonner.find('.form-left-rq').eq(4).find('.data').text(myarray[i].room_description);
 
             for (let j = 0; j < myarray[i].room_image.length; j++) {
-              clonner.find('.first-bg-s').append('<div><div class="fst-bg-img"style="background-image:url(' + "/roomimage/" + myarray[i].room_image[j] + '")></div></div>')
+              clonner.find('.first-bg-s').append('<div><div class="fst-bg-img" style="background-image:url(' + "/roomimage/" + myarray[i].room_image[j] + '")></div></div>')
             }
             $(clonner).find('.first-bg-s > div:eq(0)').remove();
             $('.newform-two-clr:last').after(clonner);
+            $('.newform-two-clr:last .first-bg-s').slick({
+              dots: false,
+              infinite: true,
+              speed: 300,
+              slidesToShow: 1
+            });
           }
-          $('.first-bg-s').slick({
-            dots: false,
-            infinite: true,
-            speed: 300,
-            slidesToShow: 1
-          });
+        
+          
           let myimage = result.data.image
           for (let a = 0; a < myimage.length; a++) {
             $(".fieldset-fourcolumn").append('<div class="main"><div class="myimgtype">' + myimage[a].imagetype + '</div><div class="myimage">' + myimage[a].imagedata + '</div><div ><a href="#" class="delimg">remove</a></div><br><br>')
@@ -97,34 +99,37 @@ $(document).ready(function () {
           $('input[name=furnishing][value="' + result.data.furnishing + '"]').attr("checked", true)
 
           // select option value
-          try {
-            $("div .availability > select > option[value=" + result.data.availability + "]").prop("selected", true);
-          } catch(e) {
+          if (result.data.availability) {
+            try {
+              $("div .availability > select > option[value=" + result.data.availability + "]").prop("selected", true);
+            } catch (e) {
+            }
           }
           if (result.data.parking) {
             try {
               $("div .parking > select > option[value=" + result.data.parking + "]").prop("selected", true);
-            } catch(e) {
+            } catch (e) {
             }
           }
-          try {
-            $("div .property_type > select > option[value=" + result.data.property_type + "]").prop("selected", true);
-            $("div .outside_space > select > option[value=" + result.data.outside_space + "]").prop("selected", true);
-          } catch(e) {
-
+          if (result.data.property_type) {
+            try {
+              $("div .property_type > select > option[value=" + result.data.property_type + "]").prop("selected", true);
+            } catch (e) {
+            }
           }
-
-
+          if (result.data.outside_space){
+            try {
+              $("div .outside_space > select > option[value=" + result.data.outside_space + "]").prop("selected", true);
+            } catch (e) {
+            }
+          }
           // $("div .availabale_date").text(result.data.availabale_date)
-          $('#ui-datepicker-div').hide()
-          var $j = jQuery.noConflict()
+          
           const day = new Date(result.data.availabale_date).getDate()
-          const month = '0'+(new Date(result.data.availabale_date).getMonth()+1)
+          const month = '0' + (new Date(result.data.availabale_date).getMonth() + 1)
           const year = new Date(result.data.availabale_date).getFullYear()
-          var today = year+"-"+(month)+"-"+(day);
+          var today = year + "-" + (month) + "-" + (day);
           $("div .availabale_date").val(today);
-
-
           if (result && result.data) {
             for (let key in result.data) {
               if (key != "image" && key != "property_description" && key != "_id") {
@@ -136,11 +141,10 @@ $(document).ready(function () {
       });
     }
   })
-
-  $(document).on('click', '.delimg', function(e){
-     const delimg = $(this).parents('div .main').children('.myimage').text()
-     console.log(delimg)
-     if (delimg) {
+  $(document).on('click', '.delimg', function (e) {
+    const delimg = $(this).parents('div .main').children('.myimage').text()
+    console.log(delimg)
+    if (delimg) {
       $.ajax({
         url: "/api/property/removeimage",
         method: 'post',
@@ -148,14 +152,11 @@ $(document).ready(function () {
         dataType: "json",
         contentType: "application/json; charset=utf-8",
         success: function (result) {
-
+          //  location.reload()
         }
       })
     }
-    
   })
-
-
   $('.closeBTn').on('click', function (e) {
     e.preventDefault();
     $('.popupSec').fadeOut(1000);
