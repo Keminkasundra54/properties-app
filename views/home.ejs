@@ -251,14 +251,12 @@
       e.preventDefault();
       var data = getFormData($('form.propertyForm'));
       data['userId'] = 1;
-     console.log(data)
       let idToUpdate = data.id;
       
       if (idToUpdate) {
       } else {
         delete data.id;
       }
-      console.log(roomes)
       const mydata = JSON.stringify(roomes)
       for (let j = 0; j < myfile.length; j++) {
         formdata.append('roomimage', myfile[j]);
@@ -278,7 +276,6 @@
       // propety summary
 
       formdata.append('owner_contect_details', data.owner_contect_details);
-
       formdata.append('building_name', data.building_name);
       formdata.append('street', data.street);
       formdata.append('addrress_line_2', data.addrress_line_2);
@@ -323,7 +320,6 @@
 
       formdata.append('room_information', mydata)
       formdata.append('id', data.id)
-      console.log(data)
       const urlEncoded = new URLSearchParams(formdata).toString()
       $.ajax({
         url: idToUpdate ? "/api/property/update" : "/api/property/create",
@@ -607,6 +603,10 @@
                 <div class="newform-two-clr changes-s">
                   <div class="bottom-clrq">
                     <div class="first-bg-s">
+                      <div>
+                        <div class="fst-bg-img" style="background-image: url('https://propertyapp.hubresolution.com/profile/1703570719122_0asd.jpg');">
+                        </div>
+                      </div>
                     </div>
                     <div class="change-clr">
                       <div class="form-left-rq">

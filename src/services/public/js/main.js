@@ -63,6 +63,7 @@ $(document).ready(function () {
             for (let j = 0; j < myarray[i].room_image.length; j++) {
               clonner.find('.first-bg-s').append('<div><div class="fst-bg-img"style="background-image:url(' + "/roomimage/" + myarray[i].room_image[j] + '")></div></div>')
             }
+            $(clonner).find('.first-bg-s > div:eq(0)').remove();
             $('.newform-two-clr:last').after(clonner);
           }
           $('.first-bg-s').slick({
@@ -85,7 +86,7 @@ $(document).ready(function () {
           }
 
           // radio button value
-          $('input[name=active][value="' + $('input[name=active]').val() + '"]').attr("checked", true)
+          $('input[name=active][value="' + result.data.active + '"]').attr("checked", true)
           $('input[name=propertytype][value="' + result.data.propertytype + '"]').attr("checked", true)
           $('input[name=featured][value="' + result.data.featured + '"]').attr("checked", true)
           $('input[name=furnishing][value="' + result.data.furnishing + '"]').attr("checked", true)

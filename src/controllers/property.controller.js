@@ -130,11 +130,13 @@ exports.create = async (req, res, next) => {
       "per_annum": req.body.per_annum
     }
     let mytype;
-    if(req.body.propertytype == undefined || req.body.propertytype == "for_sale")
+    if(req.body.propertytype == "undefined" || req.body.propertytype == "for_sale")
     {
+       console.log("i am if")
       mytype = "for_sale" 
     }
     else{
+      console.log("i am else")
       mytype = "to_let"
     }
     if (body) {
