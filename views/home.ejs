@@ -261,7 +261,7 @@
       data['userId'] = 1;
      console.log(data)
       let idToUpdate = data.id;
-      
+
       if (idToUpdate) {
       } else {
         delete data.id;
@@ -342,7 +342,7 @@
         cache: false,
         success: function (result) {
           // console.log(result)
-          // location.reload();
+          location.reload();
         },
         error: function (result) {
           console.log("error", result)
@@ -358,7 +358,7 @@
       return indexed_array;
     }
     $(document).ready(function () {
-      $('.filter-img-s').slick({
+      $('.new-filter-inr .filter-img-s').slick({
         dots: false,
         infinite: true,
         speed: 300,

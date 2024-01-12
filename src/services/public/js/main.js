@@ -95,7 +95,12 @@ $(document).ready(function () {
           $('input[name=furnishing][value="' + result.data.furnishing + '"]').attr("checked", true)
 
           // select option value
-          $("div .availability > select > option[value=" + result.data.availability + "]").prop("selected", true);
+          try {
+            $("div .availability > select > option[value=" + result.data.availability + "]").prop("selected", true);
+          } catch(e) {
+
+          }
+
           $("div .parking > select > option[value=" + result.data.parking + "]").prop("selected", true);
           $("div .property_type > select > option[value=" + result.data.property_type + "]").prop("selected", true);
           $("div .outside_space > select > option[value=" + result.data.outside_space + "]").prop("selected", true);

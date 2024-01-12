@@ -19,7 +19,7 @@ exports.create = async (req, res, next) => {
     let roomimagevar = []
     const room_information = []
 
-    //  console.log(req.body.imagetype)  
+     console.log(req.body.imagetype)
     const roomjsondata = JSON.parse(req.body.room_information)
     const img = req.files.roomimage
     const myimg = req.files.image
@@ -42,7 +42,7 @@ exports.create = async (req, res, next) => {
       const lastdata = []
       for (let k = 0; k < roomimagevar.length; k++) {
         for (let j = 0; j < roomjsondata[i].roomImage.length; j++) {
-          // lastdata.push(roomjsondata[i].roomImage[j]) 
+          // lastdata.push(roomjsondata[i].roomImage[j])
           let newdata = roomimagevar[k].split("_").pop()
           console.log(newdata)
           if (newdata == roomjsondata[i].roomImage[j]) {
@@ -361,7 +361,7 @@ exports.updateProperty = async (req, res, next) => {
       for (let k = 0; k < roomimagevar.length; k++) {
 
         for (let j = 0; j < roomjsondata[i].roomImage.length; j++) {
-          // lastdata.push(roomjsondata[i].roomImage[j]) 
+          // lastdata.push(roomjsondata[i].roomImage[j])
           let newdata = roomimagevar[k].split("_").pop()
           if (newdata == roomjsondata[i].roomImage[j]) {
             lastdata.push(roomimagevar[k])
@@ -378,9 +378,9 @@ exports.updateProperty = async (req, res, next) => {
       }
       room_information.push(obj)
     }
-    // roomimage add and update end here 
+    // roomimage add and update end here
 
-    //image add and update 
+    //image add and update
     if (olddata.image.length) {
       for (let a = 0; a < olddata.image.length; a++) {
         const mydata = olddata.image[a]
@@ -508,9 +508,9 @@ exports.deleteProperty = async (req, res, next) => {
     const id = req.body._id
 
     const olddata = await Property.findOne({ _id: id })
-    if (olddata.property_description.length) {
+    if (olddata.property_description && olddata.property_description.length) {
       for (let a = 0; a < olddata.property_description.length; a++) {
-        if (olddata.property_description[a].room_image.length) {
+        if (olddata.property_description[a] && olddata.property_description[a].room_image && olddata.property_description[a].room_image.length) {
           for (let b = 0; b < olddata.property_description[a].room_image.length; b++) {
             const mydata = olddata.property_description[a].room_image[b]
             if (mydata) {
