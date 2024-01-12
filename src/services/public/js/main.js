@@ -100,19 +100,32 @@ $(document).ready(function () {
           } catch(e) {
 
           }
+          if (result.data.parking) {
+            try {
+              $("div .parking > select > option[value=" + result.data.parking + "]").prop("selected", true);
+            } catch(e) {
 
-          $("div .parking > select > option[value=" + result.data.parking + "]").prop("selected", true);
-          $("div .property_type > select > option[value=" + result.data.property_type + "]").prop("selected", true);
-          $("div .outside_space > select > option[value=" + result.data.outside_space + "]").prop("selected", true);
+            }
+
+          }
+          try {
+            $("div .property_type > select > option[value=" + result.data.property_type + "]").prop("selected", true);
+            $("div .outside_space > select > option[value=" + result.data.outside_space + "]").prop("selected", true);
+          } catch(e) {
+
+          }
+
 
           // $("div .availabale_date").text(result.data.availabale_date)
           $('#ui-datepicker-div').hide()
           var $j = jQuery.noConflict()
           const day = new Date(result.data.availabale_date).getDate()
-          const month = new Date(result.data.availabale_date).getMonth()
+          const month = '0'+(new Date(result.data.availabale_date).getMonth()+1)
           const year = new Date(result.data.availabale_date).getFullYear()
-          $("div .availabale_date").datepicker({dateFormat: "yy-mm-dd"}).datepicker("setDate",  new Date(year, month, day))
-          
+          var today = year+"-"+(month)+"-"+(day);
+          console.log(today);
+          $("div .availabale_date").val(today);
+
 
           if (result && result.data) {
             for (let key in result.data) {
@@ -124,7 +137,7 @@ $(document).ready(function () {
         }
       });
     }
-    console.log($('.fieldset-fourcolumn'))  
+    console.log($('.fieldset-fourcolumn'))
   })
 
   $(document).on('click', '.delimg', function(e){
