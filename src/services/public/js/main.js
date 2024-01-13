@@ -189,6 +189,7 @@ $(document).ready(function () {
     $('.popupSec').fadeOut(1000);
     $('.newform-two-clr:gt(0)').remove();
     $('.fieldset-fourcolumn .main').remove();
+    $('.propertyForm').trigger("reset");
   })
   $(".popupSec").click(function (e) {
     // e.preventDefault();
