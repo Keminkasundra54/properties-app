@@ -214,67 +214,7 @@ exports.create = async (req, res, next) => {
 exports.getProperty = async (req, res, next) => {
   try {
     const property = await Property.findOne({ _id: req.body._id })
-
-    const propertiedata = {
-      '_id': property._id,
-      'owner_contect_details': property.owner_contect_details,
-      'deposit': property.deposit,
-      'building_name': property.address.building_name,
-      'street': property.address.street,
-      'town': property.address.town,
-      'addrress_line_2': property.address.addrress_line_2,
-      'country': property.address.country,
-      'passcode': property.address.passcode,
-      'location_map': property.location_map,
-
-      // "orio": property.price.orio,
-      // "offers_over": property.price.offers_over,
-      // "guide_price": property.price.guide_price,
-      // "fixed_price": property.price.fixed_price,
-      // "free_hold": property.tenure.free_hold,
-      // "less_hold": property.tenure.less_hold,
-
-      'bedrooms': property.bedrooms,
-      'bathrooms': property.bathrooms,
-      'reception_rooms': property.reception_rooms,
-      'property_type': property.property_type,
-      'parking': property.parking,
-      'outside_space': property.outside_space,
-      'council_tax_band': property.council_tax_band,
-      'image': property.image,
-
-      'active': property.active,
-      'featured': property.featured,
-      'availability': property.availability,
-      'property_description': property.property_description,
-
-      'residentail_orio': property.details_price.residentail_orio,
-      'residentail_offers_over': property.details_price.residentail_offers_over,
-      'residentail_guide_price': property.details_price.residentail_guide_price,
-      'residentail_fix_price': property.details_price.residentail_fix_price,
-      'residentail_price_on_application': property.details_price.residentail_price_on_application,
-
-      'residentail_free_hold': property.deatils_tenure.residentail_free_hold,
-      'residentail_less_hold': property.deatils_tenure.residentail_less_hold,
-
-      'deposit': property.deposit,
-      'furnishing': property.furnishing,
-      'availabale_date': property.availabale_date,
-      'minimume_tenancy': property.minimume_tenancy,
-
-      'per_person_per_week': property.rent.per_person_per_week,
-      'per_week': property.rent.per_week,
-      'per_calander_month': property.rent.per_calander_month,
-      'per_quater': property.rent.per_quater,
-      'per_annum': property.rent.per_annum,
-      'propertytype': property.propertytype,
-      'id': property._id,
-      'name': property.name,
-      'description': property.description,
-      unique_features: property.unique_features
-
-    }
-    return res.json({ message: 'OK', data: propertiedata })
+    return res.json({ message: 'OK', data: property })
   } catch (error) {
     console.log(error)
     next(error)

@@ -153,6 +153,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
   <script src="/static/js/main.js"></script>
   <script>
+
     const formdata = new FormData()
     let selectedFiles = [];
     let selectedRoom = [];
@@ -188,7 +189,8 @@
       formdata.append('imagetype', value);
     });
 
-    let myfeaturesdata = []
+    let myfeaturesdata = [];
+
     function myfeatures(event) {
       const features = $('input[name="unique_features"]').val()
       myfeaturesdata.push(features)
@@ -197,21 +199,7 @@
     }
     function myvalue(event) {
       const myvalue = $(event.target).closest('input').val()
-
-      if (myvalue == 'to_let') {
-        $(document).find('div .residentail_sale').hide()
-        $(document).find('div .residentail_letting').show()
-        $(document).find('div #tolet_availability').show()
-        $(document).find('div #availability').hide()
-
-      }
-      if (myvalue == 'for_sale') {
-        $(document).find('div .residentail_sale').show()
-        $(document).find('div .residentail_letting').hide()
-        $(document).find('div  #availability').show()
-        $(document).find('div #tolet_availability').hide()
-
-      }
+      setFieldsView(myvalue);
     }
     function getBase64(file) {
       return new Promise((resolve) => {
