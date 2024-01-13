@@ -628,9 +628,12 @@ function getPropertyPayload(property) {
 exports.removeimage = async (req, res, next) => {
   try {
     const imageName = req.body.imageName
+    console.log(imageName)
     let modifydata = []
     const removeimg = await Property.findOne({ "image.imagedata": imageName })
-   
+   if(removeimg){
+      fs.unlinkSync('./images/' + imageName)
+   }
     for (let j = 0; j < removeimg.image.length; j++) {
       if (removeimg.image[j].imagedata != imageName) {
         modifydata.push(removeimg.image[j])
@@ -642,5 +645,33 @@ exports.removeimage = async (req, res, next) => {
 
   } catch (e) {
     next(error)
+  }
+}
+exports.removeRoom = async(req, res, next)=>{
+  try{
+  console.log("room call")
+  const roomdata = req.body.roomdata
+  const room_description = roomdata.room_description
+  const summary_description = roomdata.summary_description
+  const room_name = roomdata.room_name
+  const room_dimension = roomdata.room_dimension
+  const modifydata = []
+  const propertydata = await Property.findOne({ "property_description.room_description": room_description , "property_description.summary_description":summary_description , "property_description.room_name":room_name , "property_description.room_dimension":room_dimension})
+  const data = propertydata.property_description
+  for (let j = 0; j < propertydata.property_description.length; j++) {
+    
+    if(data[j].room_description != room_description && data[j].summary_description != summary_description && data[j].room_name != room_name && data[j].room_dimension != room_dimension) {
+       console.log(data[j])
+       modifydata.push(data[j])
+    }
+  }
+  await Property.findOneAndUpdate({ property_description: modifydata })
+  // console.log(modifydata)
+
+  return res.json({ message: 'OK', data: { message: 'Remove' } })
+  // 
+  }
+  catch(err){
+    next(err)
   }
 }

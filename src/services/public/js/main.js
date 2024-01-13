@@ -53,10 +53,14 @@ $(document).ready(function () {
 
           let myarray = result.data.property_description
           for (let i = 0; i < result.data.property_description.length; i++) {
+            const allfeatures = []
             var clonner = $('.newform-two-clr').eq(0).clone();
+            clonner.find('.RemoveRoom').eq(0).append('<a href="#"><svg clip-rule="evenodd" fill-rule="evenodd" stroke-linejoin="round" stroke-miterlimit="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="m20.015 6.506h-16v14.423c0 .591.448 1.071 1 1.071h14c.552 0 1-.48 1-1.071 0-3.905 0-14.423 0-14.423zm-5.75 2.494c.414 0 .75.336.75.75v8.5c0 .414-.336.75-.75.75s-.75-.336-.75-.75v-8.5c0-.414.336-.75.75-.75zm-4.5 0c.414 0 .75.336.75.75v8.5c0 .414-.336.75-.75.75s-.75-.336-.75-.75v-8.5c0-.414.336-.75.75-.75zm-.75-5v-1c0-.535.474-1 1-1h4c.526 0 1 .465 1 1v1h5.254c.412 0 .746.335.746.747s-.334.747-.746.747h-16.507c-.413 0-.747-.335-.747-.747s.334-.747.747-.747zm4.5 0v-.5h-3v.5z" fill-rule="nonzero"/></svg></a>')
+
             clonner.find('.form-left-rq').eq(0).find('.data').text(myarray[i].summary_description);
             for (let k = 0; k < myarray[i].unique_features.length; k++) {
-              clonner.find('.form-left-rq').eq(1).find('.data').text(myarray[i].unique_features[k]);
+              allfeatures.push(myarray[i].unique_features[k])
+              clonner.find('.form-left-rq').eq(1).find('.data').text(allfeatures);
             }
             clonner.find('.form-left-rq').eq(2).find('.data').text(myarray[i].room_name);
             clonner.find('.form-left-rq').eq(3).find('.data').text(myarray[i].room_dimension);
@@ -149,6 +153,29 @@ $(document).ready(function () {
         url: "/api/property/removeimage",
         method: 'post',
         data: JSON.stringify({ imageName: delimg }),
+        dataType: "json",
+        contentType: "application/json; charset=utf-8",
+        success: function (result) {
+          //  location.reload()
+        }
+      })
+    }
+  })
+
+  $(document).on('click', '.RemoveRoom', function (e) {
+    const roomdata = {
+    "summary_description" : $(this).siblings('div.change-clr').find('.form-left-rq .data:eq(0)').text(),
+    "unique_features" : $(this).siblings('div.change-clr').find('.form-left-rq .data:eq(1)').text(),
+    "room_name" : $(this).siblings('div.change-clr').find('.form-left-rq .data:eq(2)').text(),
+    "room_dimension" :$(this).siblings('div.change-clr').find('.form-left-rq .data:eq(3)').text(),
+    "room_description" : $(this).siblings('div.change-clr').find('.form-left-rq .data:eq(4)').text(),
+    }
+    console.log(roomdata)
+    if (roomdata) {
+      $.ajax({
+        url: "/api/property/removeRoom",
+        method: 'post',
+        data: JSON.stringify({ roomdata: roomdata }),
         dataType: "json",
         contentType: "application/json; charset=utf-8",
         success: function (result) {

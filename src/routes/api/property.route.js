@@ -29,7 +29,7 @@ router.post('/update',upload.fields([{name: 'image', maxCount: 5},{name: 'roomim
 router.get('/getAll', propertyController.getAllProperty)
 router.post('/delete', propertyController.deleteProperty)
 router.post('/removeimage', propertyController.removeimage)
-
+router.post('/removeRoom' , propertyController.removeRoom)
 
 // router.post('/addImage',propertyController.addImage)
 module.exports = router

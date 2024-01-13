@@ -8,15 +8,24 @@
   <title>Table Filter</title>
   <link rel="stylesheet" type="text/css" href="/static/style.css">
   <style>
-    #ui-datepicker-div{display: none;}
-    .forid{display: none;}
+    #ui-datepicker-div {
+      display: none;
+    }
+
+    .forid {
+      display: none;
+    }
+
     input::-webkit-outer-spin-button,
     input::-webkit-inner-spin-button {
       -webkit-appearance: none;
       margin: 0;
     }
-    div #tolet_availability
-    {display: none}
+
+    div #tolet_availability {
+      display: none
+    }
+
     input[type=number] {
       -moz-appearance: textfield;
       appearance: none;
@@ -96,15 +105,54 @@
       align-items: stretch;
       justify-content: center;
     }
-.main {width: 100%;display: flex;}
-.myimage {width: 35%;text-align: left;}
-.main div svg {height: 17px;width: 20px;}
-.myimgtype {width: 20%;text-align: left;padding-left: 10px;}
-.main div{width: calc(100% - 55%);}
-.main input[type="button"] svg {height: 17px;width: 20px;}
-    .first-bg-s > div:first-child{
+
+    .main {
+      width: 100%;
+      display: flex;
+    }
+
+    .myimage {
+      width: 35%;
+      text-align: left;
+    }
+
+    .main div svg {
+      height: 17px;
+      width: 20px;
+    }
+
+    .myimgtype {
+      width: 20%;
+      text-align: left;
+      padding-left: 10px;
+    }
+
+    .main div {
+      width: calc(100% - 55%);
+    }
+
+    .main input[type="button"] svg {
+      height: 17px;
+      width: 20px;
+    }
+
+    .first-bg-s>div:first-child {
       display: none;
     }
+
+    .RemoveRoom a svg {
+      width: 18px;
+      height: 18px;
+      /* text-align: center; */
+    }
+
+    .RemoveRoom a {
+      display: flex;
+      /* width: calc(100% - 18px); */
+      justify-content: flex-end;
+      padding: 3px 10px 3px 0;
+    }
+
     /* #availability option:first-child{
         display: none;
     } */
@@ -112,8 +160,8 @@
 
 
 
-<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
-<script src="http://code.jquery.com/ui/1.11.0/jquery-ui.js"></script>
+  <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+  <script src="http://code.jquery.com/ui/1.11.0/jquery-ui.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
   <script src="/static/js/main.js"></script>
   <script>
@@ -126,8 +174,8 @@
     function onFileSelected(event) {
       selectedFiles = event.target.files;
       if (selectedFiles.length) {
-        for (let i = 0; i < selectedFiles.length; i++){
-          $(".fieldset-fourcolumn").append('<div class="right-cols"><input type="radio" id="jpg" name="'+ selectedFiles[i].name+'" value="Floor_plan"><label for="Floor_plan">Floor plan</label><br><input type="radio" id="jpeg" name="'+ selectedFiles[i].name+'" value="EPC"><label for="EPC">EPC</label><br></div><div class="form-field left-colr">' + selectedFiles[i].name + '"</div></fieldset>')
+        for (let i = 0; i < selectedFiles.length; i++) {
+          $(".fieldset-fourcolumn").append('<div class="right-cols"><input type="radio" id="jpg" name="' + selectedFiles[i].name + '" value="Floor_plan"><label for="Floor_plan">Floor plan</label><br><input type="radio" id="jpeg" name="' + selectedFiles[i].name + '" value="EPC"><label for="EPC">EPC</label><br></div><div class="form-field left-colr">' + selectedFiles[i].name + '"</div></fieldset>')
           formdata.append('image', selectedFiles[i])
         }
       }
@@ -169,7 +217,7 @@
           resolve(reader.result);
         };
         reader.onerror = function (error) {
-          resolve('Error: '+error);
+          resolve('Error: ' + error);
         };
       });
     }
@@ -194,7 +242,7 @@
         "roomImage": roomImages
       }
       myfeaturesdata = []
-
+      const allfeatures = []
       $(event.target).parents('.roomFields').find('.form-field input').val('');
       var clonner = $('.newform-two-clr').eq(0).clone();
 
@@ -202,21 +250,26 @@
       console.log(imageBase64);
       for (let image of imageBase64) {
         var imageClon = $(clonner).find('.first-bg-s div').eq(0).clone();
-        $(imageClon).find('.fst-bg-img').attr('style', "background-image: url('"+image+"')")
+        $(imageClon).find('.fst-bg-img').attr('style', "background-image: url('" + image + "')")
         $(clonner).find('.first-bg-s').append(imageClon);
       }
+      clonner.find('.RemoveRoom').eq(0).append('<a href="#"><svg clip-rule="evenodd" fill-rule="evenodd" stroke-linejoin="round" stroke-miterlimit="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="m20.015 6.506h-16v14.423c0 .591.448 1.071 1 1.071h14c.552 0 1-.48 1-1.071 0-3.905 0-14.423 0-14.423zm-5.75 2.494c.414 0 .75.336.75.75v8.5c0 .414-.336.75-.75.75s-.75-.336-.75-.75v-8.5c0-.414.336-.75.75-.75zm-4.5 0c.414 0 .75.336.75.75v8.5c0 .414-.336.75-.75.75s-.75-.336-.75-.75v-8.5c0-.414.336-.75.75-.75zm-.75-5v-1c0-.535.474-1 1-1h4c.526 0 1 .465 1 1v1h5.254c.412 0 .746.335.746.747s-.334.747-.746.747h-16.507c-.413 0-.747-.335-.747-.747s.334-.747.747-.747zm4.5 0v-.5h-3v.5z" fill-rule="nonzero"/></svg></a>')
       clonner.find('.form-left-rq').eq(0).find('.data').text(myarray.summary_description);
-      clonner.find('.form-left-rq').eq(1).find('.data').text(myarray.unique_features.length);
+      for (let k = 0; k < myarray.unique_features.length; k++) {
+              allfeatures.push(myarray.unique_features[k])
+              clonner.find('.form-left-rq').eq(1).find('.data').text(allfeatures);
+              // clonner.find('.form-left-rq').eq(1).find('.data').text(myarray.unique_features.length);
+            }
       clonner.find('.form-left-rq').eq(2).find('.data').text(myarray.room_name);
       clonner.find('.form-left-rq').eq(3).find('.data').text(myarray.room_dimension);
       clonner.find('.form-left-rq').eq(4).find('.data').text(myarray.room_description);
       clonner.find('.form-left-rq').eq(5).find('.data').text(myarray.roomImage.length);
       $(clonner).find('.first-bg-s > div:eq(0)').remove();
-   
+
       $('.newform-two-clr:last').after(clonner);
       console.log($('.newform-two-clr:last .first-bg-s'))
       // $('.newform-two-clr:last .first-bg-s').slick({
-          $('.newform-two-clr:last .first-bg-s').slick({
+      $('.newform-two-clr:last .first-bg-s').slick({
         dots: false,
         infinite: true,
         speed: 300,
@@ -261,7 +314,7 @@
       e.preventDefault();
       var data = getFormData($('form.propertyForm'));
       data['userId'] = 1;
-     console.log(data)
+      console.log(data)
       let idToUpdate = data.id;
 
       if (idToUpdate) {
@@ -273,17 +326,17 @@
       for (let j = 0; j < myfile.length; j++) {
         formdata.append('roomimage', myfile[j]);
       }
-     // radio button
+      // radio button
       formdata.append('active', $('input[name="active"]:checked').val());
-      formdata.append('featured',$('input[name="featured"]:checked').val())
-      formdata.append('propertytype',$('input[name="propertytype"]:checked').val());
+      formdata.append('featured', $('input[name="featured"]:checked').val())
+      formdata.append('propertytype', $('input[name="propertytype"]:checked').val());
       formdata.append('furnishing', $('input[name="furnishing"]:checked').val());
 
       //select button
-      formdata.append('parking',  $('#parking').val());
-      formdata.append('outside_space',  $('#outside_space').val());
-      formdata.append('availability',  $('#availability').val());
-      formdata.append('property_type',  $('#property_type').val());
+      formdata.append('parking', $('#parking').val());
+      formdata.append('outside_space', $('#outside_space').val());
+      formdata.append('availability', $('#availability').val());
+      formdata.append('property_type', $('#property_type').val());
 
       // propety summary
 
@@ -339,7 +392,7 @@
         url: idToUpdate ? "/api/property/update" : "/api/property/create",
         method: 'post',
         data: formdata,
-        contentType:   false , //"application/x-www-form-urlencoded", //this is requireded please see answers above
+        contentType: false, //"application/x-www-form-urlencoded", //this is requireded please see answers above
         processData: false,
         cache: false,
         success: function (result) {
@@ -386,7 +439,7 @@
           <form class="propertyForm" enctype="multipart/form-data">
             <div class="mybutton" onchange="myvalue(event)">
               <h6>for sale</h6><input type="radio" id="mybutton1" class="mybutton" name="propertytype" value="for_sale">
-              <h6>to let</h6><input type="radio"  id="mybutton2" class="mybutton" name="propertytype" value="to_let">
+              <h6>to let</h6><input type="radio" id="mybutton2" class="mybutton" name="propertytype" value="to_let">
             </div>
             <!-- propety summary -->
             <div class="form-title">
@@ -501,7 +554,7 @@
             </fieldset>
 
             <fieldset class="fieldset-threecolumn">
-              <div class="form-field property_type" >
+              <div class="form-field property_type">
                 <label for="property_type">property type:</label>
                 <select id="property_type">
                   <option name="property_type" value="">choose property type</option>
@@ -512,7 +565,7 @@
               </div>
               <div class="form-field parking">
                 <label for="parking">parking:</label>
-                <select id="parking" >
+                <select id="parking">
                   <option name="parking" value="">choose parking</option>
                   <option name="parking" value="grage">grage</option>
                   <option name="parking" value="carport">carport</option>
@@ -579,6 +632,7 @@
               <h4>property description</h4>
             </div>
             <fieldset class="fieldset-twocolumn roomFields">
+
               <div class="form-field">
                 <label>summary description</label>
                 <input type="text" name="summary_description" placeholder="summary description">
@@ -601,7 +655,7 @@
               </div>
               <div class="form-field">
                 <label>room description</label>
-                <input type="text" name="room_description" placeholder="Room Dimension Text">
+                <input type="text" name="room_description" placeholder="Room description Text">
               </div>
               <div class="form-field">
                 <label>roomimage</label>
@@ -616,9 +670,13 @@
               <div class="new-form-inr">
                 <div class="newform-two-clr changes-s">
                   <div class="bottom-clrq">
+                    <div class="RemoveRoom">
+                      
+                    </div>
                     <div class="first-bg-s">
                       <div>
-                        <div class="fst-bg-img" style="background-image: url('https://propertyapp.hubresolution.com/profile/1703570719122_0asd.jpg');">
+                        <div class="fst-bg-img"
+                          style="background-image: url('https://propertyapp.hubresolution.com/profile/1703570719122_0asd.jpg');">
                         </div>
                       </div>
                     </div>
@@ -851,7 +909,7 @@
 
                   <div class="button-s">
                     <div class="button">
-                      <a href="javascript:void(0)" class="editProp" data-id="<%- item._id %>" >
+                      <a href="javascript:void(0)" class="editProp" data-id="<%- item._id %>">
                         <svg clip-rule="evenodd" fill-rule="evenodd" stroke-linejoin="round" stroke-miterlimit="2"
                           viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                           <path
