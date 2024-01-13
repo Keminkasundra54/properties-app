@@ -188,6 +188,7 @@ $(document).ready(function () {
     e.preventDefault();
     $('.popupSec').fadeOut(1000);
     $('.newform-two-clr:gt(0)').remove();
+    $('.fieldset-fourcolumn .main').remove();
   })
   $(".popupSec").click(function (e) {
     // e.preventDefault();
