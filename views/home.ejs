@@ -346,6 +346,9 @@
       formdata.append('street', data.street);
       formdata.append('addrress_line_2', data.addrress_line_2);
       formdata.append('town', data.town);
+      formdata.append('description', data.description);
+      formdata.append('name', data.name);
+
       formdata.append('country', data.country);
       formdata.append('passcode', data.passcode);
       formdata.append('location_map', data.location_map);
@@ -424,6 +427,22 @@
 </head>
 
 <body>
+  <div class="headerSection">
+    <div  class="wrapper largerWrapper">
+      <div class="header">
+        <div class="headerleft">
+          <a href="https://www.burrowsconsultancy.com/">
+              <img src="https://www.burrowsconsultancy.com/hubfs/BurrowsConsultancy-pos.svg">
+          </a>
+        </div>
+        <div class="header-right">
+            <a href="https://www.burrowsconsultancy.com/book-consultation">Book a call</a>
+        </div>
+      </div>
+  </div>
+
+</div>
+
   <div class="popupSec" id="popupBox">
     <div class="popupsecinr">
       <div class="popupBoxs">
@@ -447,8 +466,8 @@
             </div>
             <fieldset class="fieldset-onecolumn">
               <div class="form-field">
-                <label>owner_contect_details</label>
-                <input type="text" name="owner_contect_details" placeholder="owner contect details">
+                <label>Owner contect details</label>
+                <input type="text" name="owner_contect_details" placeholder="Owner contect details">
               </div>
             </fieldset>
             <!-- <div class="address-clr"> -->
@@ -538,6 +557,16 @@
             <div class="form-title">
               <h4>property deatils</h4>
             </div>
+            <fieldset class="fieldset-threecolumn">
+              <div class="form-field">
+                <label>Title</label>
+                <input type="text" name="name" placeholder="Title">
+              </div>
+              <div class="form-field">
+                <label>Description</label>
+                <textarea type="number" name="description" placeholder="Property Description"></textarea>
+              </div>
+            </fieldset>
             <fieldset class="fieldset-threecolumn">
               <div class="form-field">
                 <label>bedrooms</label>
@@ -671,7 +700,7 @@
                 <div class="newform-two-clr changes-s">
                   <div class="bottom-clrq">
                     <div class="RemoveRoom">
-                      
+
                     </div>
                     <div class="first-bg-s">
                       <div>
@@ -841,8 +870,12 @@
       </div>
     </div>
   </div>
-  <a href="javascript:void(0)" class="addProperty">Add</a>
-  <a href="mypage.ejs" class="showProp">see details</a>
+  <div class=" wrapper largerWrapper">
+    <div class="AddButton">
+      <a href="javascript:void(0)" class="addProperty">Add New Property</a>
+    </div>
+  </div>
+  <!-- <a href="mypage.ejs" class="showProp">see details</a> -->
   <section class="new-filter-section">
     <div class="wrapper">
       <div class="new-filter-inr">
@@ -862,84 +895,73 @@
                       <%});%>
                 </div>
                 <div class="filter-bottom-s">
-                  <div class="content-s forid">
-                    <h2><%- item._id %>&nbsp;</h2>
-                  </div>
                   <div class="content-s">
-                    <h2><%- item.owner_contect_details %>&nbsp;</h2>
+                    <span>Property Owner</span>
+                    <span><%- item.owner_contect_details %></span>
                   </div>
                   <div class="summary-con">
-                    <h2><%- item.address.building_name %>&nbsp;</h2>
+                    <h2><%- item.name %></h2>
                   </div>
-                  <div class="summary-con">
-                    <h2><%- item.availability %>&nbsp;</h2>
+                  <div class="summary-description">
+                    <%- item.description %>
                   </div>
-                  <span class="summary-con">
-                    <p><%- item.location_map %></p>
-                  </span>
-                  <h5 class="price-title">
+                  <div class="price-parent">
+                    <div class="price-title fixPrice">
 
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-                      <path
-                        d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm1 16.947v1.053h-1v-.998c-1.035-.018-2.106-.265-3-.727l.455-1.644c.956.371 2.229.765 3.225.54 1.149-.26 1.384-1.442.114-2.011-.931-.434-3.778-.805-3.778-3.243 0-1.363 1.039-2.583 2.984-2.85v-1.067h1v1.018c.724.019 1.536.145 2.442.42l-.362 1.647c-.768-.27-1.617-.515-2.443-.465-1.489.087-1.62 1.376-.581 1.916 1.712.805 3.944 1.402 3.944 3.547.002 1.718-1.343 2.632-3 2.864z">
-                      </path>
-                    </svg>
-                    <span>
-                      <% if(item.price) { %>
-                        <%- item.price.fixed_price%>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                        <path
+                          d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm1 16.947v1.053h-1v-.998c-1.035-.018-2.106-.265-3-.727l.455-1.644c.956.371 2.229.765 3.225.54 1.149-.26 1.384-1.442.114-2.011-.931-.434-3.778-.805-3.778-3.243 0-1.363 1.039-2.583 2.984-2.85v-1.067h1v1.018c.724.019 1.536.145 2.442.42l-.362 1.647c-.768-.27-1.617-.515-2.443-.465-1.489.087-1.62 1.376-.581 1.916 1.712.805 3.944 1.402 3.944 3.547.002 1.718-1.343 2.632-3 2.864z">
+                        </path>
+                      </svg>
+                      <span>
+                        <% if(item.rent && item.rent.per_calander_month) { %>
+                          <%- item.rent.per_calander_month%> PM
+                            <% } else{ %>
+
+                              <% } %>
+
+
+                      <% if(item.details_price && item.details_price.residentail_fix_price) { %>
+                        <%- item.details_price.residentail_fix_price%> Fix Price
                           <% } else{ %>
-                            &nbsp;
-                            <% } %>
-                    </span>
-                  </h5>
-                  <h5 class="price-title">
-                    <svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd"
-                      clip-rule="evenodd">
-                      <path
-                        d="M24 19v-7h-23v-7h-1v14h1v-2h22v2h1zm-20-12c1.104 0 2 .896 2 2s-.896 2-2 2-2-.896-2-2 .896-2 2-2zm19 4c0-1.657-1.343-3-3-3h-13v3h16z" />
-                    </svg>
-                    <span>
-                      <% if(item.property_description) { %>
-                        <%- item.property_description.length%>
-                          <% } else{ %>
-                            0
-                            <% } %>
-                    </span>
-                  </h5>
 
-                  <div class="button-s">
-                    <div class="button">
-                      <a href="javascript:void(0)" class="editProp" data-id="<%- item._id %>">
-                        <svg clip-rule="evenodd" fill-rule="evenodd" stroke-linejoin="round" stroke-miterlimit="2"
-                          viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                          <path
-                            d="m11.25 6c.398 0 .75.352.75.75 0 .414-.336.75-.75.75-1.505 0-7.75 0-7.75 0v12h17v-8.749c0-.414.336-.75.75-.75s.75.336.75.75v9.249c0 .621-.522 1-1 1h-18c-.48 0-1-.379-1-1v-13c0-.481.38-1 1-1zm1.521 9.689 9.012-9.012c.133-.133.217-.329.217-.532 0-.179-.065-.363-.218-.515l-2.423-2.415c-.143-.143-.333-.215-.522-.215s-.378.072-.523.215l-9.027 8.996c-.442 1.371-1.158 3.586-1.264 3.952-.126.433.198.834.572.834.41 0 .696-.099 4.176-1.308zm-2.258-2.392 1.17 1.171c-.704.232-1.274.418-1.729.566zm.968-1.154 7.356-7.331 1.347 1.342-7.346 7.347z"
-                            fill-rule="nonzero"></path>
-                        </svg></a>
+                            <% } %>
+                      </span>
                     </div>
-                    <div class="button">
-                      <a href="javascript:void(0)" class="deleteProp" data-id="<%- item._id %>">
-                        <svg clip-rule="evenodd" fill-rule="evenodd" stroke-linejoin="round" stroke-miterlimit="2"
-                          viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                          <path
-                            d="m20.015 6.506h-16v14.423c0 .591.448 1.071 1 1.071h14c.552 0 1-.48 1-1.071 0-3.905 0-14.423 0-14.423zm-5.75 2.494c.414 0 .75.336.75.75v8.5c0 .414-.336.75-.75.75s-.75-.336-.75-.75v-8.5c0-.414.336-.75.75-.75zm-4.5 0c.414 0 .75.336.75.75v8.5c0 .414-.336.75-.75.75s-.75-.336-.75-.75v-8.5c0-.414.336-.75.75-.75zm-.75-5v-1c0-.535.474-1 1-1h4c.526 0 1 .465 1 1v1h5.254c.412 0 .746.335.746.747s-.334.747-.746.747h-16.507c-.413 0-.747-.335-.747-.747s.334-.747.747-.747zm4.5 0v-.5h-3v.5z"
-                            fill-rule="nonzero" />
-                        </svg>
-                      </a>
+                    <div class="price-title">
+                      <svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd"
+                        clip-rule="evenodd">
+                        <path
+                          d="M24 19v-7h-23v-7h-1v14h1v-2h22v2h1zm-20-12c1.104 0 2 .896 2 2s-.896 2-2 2-2-.896-2-2 .896-2 2-2zm19 4c0-1.657-1.343-3-3-3h-13v3h16z" />
+                      </svg>
+                      <span>
+                        <% if(item.bedrooms) { %>
+                          <%- item.bedrooms%>
+                            <% } else{ %>
+                              0
+                              <% } %>
+                      </span>
                     </div>
+                  </div>
+                  <div class="hubspot-buttons">
+                    <a href="javascript:void(0)" class="editProp" data-id="<%- item._id %>">Edit</a>
+                    <a href="javascript:void(0)" class="deleteProp" data-id="<%- item._id %>">Delete</a>
+                    <% if(!item.pushedToHive) { %>
+                        <a href="javascript:void(0)" class="pushToHive" data-id="<%- item._id %>">Upload to RightMove</a>
 
-                    <% if(item.pushedToHive) { %>
-                      <div class="button">
-                        <a href="javascript:void(0)" class="pushToHive" data-id="<%- item._id %>">
-                          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-                            <path
-                              d="M19.479 10.092c-.212-3.951-3.473-7.092-7.479-7.092-4.005 0-7.267 3.141-7.479 7.092-2.57.463-4.521 2.706-4.521 5.408 0 3.037 2.463 5.5 5.5 5.5h13c3.037 0 5.5-2.463 5.5-5.5 0-2.702-1.951-4.945-4.521-5.408zm-7.479-1.092l4 4h-3v4h-2v-4h-3l4-4z" />
-                          </svg>
-                        </a>
-                      </div>
                       <% } else{ %>
 
                         <% } %>
+                  </div>
+                  <div class="button-s">
+                    <div class="button">
+
+                    </div>
+                    <div class="button">
+
+                    </div>
+
+
 
                   </div>
                 </div>

@@ -267,7 +267,9 @@ exports.getProperty = async (req, res, next) => {
       "per_quater": property.rent.per_quater,
       "per_annum": property.rent.per_annum,
       "propertytype": property.propertytype,
-      "id": property._id
+      "id": property._id,
+      "name": property.name,
+      "description": property.description,
 
     }
     return res.json({ message: 'OK', data: propertiedata })
@@ -321,7 +323,7 @@ exports.updateProperty = async (req, res, next) => {
     const myimg = req.files.image
 
 
-    //  for roomimage add and update 
+    //  for roomimage add and update
     const roomjsondata = JSON.parse(req.body.room_information)
     const img = req.files.roomimage
     const olddata = await Property.findOne({ _id: req.body.id })
@@ -481,6 +483,7 @@ exports.updateProperty = async (req, res, next) => {
         "rent.per_quater": req.body.per_quater,
         'rent.per_annum': req.body.per_annum,
         "property_description": room_information,
+
       }
     })
 
@@ -515,7 +518,7 @@ exports.deleteProperty = async (req, res, next) => {
             const mydata = olddata.property_description[a].room_image[b]
             if (mydata) {
               console.log(mydata)
-              const fils = fs.unlinkSync('./roomimage/' + mydata)
+              // const fils = fs.unlinkSync('./roomimage/' + mydata)
             }
           }
         }
@@ -659,7 +662,7 @@ exports.removeRoom = async(req, res, next)=>{
   const propertydata = await Property.findOne({ "property_description.room_description": room_description , "property_description.summary_description":summary_description , "property_description.room_name":room_name , "property_description.room_dimension":room_dimension})
   const data = propertydata.property_description
   for (let j = 0; j < propertydata.property_description.length; j++) {
-    
+
     if(data[j].room_description != room_description && data[j].summary_description != summary_description && data[j].room_name != room_name && data[j].room_dimension != room_dimension) {
        console.log(data[j])
        modifydata.push(data[j])
@@ -669,7 +672,7 @@ exports.removeRoom = async(req, res, next)=>{
   // console.log(modifydata)
 
   return res.json({ message: 'OK', data: { message: 'Remove' } })
-  // 
+  //
   }
   catch(err){
     next(err)

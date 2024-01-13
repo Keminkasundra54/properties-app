@@ -7,12 +7,18 @@ const string = require('joi/lib/types/string')
 const Schema = mongoose.Schema
 
 const propertySchema = new Schema({
-  propertytype:{
-   type:String,
-   default:"for_sale"
+  propertytype: {
+    type: String,
+    default: 'for_sale'
+  },
+  name: {
+    type: String
+  },
+  description: {
+    type: String
   },
   owner_contect_details: {
-    type: String,
+    type: String
   },
   address: {
     type: Object
@@ -24,11 +30,11 @@ const propertySchema = new Schema({
     type: String
   },
   tenure: {
-    type: Object,
+    type: Object
   },
 
   bedrooms: {
-    type: Number,
+    type: Number
   },
   bathrooms: {
     type: Number
@@ -38,34 +44,34 @@ const propertySchema = new Schema({
   },
   property_type: {
     type: String,
-    default:"apartment"
+    default: 'apartment'
   },
   parking: {
     type: String,
-    default:"grage"
+    default: 'grage'
   },
   outside_space: {
     type: String,
-    default:"rear garden"
+    default: 'rear garden'
   },
   council_tax_band: {
-    type: Object,
+    type: Object
   },
   image: {
-    type: Object,
+    type: Object
   },
 
   active: {
     type: String,
-    default: "yes"
+    default: 'yes'
   },
   featured: {
     type: String,
-    default: "yes"
+    default: 'yes'
   },
   availability: {
     type: String,
-    default:"for_sale"
+    default: 'for_sale'
   },
   send_to_portal: {
     type: String
@@ -76,45 +82,45 @@ const propertySchema = new Schema({
 
   details_price: {
     type: Object,
-    default:null
+    default: null
   },
   deatils_tenure: {
     type: Object,
-    default:null
+    default: null
   },
-  rent:{
-    type:Object,
-    default:null
+  rent: {
+    type: Object,
+    default: null
   },
-  deposit:{
-    type:Number,
-    default:null
+  deposit: {
+    type: Number,
+    default: null
   },
-  furnishing:{
-    type:String,
-    default:null
+  furnishing: {
+    type: String,
+    default: null
   },
-  availabale_date:{
-    type:Date,
-    default:null
+  availabale_date: {
+    type: Date,
+    default: null
   },
-  minimume_tenancy:{
-    type:String,
-    default:null
-  },
+  minimume_tenancy: {
+    type: String,
+    default: null
+  }
 
 }, {
   timestamps: true
 })
 propertySchema.method({
-  transform() {
+  transform () {
     const transformed = {}
-    const fields = ['_id' , 'propertytype' ,  'owner_contect_details', 'address', 'price', 'location_map', 'tenure',
+    const fields = ['_id', 'propertytype', 'owner_contect_details', 'address', 'price', 'location_map', 'tenure',
       'bedrooms', 'bathrooms', 'reception_rooms', 'propery_type', 'parking', 'outside_space', 'price', 'council_tax_band', 'image',
       'active', 'featured', , 'availability', 'send_to_portal',
       'property_description',
       'details_price', 'deatils_tenure',
-      'rent','deposit','furnishing' , 'availabale_date' , 'minimume_tenancy']
+      'rent', 'deposit', 'furnishing', 'availabale_date', 'minimume_tenancy']
 
     fields.forEach((field) => {
       transformed[field] = this[field]
@@ -124,18 +130,18 @@ propertySchema.method({
   }
 })
 propertySchema.statics = {
-  async findProperty(_id) {
+  async findProperty (_id) {
     const connection = await this.findOne({ _id: _id }).exec()
     if (!connection) throw new APIError(`No property associated with ${_id}`, httpStatus.NOT_FOUND)
     return connection
   },
-  async getAllProperty(userId) {
+  async getAllProperty (userId) {
     if (!userId) throw new APIError('Name must be provided for login')
     const property = await this.find().exec()
     if (!property) throw new APIError(`No property`, httpStatus.NOT_FOUND)
     return property
   },
-  async removeProperty(_id) {
+  async removeProperty (_id) {
     if (!_id) throw new APIError('Name must be provided for login')
     const property = await this.deleteOne({ _id: _id }).exec()
     if (!property) throw new APIError(`No property`, httpStatus.NOT_FOUND)
