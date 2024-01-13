@@ -147,7 +147,7 @@ $(document).ready(function () {
   })
   $(document).on('click', '.delimg', function (e) {
     const delimg = $(this).parents('div .main').children('.myimage').text()
-    console.log(delimg)
+    var that = this;
     if (delimg) {
       $.ajax({
         url: "/api/property/removeimage",
@@ -156,7 +156,7 @@ $(document).ready(function () {
         dataType: "json",
         contentType: "application/json; charset=utf-8",
         success: function (result) {
-          //  location.reload()
+          $(that).closest('.main').remove();
         }
       })
     }
@@ -187,6 +187,7 @@ $(document).ready(function () {
   $('.closeBTn').on('click', function (e) {
     e.preventDefault();
     $('.popupSec').fadeOut(1000);
+    $('.newform-two-clr:gt(0)').remove();
   })
   $(".popupSec").click(function (e) {
     // e.preventDefault();

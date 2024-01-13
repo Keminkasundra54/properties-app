@@ -633,7 +633,12 @@ exports.removeimage = async (req, res, next) => {
     let modifydata = []
     const removeimg = await Property.findOne({ 'image.imagedata': imageName })
     if (removeimg) {
-      fs.unlinkSync('./images/' + imageName)
+      try {
+        fs.unlinkSync('./images/' + imageName)
+      } catch(e) {
+
+      }
+
     }
     for (let j = 0; j < removeimg.image.length; j++) {
       if (removeimg.image[j].imagedata != imageName) {
