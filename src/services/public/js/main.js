@@ -53,18 +53,18 @@ $(document).ready(function () {
 
           let myarray = result.data.property_description
           for (let i = 0; i < result.data.property_description.length; i++) {
-            const allfeatures = []
             var clonner = $('.newform-two-clr').eq(0).clone();
-            clonner.find('.RemoveRoom').eq(0).append('<a href="#"><svg clip-rule="evenodd" fill-rule="evenodd" stroke-linejoin="round" stroke-miterlimit="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="m20.015 6.506h-16v14.423c0 .591.448 1.071 1 1.071h14c.552 0 1-.48 1-1.071 0-3.905 0-14.423 0-14.423zm-5.75 2.494c.414 0 .75.336.75.75v8.5c0 .414-.336.75-.75.75s-.75-.336-.75-.75v-8.5c0-.414.336-.75.75-.75zm-4.5 0c.414 0 .75.336.75.75v8.5c0 .414-.336.75-.75.75s-.75-.336-.75-.75v-8.5c0-.414.336-.75.75-.75zm-.75-5v-1c0-.535.474-1 1-1h4c.526 0 1 .465 1 1v1h5.254c.412 0 .746.335.746.747s-.334.747-.746.747h-16.507c-.413 0-.747-.335-.747-.747s.334-.747.747-.747zm4.5 0v-.5h-3v.5z" fill-rule="nonzero"/></svg></a>')
+            clonner.find('.form-left-rq').eq(0).find('.data').text(myarray[i].room_name);
+            clonner.find('.RemoveRoom').eq(0).append('<a href="#">Room Remove</a>')
 
-            clonner.find('.form-left-rq').eq(0).find('.data').text(myarray[i].summary_description);
+            clonner.find('.form-left-rq').eq(1).find('.data').text(myarray[i].summary_description);
+
+
+            clonner.find('.form-left-rq').eq(2).find('.data').text(myarray[i].room_dimension);
             for (let k = 0; k < myarray[i].unique_features.length; k++) {
-              allfeatures.push(myarray[i].unique_features[k])
-              clonner.find('.form-left-rq').eq(1).find('.data').text(allfeatures);
+              clonner.find('.form-left-rq').eq(3).find('.data').append(`<span>${myarray[i].unique_features[k]}</span>`);
             }
-            clonner.find('.form-left-rq').eq(2).find('.data').text(myarray[i].room_name);
-            clonner.find('.form-left-rq').eq(3).find('.data').text(myarray[i].room_dimension);
-            clonner.find('.form-left-rq').eq(4).find('.data').text(myarray[i].room_description);
+
 
             for (let j = 0; j < myarray[i].room_image.length; j++) {
               clonner.find('.first-bg-s').append('<div><div class="fst-bg-img" style="background-image:url(' + "/roomimage/" + myarray[i].room_image[j] + '")></div></div>')
@@ -78,11 +78,11 @@ $(document).ready(function () {
               slidesToShow: 1
             });
           }
-        
-          
+
+
           let myimage = result.data.image
           for (let a = 0; a < myimage.length; a++) {
-            $(".fieldset-fourcolumn").append('<div class="main"><div class="myimgtype">' + myimage[a].imagetype + '</div><div class="myimage">' + myimage[a].imagedata + '</div><div ><a href="#" class="delimg">remove</a></div><br><br>')
+            $(".fieldset-fourcolumn").append('<div class="main"><div class="myimgtype">' + myimage[a].imagetype + '</div><div class="myimage">' + myimage[a].imagedata + '</div><div class="boxsRemove"><a href="#" class="delimg">remove</a></div><br><br>')
           }
           if (result.data.propertytype == 'to_let') {
             $(document).find('div .residentail_sale').hide()
@@ -128,7 +128,7 @@ $(document).ready(function () {
             }
           }
           // $("div .availabale_date").text(result.data.availabale_date)
-          
+
           const day = new Date(result.data.availabale_date).getDate()
           const month = '0' + (new Date(result.data.availabale_date).getMonth() + 1)
           const year = new Date(result.data.availabale_date).getFullYear()
@@ -164,7 +164,7 @@ $(document).ready(function () {
 
   $(document).on('click', '.RemoveRoom', function (e) {
     const roomdata = {
-    "summary_description" : $(this).siblings('div.change-clr').find('.form-left-rq .data:eq(0)').text(),
+    "summary_description" : '',
     "unique_features" : $(this).siblings('div.change-clr').find('.form-left-rq .data:eq(1)').text(),
     "room_name" : $(this).siblings('div.change-clr').find('.form-left-rq .data:eq(2)').text(),
     "room_dimension" :$(this).siblings('div.change-clr').find('.form-left-rq .data:eq(3)').text(),

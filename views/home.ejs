@@ -40,7 +40,7 @@
     }
 
     fieldset.fieldset-threecolumn .form-field {
-      width: 30%;
+      width: 33.33%;
     }
 
     fieldset.fieldset-twocolumn {
@@ -109,10 +109,14 @@
     .main {
       width: 100%;
       display: flex;
+      font-size: 13px;
+      color: #000;
+      align-items: center;
+      justify-content: space-between;
     }
 
     .myimage {
-      width: 35%;
+      width: 65%;
       text-align: left;
     }
 
@@ -122,40 +126,24 @@
     }
 
     .myimgtype {
-      width: 20%;
+      width: 30%;
       text-align: left;
       padding-left: 10px;
     }
 
-    .main div {
-      width: calc(100% - 55%);
-    }
 
     .main input[type="button"] svg {
       height: 17px;
       width: 20px;
     }
+    .main div.boxsRemove {
+    width: 100px;
+}
 
     .first-bg-s>div:first-child {
       display: none;
     }
 
-    .RemoveRoom a svg {
-      width: 18px;
-      height: 18px;
-      /* text-align: center; */
-    }
-
-    .RemoveRoom a {
-      display: flex;
-      /* width: calc(100% - 18px); */
-      justify-content: flex-end;
-      padding: 3px 10px 3px 0;
-    }
-
-    /* #availability option:first-child{
-        display: none;
-    } */
   </style>
 
 
@@ -175,7 +163,22 @@
       selectedFiles = event.target.files;
       if (selectedFiles.length) {
         for (let i = 0; i < selectedFiles.length; i++) {
-          $(".fieldset-fourcolumn").append('<div class="right-cols"><input type="radio" id="jpg" name="' + selectedFiles[i].name + '" value="Floor_plan"><label for="Floor_plan">Floor plan</label><br><input type="radio" id="jpeg" name="' + selectedFiles[i].name + '" value="EPC"><label for="EPC">EPC</label><br></div><div class="form-field left-colr">' + selectedFiles[i].name + '"</div></fieldset>')
+          $(".fieldset-fourcolumn").append(`<div class="main">
+    <div class="myimgtype">
+        <div class="radioGroup">
+        <div class="radio">
+            <input type="radio" id="jpg" name="' + selectedFiles[i].name + '" value="Floor_plan">
+            <label for="Floor_plan">Floor plan</label>
+        </div>
+        <div class="radio">
+            <input type="radio" id="jpeg" name="' + selectedFiles[i].name + '" value="EPC">
+            <label for="EPC">EPC</label>
+        </div>
+    </div></div>
+    <div class="myimage">${selectedFiles[i].name}</div>
+    <div class="boxsRemove"><a href="#" class="delimg">remove</a></div>
+    <br><br>
+</div>`)
           formdata.append('image', selectedFiles[i])
         }
       }
@@ -187,9 +190,10 @@
 
     let myfeaturesdata = []
     function myfeatures(event) {
-      const features = $(event.target).parents('.roomFields ').find('.form-field:nth-child(3) input').val()
+      const features = $('input[name="unique_features"]').val()
       myfeaturesdata.push(features)
-      $(event.target).parents('.roomFields').find('.form-field:nth-child(3) input').val('');
+      $('input[name="unique_features"]').val('');
+      $('.feature_list').append(`<span>${features}</span>`);
     }
     function myvalue(event) {
       const myvalue = $(event.target).closest('input').val()
@@ -224,23 +228,24 @@
     async function myroomdata(event) {
       let roomImages = [];
       let imageBase64 = [];
-      const imagelength = $(event.target).parents('.roomFields').find('.form-field:nth-child(7) .fileinput').prop('files').length;
+      const imagelength = $('.fileinput').prop('files').length;
       for (let i = 0; i < imagelength; i++) {
-        var imagename = $(event.target).parents('.roomFields').find('.form-field:nth-child(7) .fileinput').prop('files')[i].name
-        var imagedata = $(event.target).parents('.roomFields').find('.form-field:nth-child(7) .fileinput').prop('files')[i]
+        var imagename = $('.fileinput').prop('files')[i].name
+        var imagedata = $('.fileinput').prop('files')[i]
         myfile.push(imagedata)
         roomImages.push(imagename)
-        let fileBase = await getBase64($(event.target).parents('.roomFields').find('.form-field:nth-child(7) .fileinput').prop('files')[i]);
+        let fileBase = await getBase64($('.fileinput').prop('files')[i]);
         imageBase64.push(fileBase)
       }
       const myarray = {
-        "summary_description": $(event.target).parents('.roomFields ').find('.form-field:nth-child(1) input').val(),
-        "room_name": $(event.target).parents('.roomFields').find('.form-field:nth-child(2) input').val(),
+        "summary_description": $('input[name="summary_description"]').val(),
+        "room_name": $('input[name="room_name"]').val(),
         "unique_features": myfeaturesdata,
-        "room_dimension": $(event.target).parents('.roomFields ').find('.form-field:nth-child(5) input').val(),
-        "room_description": $(event.target).parents('.roomFields').find('.form-field:nth-child(6) input').val(),
+        "room_dimension": $('input[name="room_dimension"]').val(),
+        "room_description": $('input[name="room_description"]').val(),
         "roomImage": roomImages
       }
+      $('.feature_list').html('');
       myfeaturesdata = []
       const allfeatures = []
       $(event.target).parents('.roomFields').find('.form-field input').val('');
@@ -253,7 +258,7 @@
         $(imageClon).find('.fst-bg-img').attr('style', "background-image: url('" + image + "')")
         $(clonner).find('.first-bg-s').append(imageClon);
       }
-      clonner.find('.RemoveRoom').eq(0).append('<a href="#"><svg clip-rule="evenodd" fill-rule="evenodd" stroke-linejoin="round" stroke-miterlimit="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="m20.015 6.506h-16v14.423c0 .591.448 1.071 1 1.071h14c.552 0 1-.48 1-1.071 0-3.905 0-14.423 0-14.423zm-5.75 2.494c.414 0 .75.336.75.75v8.5c0 .414-.336.75-.75.75s-.75-.336-.75-.75v-8.5c0-.414.336-.75.75-.75zm-4.5 0c.414 0 .75.336.75.75v8.5c0 .414-.336.75-.75.75s-.75-.336-.75-.75v-8.5c0-.414.336-.75.75-.75zm-.75-5v-1c0-.535.474-1 1-1h4c.526 0 1 .465 1 1v1h5.254c.412 0 .746.335.746.747s-.334.747-.746.747h-16.507c-.413 0-.747-.335-.747-.747s.334-.747.747-.747zm4.5 0v-.5h-3v.5z" fill-rule="nonzero"/></svg></a>')
+      clonner.find('.RemoveRoom').eq(0).append('<a href="#">Remove Room</a>')
       clonner.find('.form-left-rq').eq(0).find('.data').text(myarray.summary_description);
       for (let k = 0; k < myarray.unique_features.length; k++) {
               allfeatures.push(myarray.unique_features[k])
@@ -400,7 +405,7 @@
         cache: false,
         success: function (result) {
           // console.log(result)
-          location.reload();
+          // location.reload();
         },
         error: function (result) {
           console.log("error", result)
@@ -431,12 +436,12 @@
     <div  class="wrapper largerWrapper">
       <div class="header">
         <div class="headerleft">
-          <a href="https://www.burrowsconsultancy.com/">
+          <a href="https://www.burrowsconsultancy.com/"  target="_blank">
               <img src="https://www.burrowsconsultancy.com/hubfs/BurrowsConsultancy-pos.svg">
           </a>
         </div>
         <div class="header-right">
-            <a href="https://www.burrowsconsultancy.com/book-consultation">Book a call</a>
+            <a href="https://www.burrowsconsultancy.com/book-consultation"  target="_blank">Book a call</a>
         </div>
       </div>
   </div>
@@ -456,59 +461,67 @@
         </div>
         <div class="popupItem">
           <form class="propertyForm" enctype="multipart/form-data">
-            <div class="mybutton" onchange="myvalue(event)">
-              <h6>for sale</h6><input type="radio" id="mybutton1" class="mybutton" name="propertytype" value="for_sale">
-              <h6>to let</h6><input type="radio" id="mybutton2" class="mybutton" name="propertytype" value="to_let">
+            <div class="mybutton mainTabButtons" onchange="myvalue(event)">
+              <div class="radioGroup">
+                  <div class="radio" for="mybutton1">
+                    <input type="radio" id="mybutton1" class="mybutton" name="propertytype" value="for_sale">
+                      <label for="mybutton1">For Sale</label>
+                  </div>
+                  <div class="radio" for="mybutton2">
+                      <input type="radio" id="mybutton2" class="mybutton" name="propertytype" value="to_let">
+                      <label for="mybutton2">To Let</label>
+                  </div>
+              </div>
             </div>
             <!-- propety summary -->
             <div class="form-title">
-              <h4>propertySummray</h4>
+              <h4>Property Summray</h4>
             </div>
             <fieldset class="fieldset-onecolumn">
               <div class="form-field">
-                <label>Owner contect details</label>
+                <label>Owner Contect Details</label>
                 <input type="text" name="owner_contect_details" placeholder="Owner contect details">
               </div>
             </fieldset>
             <!-- <div class="address-clr"> -->
 
             <div class="form-title">
-              <h4>address</h4>
+              <h4>Address</h4>
             </div>
             <fieldset class="fieldset-twocolumn">
               <div class="form-field">
-                <label>building_name/number</label>
+                <label>Building Name/number</label>
                 <input type="text" name="building_name" placeholder="building name/number">
               </div>
 
               <div class="form-field">
-                <label>street</label>
+                <label>Street</label>
                 <input type="text" name="street" placeholder="street">
               </div>
             </fieldset>
             <fieldset class="fieldset-twocolumn">
               <div class="form-field">
-                <label>addrress_line_2</label>
+                <label>Addrress Line 2</label>
                 <input type="text" name="addrress_line_2" placeholder="addrress line 2">
               </div>
               <div class="form-field">
-                <label>town/city</label>
+                <label>Town/City</label>
                 <input type="text" name="town" placeholder="town/city">
               </div>
             </fieldset>
             <fieldset class="fieldset-twocolumn">
               <div class="form-field">
-                <label>country/state</label>
+                <label>Country/state</label>
                 <input type="text" name="country" placeholder="country/state">
               </div>
               <div class="form-field">
-                <label>passcode/zipcode</label>
+                <label>Passcode/Zipcode</label>
                 <input type="number" name="passcode" placeholder="passcode/zipcode">
               </div>
             </fieldset>
             <fieldset class="fieldset-onecolumn">
               <div class="form-field">
-                <label>location_map</label>
+                <label>Location Map</label>
                 <input type="text" name="location_map" placeholder="location map">
               </div>
             </fieldset>
@@ -555,38 +568,38 @@
 
             <!-- property deatils -->
             <div class="form-title">
-              <h4>property deatils</h4>
+              <h4>Property Deatils</h4>
             </div>
-            <fieldset class="fieldset-threecolumn">
+            <fieldset class="fieldset-twocolumn">
               <div class="form-field">
                 <label>Title</label>
                 <input type="text" name="name" placeholder="Title">
               </div>
               <div class="form-field">
                 <label>Description</label>
-                <textarea type="number" name="description" placeholder="Property Description"></textarea>
+                <textarea type="number" name="description" placeholder="Property Description" rows="4"></textarea>
               </div>
             </fieldset>
             <fieldset class="fieldset-threecolumn">
               <div class="form-field">
-                <label>bedrooms</label>
+                <label>Bedrooms</label>
                 <input type="number" name="bedrooms" placeholder="bedrooms">
               </div>
               <div class="form-field">
-                <label>bathrooms</label>
+                <label>Bathrooms</label>
                 <input type="number" name="bathrooms" placeholder="bathrooms">
               </div>
               <div class="form-field">
-                <label>reception rooms</label>
+                <label>Reception Rooms</label>
                 <input type="number" name="reception_rooms" placeholder="reception rooms">
               </div>
             </fieldset>
 
             <fieldset class="fieldset-threecolumn">
               <div class="form-field property_type">
-                <label for="property_type">property type:</label>
+                <label for="property_type">Property Type:</label>
                 <select id="property_type">
-                  <option name="property_type" value="">choose property type</option>
+                  <option name="property_type" value="">Choose property type</option>
                   <option name="property_type" value="apartment">apartment</option>
                   <option name="property_type" value="bungalow">bungalow</option>
                   <option name="property_type" value="cottage">cottage</option>
@@ -595,26 +608,26 @@
               <div class="form-field parking">
                 <label for="parking">parking:</label>
                 <select id="parking">
-                  <option name="parking" value="">choose parking</option>
-                  <option name="parking" value="grage">grage</option>
-                  <option name="parking" value="carport">carport</option>
-                  <option name="parking" value="off-street">off-street</option>
+                  <option name="parking" value="">Choose parking</option>
+                  <option name="parking" value="grage">Grage</option>
+                  <option name="parking" value="carport">Carport</option>
+                  <option name="parking" value="off-street">Off-street</option>
                 </select>
               </div>
               <div class="form-field outside_space">
                 <label>outside_space</label>
                 <select id="outside_space">
-                  <option name="outside_space" value="">choose outside space</option>
-                  <option name="outside_space" value="rear_garden">rear garden</option>
-                  <option name="outside_space" value="front_garden">front garden</option>
-                  <option name="outside_space" value="courtyard">courtyard</option>
-                  <option name="outside_space" value="balcony">balcony</option>
+                  <option name="outside_space" value="">Choose Outside Space</option>
+                  <option name="outside_space" value="rear_garden">Rear Garden</option>
+                  <option name="outside_space" value="front_garden">Front Garden</option>
+                  <option name="outside_space" value="courtyard">Courtyard</option>
+                  <option name="outside_space" value="balcony">Balcony</option>
                 </select>
               </div>
             </fieldset>
             <fieldset class="fieldset-onecolumn">
               <div class="form-field">
-                <label>council_tax_band</label>
+                <label>Council Tax Band</label>
                 <input type="text" name="council_tax_band" placeholder="council tax band">
               </div>
             </fieldset>
@@ -622,35 +635,52 @@
 
             <!-- property marketing-->
             <div class="form-title">
-              <h4>property marketing</h4>
+              <h4>Property Marketing</h4>
             </div>
             <fieldset class="fieldset-threecolumn">
               <div class="form-field">
-                <label>active</label>
-                <h6>yes</h6><input type="radio" class="active" id="active1" name="active" value="yes">
-                <h6>no</h6><input type="radio" class="active" id="active2" name="active" value="no">
+                <label>Active</label>
+                <div class="radioGroup">
+                  <div class="radio">
+                    <input type="radio" class="active" id="active1" name="active" value="Yes">
+                    <label for="active1">yes</label>
+                  </div>
+                  <div class="radio">
+                    <input type="radio" class="active" id="active2" name="active" value="No">
+                    <label for="active2">No</label>
+                  </div>
+                </div>
+
               </div>
 
               <div class="form-field">
-                <label>featured</label>
-                <h6>yes</h6><input type="radio" class="featured" id="featured1" name="featured" value="yes">
-                <h6>no</h6><input type="radio" class="featured" id="featured2" name="featured" value="no">
+                <label>Featured</label>
+                <div class="radioGroup">
+                  <div class="radio">
+                    <input type="radio" class="featured" id="featured1" name="featured" value="Yes">
+                    <label for="featured1">yes</label>
+                  </div>
+                  <div class="radio">
+                    <input type="radio" class="featured" id="featured2" name="featured" value="No">
+                    <label for="featured2">No</label>
+                  </div>
+                </div>
               </div>
 
               <div class="form-field availability">
                 <label for="availability">availability:</label>
                 <select id="availability">
-                  <option name="availability" value="">choose availability</option>
-                  <option name="availability" value="for_sale">for_sale</option>
-                  <option name="availability" value="under_offer">under_offer</option>
-                  <option name="availability" value="sold_stc">sold_stc</option>
-                  <option name="availability" value="sold">sold</option>
+                  <option name="availability" value="">Choose availability</option>
+                  <option name="availability" value="for_sale">For Sale</option>
+                  <option name="availability" value="under_offer">Under Offer</option>
+                  <option name="availability" value="sold_stc">Sold Stc</option>
+                  <option name="availability" value="sold">Sold</option>
                 </select>
                 <select id="tolet_availability">
                   <option name="availability" value="">choose availability</option>
-                  <option name="availability" value="to_let">to_let</option>
-                  <option name="availability" value="let_agreed">let agreed</option>
-                  <option name="availability" value="let">let</option>
+                  <option name="availability" value="to_let">To Let</option>
+                  <option name="availability" value="let_agreed">Let Agreed</option>
+                  <option name="availability" value="let">Let</option>
                 </select>
               </div>
             </fieldset>
@@ -658,25 +688,17 @@
 
             <!-- propery decription -->
             <div class="form-title">
-              <h4>property description</h4>
+              <h4>Property Description</h4>
             </div>
             <fieldset class="fieldset-twocolumn roomFields">
 
               <div class="form-field">
-                <label>summary description</label>
+                <label>Summary Description</label>
                 <input type="text" name="summary_description" placeholder="summary description">
               </div>
               <div class="form-field">
-                <label>room name</label>
+                <label>Room Name</label>
                 <input type="text" name="room_name" placeholder="Room name">
-              </div>
-              <div class="form-field">
-                <label>add unique features</label>
-                <input type="text" name="unique features" placeholder="unique features">
-              </div>
-              <div class="form-field">
-                <label> &nbsp; </label>
-                <button class="addroom" type="button" onclick="myfeatures(event)">add feature</button>
               </div>
               <div class="form-field">
                 <label>room dimension</label>
@@ -690,8 +712,25 @@
                 <label>roomimage</label>
                 <input type="file" class="fileinput" name="roomimage" placeholder="roomimage" multiple="multiple">
               </div>
-              <div><label> &nbsp; </label>
-                <button class="addroom" type="button" onclick="myroomdata(event)">add room</button>
+
+            </fieldset>
+
+            <fieldset class="fieldset-onecolumn">
+              <div class="form-field">
+                <label>Add Unique Features</label>
+                <input type="text" name="unique_features" placeholder="unique features">
+              </div>
+              <div class="form-field">
+                <button class="addroom" type="button" onclick="myfeatures(event)">Add Feature</button>
+              </div>
+              <div class="feature_list">
+
+              </div>
+            </fieldset>
+            <fieldset class="fieldset-onecolumn">
+              <div class="form-field">
+                <br>
+                <button class="addroom" type="button" onclick="myroomdata(event)">Add Room</button>
               </div>
             </fieldset>
             <!-- propery decription end-->
@@ -699,9 +738,7 @@
               <div class="new-form-inr">
                 <div class="newform-two-clr changes-s">
                   <div class="bottom-clrq">
-                    <div class="RemoveRoom">
 
-                    </div>
                     <div class="first-bg-s">
                       <div>
                         <div class="fst-bg-img"
@@ -710,7 +747,21 @@
                       </div>
                     </div>
                     <div class="change-clr">
-                      <div class="form-left-rq">
+                      <div class="form-left-rq room-title">
+                        <div class="data">
+                        </div>
+                      </div>
+                      <div class="form-left-rq room-description">
+                        <div class="data">
+                        </div>
+                      </div>
+                      <div class="form-left-rq room-dimension">
+                         <strong>Room Dimension</strong>
+                        <div class="data">
+                        </div>
+                      </div>
+                      <div class="form-left-rq room-feature">
+                        <strong>Room Features</strong>
                         <div class="data">
                         </div>
                       </div>
@@ -718,18 +769,9 @@
                         <div class="data">
                         </div>
                       </div>
-                      <div class="form-left-rq">
-                        <div class="data">
-                        </div>
-                      </div>
-                      <div class="form-left-rq">
-                        <div class="data">
-                        </div>
-                      </div>
-                      <div class="form-left-rq">
-                        <div class="data">
-                        </div>
-                      </div>
+                    </div>
+                    <div class="RemoveRoom">
+
                     </div>
                   </div>
                 </div>
@@ -823,18 +865,28 @@
               <fieldset class="fieldset-onecolumn">
                 <div class="form-field">
                   <label>furnishing</label>
-                  <h6>unfurnished</h6><input type="radio" id="unfurnished" name="furnishing" value="unfurnished">
-                  <h6>furnished</h6><input type="radio" id="furnished" name="furnishing" value="furnished">
+                  <div class="radioGroup">
+                    <div class="radio">
+                      <input type="radio" id="unfurnished" name="furnishing" value="unfurnished">
+                      <label for="unfurnished">Unfurnished</label>
+                    </div>
+                    <div class="radio">
+                      <input type="radio" id="furnished" name="furnishing" value="furnished">
+                      <label for="furnished">Furnished</label>
+                    </div>
+                  </div>
                 </div>
               </fieldset>
               <fieldset class="fieldset-onecolumn">
                 <div class="form-field">
+                  <label>Available Date</label>
                   <input type="date" name="availabale_date" class="availabale_date">
                   <!-- <div class="availabale_date"></div> -->
                 </div>
               </fieldset>
               <fieldset class="fieldset-onecolumn">
                 <div class="form-field">
+                  <label>Minimum Tenancy</label>
                   <input type="text" name="minimume_tenancy" placeholder="minimume Tenancy">
                 </div>
               </fieldset>
@@ -846,7 +898,7 @@
               <h4>Media</h4>
             </div>
             <div class="media-clr">
-              <fieldset class="fieldset-threecolumn">
+              <fieldset class="fieldset-onecolumn">
                 <div class="form-field">
                   <input type="file" id="image" name="image" class="imageadd" multiple="multiple"
                     onchange="onFileSelected(event)" />
@@ -973,6 +1025,32 @@
       </div>
     </div>
   </section>
+<br>
+<br>
+<br>
+<div class="footer-section">
+  <div class="wrapper largerWrapper">
+    <div class="footer-logo">
+      <a href="https://www.burrowsconsultancy.com"  target="_blank">
+        <img src="https://www.burrowsconsultancy.com/hubfs/BurrowsConsultancy-neg.svg" alt="Burrows Consultancy" loading="lazy" width="249" height="25">
+      </a>
+    </div>
+    <div class="footer-list">
+        <ul>
+          <li><a href="https://www.burrowsconsultancy.com/terms-conditions" target="_blank">Terms &amp; Conditions</a></li>
+          <li><a href="https://www.burrowsconsultancy.com/privacy-policy" target="_blank">Privacy</a></li>
+          <li><a href="https://www.burrowsconsultancy.com/website-quotation-calculator" target="_blank">Website Quotation Calculator</a></li>
+          <li><a href="https://www.burrowsconsultancy.com/website-report" target="_blank">Analyse Your Website</a></li>
+          <li><a href="https://www.burrowsconsultancy.com/hubspot-roi-calculator" target="_blank">HubSpot ROI Calculator</a></li>
+          <li><a href="https://www.burrowsconsultancy.com/blog" target="_blank">Blog</a></li>
+        </ul>
+    </div>
+    <div class="footer-copyright">
+      <p>©Burrows Digital Consultants Ltd. Registered in the UK 4773361. Powered by <a href="https://www.hubspot.com/" target="_blank" rel="noopener">HubSpot</a></p>
+    </div>
+  </div>
+</div>
+
 </body>
 
 </html>

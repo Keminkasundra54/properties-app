@@ -1,3 +1,6 @@
+/* eslint-disable standard/object-curly-even-spacing */
+/* eslint-disable eqeqeq */
+/* eslint-disable camelcase */
 /* eslint-disable no-unused-vars */
 'use strict'
 require('dotenv').config()
@@ -28,11 +31,11 @@ exports.create = async (req, res, next) => {
       if (img.length > 0) {
         for (const i in img) {
           const teamObj = img[i]
-          if (teamObj.fieldname == "roomimage") {
+          if (teamObj.fieldname == 'roomimage') {
             const roomdata = new Image({
               fieldname: teamObj.fieldname,
-              filename: teamObj.filename,
-            });
+              filename: teamObj.filename
+            })
             roomimagevar.push(roomdata.filename)
           }
         }
@@ -43,7 +46,7 @@ exports.create = async (req, res, next) => {
       for (let k = 0; k < roomimagevar.length; k++) {
         for (let j = 0; j < roomjsondata[i].roomImage.length; j++) {
           // lastdata.push(roomjsondata[i].roomImage[j])
-          let newdata = roomimagevar[k].split("_").pop()
+          let newdata = roomimagevar[k].split('_').pop()
           console.log(newdata)
           if (newdata == roomjsondata[i].roomImage[j]) {
             lastdata.push(roomimagevar[k])
@@ -51,44 +54,42 @@ exports.create = async (req, res, next) => {
         }
       }
       const obj = {
-        "room_name": roomjsondata[i].room_name,
-        "summary_description": roomjsondata[i].summary_description,
-        "unique_features": roomjsondata[i].unique_features,
-        "room_description": roomjsondata[i].room_description,
-        "room_dimension": roomjsondata[i].room_dimension,
-        "room_image": lastdata
+        'room_name': roomjsondata[i].room_name,
+        'summary_description': roomjsondata[i].summary_description,
+        'unique_features': roomjsondata[i].unique_features,
+        'room_description': roomjsondata[i].room_description,
+        'room_dimension': roomjsondata[i].room_dimension,
+        'room_image': lastdata
       }
       room_information.push(obj)
     }
     if (myimg != undefined) {
       if (myimg.length > 0) {
-        console.log(myimg, "img")
+        console.log(myimg, 'img')
         for (const i in myimg) {
           const teamObj = myimg[i]
-          if (teamObj.fieldname == "image") {
+          if (teamObj.fieldname == 'image') {
             const imgdata = new Image({
               fieldname: teamObj.fieldname,
               destination: teamObj.destination,
               filename: teamObj.filename,
               path: teamObj.path,
-              size: teamObj.size,
-            });
+              size: teamObj.size
+            })
             if (Array.isArray(req.body.imagetype)) {
-
               if (req.body.imagetype.length) {
-
                 const obj = {
 
-                  "imagedata": imgdata.filename,
-                  "imagetype": req.body.imagetype[i]
+                  'imagedata': imgdata.filename,
+                  'imagetype': req.body.imagetype[i]
                 }
                 imagevar.push(obj)
               }
             } else {
-              console.log("i am else")
+              console.log('i am else')
               const obj = {
-                "imagedata": imgdata.filename,
-                "imagetype": req.body.imagetype
+                'imagedata': imgdata.filename,
+                'imagetype': req.body.imagetype
               }
               imagevar.push(obj)
             }
@@ -103,43 +104,42 @@ exports.create = async (req, res, next) => {
     //   "fixed_price": req.body.fixed_price
     // }
     const details_pricedata = {
-      "residentail_orio": req.body.residentail_orio,
-      "residentail_offers_over": req.body.residentail_offers_over,
-      "residentail_guide_price": req.body.residentail_guide_price,
-      "residentail_fix_price": req.body.residentail_fix_price,
-      "residentail_price_on_application": req.body.residentail_price_on_application,
+      'residentail_orio': req.body.residentail_orio,
+      'residentail_offers_over': req.body.residentail_offers_over,
+      'residentail_guide_price': req.body.residentail_guide_price,
+      'residentail_fix_price': req.body.residentail_fix_price,
+      'residentail_price_on_application': req.body.residentail_price_on_application
     }
     const deatils_tenuredata = {
-      "residentail_free_hold": req.body.residentail_free_hold,
-      "residentail_less_hold": req.body.residentail_less_hold
+      'residentail_free_hold': req.body.residentail_free_hold,
+      'residentail_less_hold': req.body.residentail_less_hold
     }
     const addressdata = {
-      "building_name": req.body.building_name,
-      "street": req.body.street,
-      "addrress_line_2": req.body.addrress_line_2,
-      "town": req.body.town,
-      "country": req.body.country,
-      "passcode": req.body.passcode,
+      'building_name': req.body.building_name,
+      'street': req.body.street,
+      'addrress_line_2': req.body.addrress_line_2,
+      'town': req.body.town,
+      'country': req.body.country,
+      'passcode': req.body.passcode
     }
     // const tenuredata = {
     //   "free_hold": req.body.free_hold,
     //   "less_hold": req.body.less_hold,
     // }
     const rent = {
-      "per_person_per_week": req.body.per_person_per_week,
-      "per_week": req.body.per_week,
-      "per_calander_month": req.body.per_calander_month,
-      "per_quater": req.body.per_quater,
-      "per_annum": req.body.per_annum
+      'per_person_per_week': req.body.per_person_per_week,
+      'per_week': req.body.per_week,
+      'per_calander_month': req.body.per_calander_month,
+      'per_quater': req.body.per_quater,
+      'per_annum': req.body.per_annum
     }
-    let mytype;
-    if (req.body.propertytype == "undefined" || req.body.propertytype == "for_sale") {
-      console.log("i am if")
-      mytype = "for_sale"
-    }
-    else {
-      console.log("i am else")
-      mytype = "to_let"
+    let mytype
+    if (req.body.propertytype == 'undefined' || req.body.propertytype == 'for_sale') {
+      console.log('i am if')
+      mytype = 'for_sale'
+    } else {
+      console.log('i am else')
+      mytype = 'to_let'
     }
     if (body) {
       const propertySave = new Property({
@@ -172,8 +172,10 @@ exports.create = async (req, res, next) => {
         deposit: req.body.deposit,
         furnishing: req.body.furnishing,
         availabale_date: req.body.availabale_date,
-        minimume_tenancy: req.body.minimume_tenancy
-      });
+        minimume_tenancy: req.body.minimume_tenancy,
+        name: req.body.name,
+        description: req.body.description
+      })
       await propertySave.save()
 
       const outsideSpacedata = new OutsideSpace({
@@ -214,16 +216,16 @@ exports.getProperty = async (req, res, next) => {
     const property = await Property.findOne({ _id: req.body._id })
 
     const propertiedata = {
-      "_id": property._id,
-      "owner_contect_details": property.owner_contect_details,
-      "deposit": property.deposit,
-      "building_name": property.address.building_name,
-      "street": property.address.street,
-      "town": property.address.town,
-      "addrress_line_2": property.address.addrress_line_2,
-      "country": property.address.country,
-      "passcode": property.address.passcode,
-      "location_map": property.location_map,
+      '_id': property._id,
+      'owner_contect_details': property.owner_contect_details,
+      'deposit': property.deposit,
+      'building_name': property.address.building_name,
+      'street': property.address.street,
+      'town': property.address.town,
+      'addrress_line_2': property.address.addrress_line_2,
+      'country': property.address.country,
+      'passcode': property.address.passcode,
+      'location_map': property.location_map,
 
       // "orio": property.price.orio,
       // "offers_over": property.price.offers_over,
@@ -232,44 +234,44 @@ exports.getProperty = async (req, res, next) => {
       // "free_hold": property.tenure.free_hold,
       // "less_hold": property.tenure.less_hold,
 
-      "bedrooms": property.bedrooms,
-      "bathrooms": property.bathrooms,
-      "reception_rooms": property.reception_rooms,
-      "property_type": property.property_type,
-      "parking": property.parking,
-      "outside_space": property.outside_space,
-      "council_tax_band": property.council_tax_band,
-      "image": property.image,
+      'bedrooms': property.bedrooms,
+      'bathrooms': property.bathrooms,
+      'reception_rooms': property.reception_rooms,
+      'property_type': property.property_type,
+      'parking': property.parking,
+      'outside_space': property.outside_space,
+      'council_tax_band': property.council_tax_band,
+      'image': property.image,
 
-      "active": property.active,
-      "featured": property.featured,
-      "availability": property.availability,
-      "property_description": property.property_description,
+      'active': property.active,
+      'featured': property.featured,
+      'availability': property.availability,
+      'property_description': property.property_description,
 
+      'residentail_orio': property.details_price.residentail_orio,
+      'residentail_offers_over': property.details_price.residentail_offers_over,
+      'residentail_guide_price': property.details_price.residentail_guide_price,
+      'residentail_fix_price': property.details_price.residentail_fix_price,
+      'residentail_price_on_application': property.details_price.residentail_price_on_application,
 
-      "residentail_orio": property.details_price.residentail_orio,
-      "residentail_offers_over": property.details_price.residentail_offers_over,
-      "residentail_guide_price": property.details_price.residentail_guide_price,
-      "residentail_fix_price": property.details_price.residentail_fix_price,
-      "residentail_price_on_application": property.details_price.residentail_price_on_application,
+      'residentail_free_hold': property.deatils_tenure.residentail_free_hold,
+      'residentail_less_hold': property.deatils_tenure.residentail_less_hold,
 
-      "residentail_free_hold": property.deatils_tenure.residentail_free_hold,
-      "residentail_less_hold": property.deatils_tenure.residentail_less_hold,
+      'deposit': property.deposit,
+      'furnishing': property.furnishing,
+      'availabale_date': property.availabale_date,
+      'minimume_tenancy': property.minimume_tenancy,
 
-      "deposit": property.deposit,
-      "furnishing": property.furnishing,
-      "availabale_date": property.availabale_date,
-      "minimume_tenancy": property.minimume_tenancy,
-
-      "per_person_per_week": property.rent.per_person_per_week,
-      "per_week": property.rent.per_week,
-      "per_calander_month": property.rent.per_calander_month,
-      "per_quater": property.rent.per_quater,
-      "per_annum": property.rent.per_annum,
-      "propertytype": property.propertytype,
-      "id": property._id,
-      "name": property.name,
-      "description": property.description,
+      'per_person_per_week': property.rent.per_person_per_week,
+      'per_week': property.rent.per_week,
+      'per_calander_month': property.rent.per_calander_month,
+      'per_quater': property.rent.per_quater,
+      'per_annum': property.rent.per_annum,
+      'propertytype': property.propertytype,
+      'id': property._id,
+      'name': property.name,
+      'description': property.description,
+      unique_features: property.unique_features
 
     }
     return res.json({ message: 'OK', data: propertiedata })
@@ -316,12 +318,10 @@ exports.pushToHive = async (req, res, next) => {
 }
 exports.updateProperty = async (req, res, next) => {
   try {
-
     let imagevar = []
     let roomimagevar = []
     const room_information = []
     const myimg = req.files.image
-
 
     //  for roomimage add and update
     const roomjsondata = JSON.parse(req.body.room_information)
@@ -347,11 +347,11 @@ exports.updateProperty = async (req, res, next) => {
       if (img.length > 0) {
         for (const i in img) {
           const teamObj = img[i]
-          if (teamObj.fieldname == "roomimage") {
+          if (teamObj.fieldname == 'roomimage') {
             const roomdata = new Image({
               fieldname: teamObj.fieldname,
-              filename: teamObj.filename,
-            });
+              filename: teamObj.filename
+            })
             roomimagevar.push(roomdata.filename)
           }
         }
@@ -361,28 +361,27 @@ exports.updateProperty = async (req, res, next) => {
       const lastdata = []
 
       for (let k = 0; k < roomimagevar.length; k++) {
-
         for (let j = 0; j < roomjsondata[i].roomImage.length; j++) {
           // lastdata.push(roomjsondata[i].roomImage[j])
-          let newdata = roomimagevar[k].split("_").pop()
+          let newdata = roomimagevar[k].split('_').pop()
           if (newdata == roomjsondata[i].roomImage[j]) {
             lastdata.push(roomimagevar[k])
           }
         }
       }
       const obj = {
-        "room_name": roomjsondata[i].room_name,
-        "summary_description": roomjsondata[i].summary_description,
-        "unique_features": roomjsondata[i].unique_features,
-        "room_description": roomjsondata[i].room_description,
-        "room_dimension": roomjsondata[i].room_dimension,
-        "room_image": lastdata
+        'room_name': roomjsondata[i].room_name,
+        'summary_description': roomjsondata[i].summary_description,
+        'unique_features': roomjsondata[i].unique_features,
+        'room_description': roomjsondata[i].room_description,
+        'room_dimension': roomjsondata[i].room_dimension,
+        'room_image': lastdata
       }
       room_information.push(obj)
     }
     // roomimage add and update end here
 
-    //image add and update
+    // image add and update
     if (olddata.image.length) {
       for (let a = 0; a < olddata.image.length; a++) {
         const mydata = olddata.image[a]
@@ -394,52 +393,51 @@ exports.updateProperty = async (req, res, next) => {
     }
     if (myimg != undefined) {
       if (myimg.length > 0) {
-        console.log(myimg, 'imgggggg');
+        console.log(myimg, 'imgggggg')
         for (const i in myimg) {
           const teamObj = myimg[i]
-          if (teamObj.fieldname == "image") {
+          if (teamObj.fieldname == 'image') {
             const imgdata = new Image({
               fieldname: teamObj.fieldname,
               destination: teamObj.destination,
               filename: teamObj.filename,
               path: teamObj.path,
-              size: teamObj.size,
-            });
+              size: teamObj.size
+            })
 
             if (Array.isArray(req.body.imagetype)) {
               if (req.body.imagetype.length) {
                 const obj = {
-                  "imagedata": imgdata.filename,
-                  "imagetype": req.body.imagetype[i]
+                  'imagedata': imgdata.filename,
+                  'imagetype': req.body.imagetype[i]
                 }
                 imagevar.push(obj)
               }
             } else {
               const obj = {
-                "imagedata": imgdata.filename,
-                "imagetype": req.body.imagetype
+                'imagedata': imgdata.filename,
+                'imagetype': req.body.imagetype
               }
               imagevar.push(obj)
             }
-
           }
         }
       }
     }
-    //image update end
+    // image update end
 
     const property = await Property.findOneAndUpdate({ _id: req.body.id }, {
       $set: {
-        "image": imagevar,
+        'image': imagevar,
 
         'address.building_name': req.body.building_name,
         'address.street': req.body.street,
         'address.addrress_line_2': req.body.addrress_line_2,
-        "address.town": req.body.town,
-        "address.country": req.body.country,
-        "owner_contect_details": req.body.owner_contect_details,
+        'address.town': req.body.town,
+        'address.country': req.body.country,
+        'owner_contect_details': req.body.owner_contect_details,
 
-        "location_map": req.body.location_map,
+        'location_map': req.body.location_map,
 
         // 'price.orio': req.body.orio,
         // 'price.offers_over': req.body.offers_over,
@@ -449,47 +447,47 @@ exports.updateProperty = async (req, res, next) => {
         // 'tenure.guide_price': req.body.free_hold,
         // "tenure.fixed_price": req.body.less_hold,
 
-        "bedrooms": req.body.bedrooms,
-        "bathrooms": req.body.bathrooms,
-        "reception_rooms": req.body.reception_rooms,
-        "council_tax_band": req.body.council_tax_band,
-        "active": req.body.active,
-        "featured": req.body.featured,
-        "property_description": req.body.property_description,
+        'bedrooms': req.body.bedrooms,
+        'bathrooms': req.body.bathrooms,
+        'reception_rooms': req.body.reception_rooms,
+        'council_tax_band': req.body.council_tax_band,
+        'active': req.body.active,
+        'featured': req.body.featured,
+        'property_description': req.body.property_description,
 
-        "availability": req.body.availability,
+        'availability': req.body.availability,
 
-        "property_type": req.body.property_type,
-        "parking": req.body.parking,
-        "outside_space": req.body.outside_space,
+        'property_type': req.body.property_type,
+        'parking': req.body.parking,
+        'outside_space': req.body.outside_space,
 
-        "details_price.residentail_orio": req.body.residentail_orio,
-        "details_price.residentail_offers_over": req.body.residentail_offers_over,
-        "details_price.residentail_guide_price": req.body.residentail_guide_price,
-        "details_price.residentail_fix_price": req.body.residentail_fix_price,
-        "details_price.residentail_price_on_application": req.body.residentail_price_on_application,
+        'details_price.residentail_orio': req.body.residentail_orio,
+        'details_price.residentail_offers_over': req.body.residentail_offers_over,
+        'details_price.residentail_guide_price': req.body.residentail_guide_price,
+        'details_price.residentail_fix_price': req.body.residentail_fix_price,
+        'details_price.residentail_price_on_application': req.body.residentail_price_on_application,
 
-        "deatils_tenure.residentail_free_hold": req.body.residentail_free_hold,
-        "deatils_tenure.residentail_less_hold": req.body.residentail_less_hold,
+        'deatils_tenure.residentail_free_hold': req.body.residentail_free_hold,
+        'deatils_tenure.residentail_less_hold': req.body.residentail_less_hold,
 
-        "deposit": req.body.deposit,
-        "furnishing": req.body.furnishing,
-        "availabale_date": req.body.availabale_date,
-        "minimume_tenancy": req.body.minimume_tenancy,
+        'deposit': req.body.deposit,
+        'furnishing': req.body.furnishing,
+        'availabale_date': req.body.availabale_date,
+        'minimume_tenancy': req.body.minimume_tenancy,
 
         'rent.per_person_per_week': req.body.per_person_per_week,
         'rent.per_week': req.body.per_week,
         'rent.per_calander_month': req.body.per_calander_month,
-        "rent.per_quater": req.body.per_quater,
+        'rent.per_quater': req.body.per_quater,
         'rent.per_annum': req.body.per_annum,
-        "property_description": room_information,
+        'property_description': room_information
 
       }
     })
 
-    await Parking.findOneAndUpdate({ propertyId: req.body.id }, { $set: { "parking_name": req.body.parking } })
-    await OutsideSpace.findOneAndUpdate({ propertyId: req.body.id }, { $set: { "outsideSpace_name": req.body.outside_space } })
-    await PropertyType.findOneAndUpdate({ propertyId: req.body.id }, { $set: { "property_type_name": req.body.property_type } })
+    await Parking.findOneAndUpdate({ propertyId: req.body.id }, { $set: { 'parking_name': req.body.parking } })
+    await OutsideSpace.findOneAndUpdate({ propertyId: req.body.id }, { $set: { 'outsideSpace_name': req.body.outside_space } })
+    await PropertyType.findOneAndUpdate({ propertyId: req.body.id }, { $set: { 'property_type_name': req.body.property_type } })
 
     return res.json({ message: 'OK', data: property })
   } catch (error) {
@@ -534,7 +532,7 @@ exports.deleteProperty = async (req, res, next) => {
     next(error)
   }
 }
-function getPropertyPayload(property) {
+function getPropertyPayload (property) {
   let rooms = property.room_information.map((room) => {
     room.room_photo_urls = room.roomimage.map(url => {
       return 'https://propertyapp.hubresolution.com/roomimage/' + url
@@ -633,10 +631,10 @@ exports.removeimage = async (req, res, next) => {
     const imageName = req.body.imageName
     console.log(imageName)
     let modifydata = []
-    const removeimg = await Property.findOne({ "image.imagedata": imageName })
-   if(removeimg){
+    const removeimg = await Property.findOne({ 'image.imagedata': imageName })
+    if (removeimg) {
       fs.unlinkSync('./images/' + imageName)
-   }
+    }
     for (let j = 0; j < removeimg.image.length; j++) {
       if (removeimg.image[j].imagedata != imageName) {
         modifydata.push(removeimg.image[j])
@@ -645,36 +643,31 @@ exports.removeimage = async (req, res, next) => {
     await Property.findOneAndUpdate({ image: modifydata })
 
     return res.json({ message: 'OK', data: { message: 'Remove' } })
-
   } catch (e) {
-    next(error)
+    next(e)
   }
 }
-exports.removeRoom = async(req, res, next)=>{
-  try{
-  console.log("room call")
-  const roomdata = req.body.roomdata
-  const room_description = roomdata.room_description
-  const summary_description = roomdata.summary_description
-  const room_name = roomdata.room_name
-  const room_dimension = roomdata.room_dimension
-  const modifydata = []
-  const propertydata = await Property.findOne({ "property_description.room_description": room_description , "property_description.summary_description":summary_description , "property_description.room_name":room_name , "property_description.room_dimension":room_dimension})
-  const data = propertydata.property_description
-  for (let j = 0; j < propertydata.property_description.length; j++) {
-
-    if(data[j].room_description != room_description && data[j].summary_description != summary_description && data[j].room_name != room_name && data[j].room_dimension != room_dimension) {
-       console.log(data[j])
-       modifydata.push(data[j])
+exports.removeRoom = async (req, res, next) => {
+  try {
+    console.log('room call')
+    const roomdata = req.body.roomdata
+    const room_description = roomdata.room_description
+    const summary_description = roomdata.summary_description
+    const room_name = roomdata.room_name
+    const room_dimension = roomdata.room_dimension
+    const modifydata = []
+    const propertydata = await Property.findOne({ 'property_description.room_description': room_description, 'property_description.summary_description': summary_description, 'property_description.room_name': room_name, 'property_description.room_dimension': room_dimension})
+    if (propertydata) {
+      const data = propertydata.property_description
+      for (let j = 0; j < propertydata.property_description.length; j++) {
+        if (data[j].room_description != room_description && data[j].summary_description != summary_description && data[j].room_name != room_name && data[j].room_dimension != room_dimension) {
+          modifydata.push(data[j])
+        }
+      }
+      await Property.findOneAndUpdate({ property_description: modifydata })
     }
-  }
-  await Property.findOneAndUpdate({ property_description: modifydata })
-  // console.log(modifydata)
-
-  return res.json({ message: 'OK', data: { message: 'Remove' } })
-  //
-  }
-  catch(err){
+    return res.json({ message: 'OK', data: { message: 'Remove' } })
+  } catch (err) {
     next(err)
   }
 }
