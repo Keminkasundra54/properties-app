@@ -22,7 +22,7 @@
       margin: 0;
     }
 
-    div #tolet_availability {
+    div .tolet_availability {
       display: none
     }
 
@@ -164,15 +164,16 @@
       selectedFiles = event.target.files;
       if (selectedFiles.length) {
         for (let i = 0; i < selectedFiles.length; i++) {
+          formdata.append('image', selectedFiles[i]);
           $(".fieldset-fourcolumn").append(`<div class="main">
     <div class="myimgtype">
         <div class="radioGroup">
         <div class="radio">
-            <input type="radio" id="jpg" name="' + selectedFiles[i].name + '" value="Floor_plan">
+            <input type="radio" id="jpg" name="' +${selectedFiles[i].name}+ '" value="Floor_plan">
             <label for="Floor_plan">Floor plan</label>
         </div>
         <div class="radio">
-            <input type="radio" id="jpeg" name="' + selectedFiles[i].name + '" value="EPC">
+            <input type="radio" id="jpeg" name="' +${selectedFiles[i].name}+ '" value="EPC">
             <label for="EPC">EPC</label>
         </div>
     </div></div>
@@ -180,21 +181,21 @@
     <div class="boxsRemove"><a href="#" class="delimg">remove</a></div>
     <br><br>
 </div>`)
-          formdata.append('image', selectedFiles[i])
         }
       }
     }
-    $(document).on('change', '.right-cols input:radio:checked', function () {
+    $(document).on('change', '.myimgtype .radio input:radio:checked', function () {
       var value = $(this).val();
+      console.log(value)
       formdata.append('imagetype', value);
     });
 
     let myfeaturesdata = [];
 
     function myfeatures(event) {
-      const features = $('input[name="unique_features"]').val()
+      const features = $('input[name="uniqueFeatures"]').val()
       myfeaturesdata.push(features)
-      $('input[name="unique_features"]').val('');
+      $('input[name="uniqueFeatures"]').val('');
       $('.feature_list').append(`<span>${features}</span>`);
     }
     function myvalue(event) {
@@ -226,11 +227,11 @@
         imageBase64.push(fileBase)
       }
       const myarray = {
-        "summary_description": $('input[name="summary_description"]').val(),
-        "room_name": $('input[name="room_name"]').val(),
-        "unique_features": myfeaturesdata,
-        "room_dimension": $('input[name="room_dimension"]').val(),
-        "room_description": $('input[name="room_description"]').val(),
+        "summaryDescription": $('input[name="summaryDescription"]').val(),
+        "roomName": $('input[name="roomName"]').val(),
+        "uniqueFeatures": myfeaturesdata,
+        "roomDimension": $('input[name="roomDimension"]').val(),
+        "roomDescription": $('input[name="roomDescription"]').val(),
         "roomImage": roomImages
       }
       $('.feature_list').html('');
@@ -238,25 +239,24 @@
       const allfeatures = []
       $(event.target).parents('.roomFields').find('.form-field input').val('');
       var clonner = $('.newform-two-clr').eq(0).clone();
-
       $(clonner).find('.first-bg-s > div:gt(0)').remove();
-      console.log(imageBase64);
-      for (let image of imageBase64) {
+      for (let image of imageBase64) 
+      {
         var imageClon = $(clonner).find('.first-bg-s div').eq(0).clone();
         $(imageClon).find('.fst-bg-img').attr('style', "background-image: url('" + image + "')")
         $(clonner).find('.first-bg-s').append(imageClon);
       }
-      clonner.find('.RemoveRoom').eq(0).append('<a href="#">Remove Room</a>')
-      clonner.find('.form-left-rq').eq(0).find('.data').text(myarray.summary_description);
-      for (let k = 0; k < myarray.unique_features.length; k++) {
-              allfeatures.push(myarray.unique_features[k])
-              clonner.find('.form-left-rq').eq(1).find('.data').text(allfeatures);
-              // clonner.find('.form-left-rq').eq(1).find('.data').text(myarray.unique_features.length);
+      clonner.find('.RemoveRoom').append('<a href="#">Remove Room</a>')
+      clonner.find('.summaryDescription').find('.data').text(myarray.summaryDescription);
+      for (let k = 0; k < myarray.uniqueFeatures.length; k++) {
+              allfeatures.push(myarray.uniqueFeatures[k])
+              clonner.find('.room-feature').find('.data').append(`<span>${allfeatures}</span>`);
+              // clonner.find('.form-left-rq').eq(1).find('.data').text(myarray.uniqueFeatures.length);
             }
-      clonner.find('.form-left-rq').eq(2).find('.data').text(myarray.room_name);
-      clonner.find('.form-left-rq').eq(3).find('.data').text(myarray.room_dimension);
-      clonner.find('.form-left-rq').eq(4).find('.data').text(myarray.room_description);
-      clonner.find('.form-left-rq').eq(5).find('.data').text(myarray.roomImage.length);
+      clonner.find('.room-title').find('.data').text(myarray.roomName);
+      clonner.find('.room-dimension').find('.data').text(myarray.roomDimension);
+      clonner.find('.room-description').find('.data').text(myarray.roomDescription);
+      // clonner.find('.form-left-rq').eq(5).find('.data').text(myarray.roomImage.length);
       $(clonner).find('.first-bg-s > div:eq(0)').remove();
 
       $('.newform-two-clr:last').after(clonner);
@@ -307,14 +307,12 @@
       e.preventDefault();
       var data = getFormData($('form.propertyForm'));
       data['userId'] = 1;
-      console.log(data)
-      let idToUpdate = data.id;
-
+     
+      let idToUpdate = data._id;
       if (idToUpdate) {
       } else {
-        delete data.id;
+        delete data._id;
       }
-      console.log(roomes)
       const mydata = JSON.stringify(roomes)
       for (let j = 0; j < myfile.length; j++) {
         formdata.append('roomimage', myfile[j]);
@@ -327,62 +325,51 @@
 
       //select button
       formdata.append('parking', $('#parking').val());
-      formdata.append('outside_space', $('#outside_space').val());
+      formdata.append('outsideSpace', $('#outsideSpace').val());
       formdata.append('availability', $('#availability').val());
-      formdata.append('property_type', $('#property_type').val());
+      formdata.append('tolet_availability', $('#tolet_availability').val());
+      formdata.append('propertyType', $('#propertyType').val());
 
       // propety summary
 
-      formdata.append('owner_contect_details', data.owner_contect_details);
-
-      formdata.append('building_name', data.building_name);
+      formdata.append('ownerContectDetails', data.ownerContectDetails);
+      formdata.append('buildingName', data.buildingName);
       formdata.append('street', data.street);
-      formdata.append('addrress_line_2', data.addrress_line_2);
+      formdata.append('addrressLine2', data.addrressLine2);
       formdata.append('town', data.town);
       formdata.append('description', data.description);
       formdata.append('name', data.name);
 
       formdata.append('country', data.country);
       formdata.append('passcode', data.passcode);
-      formdata.append('location_map', data.location_map);
-
-      // formdata.append('price', data.price);
-      // formdata.append('orio', data.orio);
-      // formdata.append('offers_over', data.offers_over);
-      // formdata.append('guide_price', data.guide_price);
-      // formdata.append('fixed_price', data.fixed_price);
-
-      // formdata.append('free_hold', data.free_hold);
-      // formdata.append('less_hold', data.less_hold);
-
+      formdata.append('locationMap', data.locationMap);
       // property deatils
       formdata.append('bedrooms', data.bedrooms);
       formdata.append('bathrooms', data.bathrooms);
-      formdata.append('reception_rooms', data.reception_rooms)
-      formdata.append('council_tax_band', data.council_tax_band);
+      formdata.append('receptionRooms', data.receptionRooms)
+      formdata.append('councilTaxBand', data.councilTaxBand);
 
       //residentail sales details
-      formdata.append('residentail_orio', data.residentail_orio);
-      formdata.append('residentail_offers_over', data.residentail_offers_over);
-      formdata.append('residentail_guide_price', data.residentail_guide_price)
-      formdata.append('residentail_fix_price', data.residentail_fix_price);
-      formdata.append('residentail_price_on_application', data.residentail_price_on_application);
-      formdata.append('residentail_free_hold', data.residentail_free_hold)
-      formdata.append('residentail_less_hold', data.residentail_less_hold);
+      formdata.append('residentailOrio', data.residentailOrio);
+      formdata.append('residentailOffersOver', data.residentailOffersOver);
+      formdata.append('residentailGuidePrice', data.residentailGuidePrice)
+      formdata.append('residentailFixPrice', data.residentailFixPrice);
+      formdata.append('residentailPriceOnApplication', data.residentailPriceOnApplication);
+      formdata.append('residentailFreeHold', data.residentailFreeHold)
+      formdata.append('residentailLessHold', data.residentailLessHold);
 
       //residentail letting details
-      formdata.append('per_person_per_week', data.per_person_per_week);
-      formdata.append('per_week', data.per_week);
-      formdata.append('per_calander_month', data.per_calander_month)
-      formdata.append('per_quater', data.per_quater);
-      formdata.append('per_annum', data.per_annum);
+      formdata.append('perPersonPerWeek', data.perPersonPerWeek);
+      formdata.append('perWeek', data.perWeek);
+      formdata.append('perCalanderMonth', data.perCalanderMonth)
+      formdata.append('perQuater', data.perQuater);
       formdata.append('deposit', data.deposit)
-      formdata.append('availabale_date', data.availabale_date);
-      formdata.append('minimume_tenancy', data.minimume_tenancy)
+      formdata.append('availabaleDate', data.availabaleDate);
+      formdata.append('minimumeTenancy', data.minimumeTenancy)
 
       formdata.append('room_information', mydata)
-      formdata.append('id', data.id)
-      console.log(data)
+      formdata.append('_id', data._id)
+
       const urlEncoded = new URLSearchParams(formdata).toString()
       $.ajax({
         url: idToUpdate ? "/api/property/update" : "/api/property/create",
@@ -452,11 +439,11 @@
             <div class="mybutton mainTabButtons" onchange="myvalue(event)">
               <div class="radioGroup">
                   <div class="radio" for="mybutton1">
-                    <input type="radio" id="mybutton1" class="mybutton" name="propertytype" value="for_sale">
+                    <input type="radio" id="mybutton1" class="mybutton" name="propertytype" value="for sale">
                       <label for="mybutton1">For Sale</label>
                   </div>
                   <div class="radio" for="mybutton2">
-                      <input type="radio" id="mybutton2" class="mybutton" name="propertytype" value="to_let">
+                      <input type="radio" id="mybutton2" class="mybutton" name="propertytype" value="to let">
                       <label for="mybutton2">To Let</label>
                   </div>
               </div>
@@ -468,7 +455,7 @@
             <fieldset class="fieldset-onecolumn">
               <div class="form-field">
                 <label>Owner Contect Details</label>
-                <input type="text" name="owner_contect_details" placeholder="Owner contect details">
+                <input type="text" name="ownerContectDetails" placeholder="Owner contect details">
               </div>
             </fieldset>
             <!-- <div class="address-clr"> -->
@@ -479,7 +466,7 @@
             <fieldset class="fieldset-twocolumn">
               <div class="form-field">
                 <label>Building Name/number</label>
-                <input type="text" name="building_name" placeholder="building name/number">
+                <input type="text" name="buildingName" placeholder="building name/number">
               </div>
 
               <div class="form-field">
@@ -490,7 +477,7 @@
             <fieldset class="fieldset-twocolumn">
               <div class="form-field">
                 <label>Addrress Line 2</label>
-                <input type="text" name="addrress_line_2" placeholder="addrress line 2">
+                <input type="text" name="addrressLine2" placeholder="addrress line 2">
               </div>
               <div class="form-field">
                 <label>Town/City</label>
@@ -510,7 +497,7 @@
             <fieldset class="fieldset-onecolumn">
               <div class="form-field">
                 <label>Location Map</label>
-                <input type="text" name="location_map" placeholder="location map">
+                <input type="text" name="locationMap" placeholder="location map">
               </div>
             </fieldset>
 
@@ -579,18 +566,18 @@
               </div>
               <div class="form-field">
                 <label>Reception Rooms</label>
-                <input type="number" name="reception_rooms" placeholder="reception rooms">
+                <input type="number" name="receptionRooms" placeholder="reception rooms">
               </div>
             </fieldset>
 
             <fieldset class="fieldset-threecolumn">
-              <div class="form-field property_type">
-                <label for="property_type">Property Type:</label>
-                <select id="property_type">
-                  <option name="property_type" value="">Choose property type</option>
-                  <option name="property_type" value="apartment">apartment</option>
-                  <option name="property_type" value="bungalow">bungalow</option>
-                  <option name="property_type" value="cottage">cottage</option>
+              <div class="form-field propertyType">
+                <label for="propertyType">Property Type:</label>
+                <select id="propertyType">
+                  <option name="propertyType" value="">Choose property type</option>
+                  <option name="propertyType" value="apartment">apartment</option>
+                  <option name="propertyType" value="bungalow">bungalow</option>
+                  <option name="propertyType" value="cottage">cottage</option>
                 </select>
               </div>
               <div class="form-field parking">
@@ -602,21 +589,21 @@
                   <option name="parking" value="off-street">Off-street</option>
                 </select>
               </div>
-              <div class="form-field outside_space">
-                <label>outside_space</label>
-                <select id="outside_space">
-                  <option name="outside_space" value="">Choose Outside Space</option>
-                  <option name="outside_space" value="rear_garden">Rear Garden</option>
-                  <option name="outside_space" value="front_garden">Front Garden</option>
-                  <option name="outside_space" value="courtyard">Courtyard</option>
-                  <option name="outside_space" value="balcony">Balcony</option>
+              <div class="form-field outsideSpace">
+                <label>outsideSpace</label>
+                <select id="outsideSpace">
+                  <option name="outsideSpace" value="">Choose Outside Space</option>
+                  <option name="outsideSpace" value="rear_garden">Rear Garden</option>
+                  <option name="outsideSpace" value="front_garden">Front Garden</option>
+                  <option name="outsideSpace" value="courtyard">Courtyard</option>
+                  <option name="outsideSpace" value="balcony">Balcony</option>
                 </select>
               </div>
             </fieldset>
             <fieldset class="fieldset-onecolumn">
               <div class="form-field">
                 <label>Council Tax Band</label>
-                <input type="text" name="council_tax_band" placeholder="council tax band">
+                <input type="text" name="councilTaxBand" placeholder="council tax band">
               </div>
             </fieldset>
             <!-- property deatils end-->
@@ -664,11 +651,14 @@
                   <option name="availability" value="sold_stc">Sold Stc</option>
                   <option name="availability" value="sold">Sold</option>
                 </select>
+                </div>
+                <div class="form-field tolet_availability">
+                  <label for="availability">availability:</label>
                 <select id="tolet_availability">
-                  <option name="availability" value="">choose availability</option>
-                  <option name="availability" value="to_let">To Let</option>
-                  <option name="availability" value="let_agreed">Let Agreed</option>
-                  <option name="availability" value="let">Let</option>
+                  <option name="tolet_availability" value="">choose availability</option>
+                  <option name="tolet_availability" value="to_let">To Let</option>
+                  <option name="tolet_availability" value="let_agreed">Let Agreed</option>
+                  <option name="tolet_availability" value="let">Let</option>
                 </select>
               </div>
             </fieldset>
@@ -682,19 +672,19 @@
 
               <div class="form-field">
                 <label>Summary Description</label>
-                <input type="text" name="summary_description" placeholder="summary description">
+                <input type="text" name="summaryDescription" placeholder="summary description">
               </div>
               <div class="form-field">
                 <label>Room Name</label>
-                <input type="text" name="room_name" placeholder="Room name">
+                <input type="text" name="roomName" placeholder="Room name">
               </div>
               <div class="form-field">
                 <label>room dimension</label>
-                <input type="text" name="room_dimension" placeholder="Room Dimension">
+                <input type="text" name="roomDimension" placeholder="Room Dimension">
               </div>
               <div class="form-field">
                 <label>room description</label>
-                <input type="text" name="room_description" placeholder="Room description Text">
+                <input type="text" name="roomDescription" placeholder="Room description Text">
               </div>
               <div class="form-field">
                 <label>roomimage</label>
@@ -706,7 +696,7 @@
             <fieldset class="fieldset-onecolumn">
               <div class="form-field">
                 <label>Add Unique Features</label>
-                <input type="text" name="unique_features" placeholder="unique features">
+                <input type="text" name="uniqueFeatures" placeholder="unique features">
               </div>
               <div class="form-field">
                 <button class="addroom" type="button" onclick="myfeatures(event)">Add Feature</button>
@@ -735,7 +725,12 @@
                       </div>
                     </div>
                     <div class="change-clr">
+                      
                       <div class="form-left-rq room-title">
+                        <div class="data">
+                        </div>
+                      </div>
+                      <div class="form-left-rq summaryDescription">
                         <div class="data">
                         </div>
                       </div>
@@ -775,25 +770,25 @@
               <fieldset class="fieldset-twocolumn ">
                 <div class="form-field">
                   <label>orio</label>
-                  <input type="text" name="residentail_orio" placeholder="residentail orio">
+                  <input type="text" name="residentailOrio" placeholder="residentail orio">
                 </div>
                 <div class="form-field">
                   <label>offers over</label>
-                  <input type="text" name="residentail_offers_over" placeholder="residentail offers over">
+                  <input type="text" name="residentailOffersOver" placeholder="residentail offers over">
                 </div>
               </fieldset>
               <fieldset class="fieldset-threecolumn ">
                 <div class="form-field">
                   <label>guide price</label>
-                  <input type="number" name="residentail_guide_price" placeholder="residentail guide price">
+                  <input type="number" name="residentailGuidePrice" placeholder="residentail guide price">
                 </div>
                 <div class="form-field">
                   <label>fix price</label>
-                  <input type="number" name="residentail_fix_price" placeholder="residentail fix price">
+                  <input type="number" name="residentailFixPrice" placeholder="residentail fix price">
                 </div>
                 <div class="form-field">
                   <label>price on application</label>
-                  <input type="number" name="residentail_price_on_application"
+                  <input type="number" name="residentailPriceOnApplication"
                     placeholder="residentail_price on application" multiple="multiple">
                 </div>
               </fieldset>
@@ -804,11 +799,11 @@
               <fieldset class="fieldset-twocolumn">
                 <div class="form-field">
                   <label>free hold</label>
-                  <input type="text" name="residentail_free_hold" placeholder="residentail free hold">
+                  <input type="text" name="residentailFreeHold" placeholder="residentail free hold">
                 </div>
                 <div class="form-field">
                   <label>less hold</label>
-                  <input type="text" name="residentail_less_hold" placeholder="residentail less hold">
+                  <input type="text" name="residentailLessHold" placeholder="residentail less hold">
                 </div>
               </fieldset>
             </div>
@@ -823,25 +818,25 @@
               <fieldset class="fieldset-twocolumn ">
                 <div class="form-field">
                   <label>per person per week</label>
-                  <input type="text" name="per_person_per_week" placeholder="per person per week">
+                  <input type="text" name="perPersonPerWeek" placeholder="per person per week">
                 </div>
                 <div class="form-field">
                   <label>per week</label>
-                  <input type="text" name="per_week" placeholder="per week">
+                  <input type="text" name="perWeek" placeholder="per week">
                 </div>
               </fieldset>
               <fieldset class="fieldset-threecolumn ">
                 <div class="form-field">
                   <label>per calander month</label>
-                  <input type="number" name="per_calander_month" placeholder="per calander month">
+                  <input type="number" name="perCalanderMonth" placeholder="per calander month">
                 </div>
                 <div class="form-field">
                   <label>per quater</label>
-                  <input type="number" name="per_quater" placeholder="per_quater">
+                  <input type="number" name="perQuater" placeholder="perQuater">
                 </div>
                 <div class="form-field">
                   <label>per annum</label>
-                  <input type="number" name="per_annum" placeholder="per_annum" multiple="multiple">
+                  <input type="number" name="perAnnum" placeholder="perAnnum" multiple="multiple">
                 </div>
               </fieldset>
               <fieldset class="fieldset-onecolumn ">
@@ -868,14 +863,14 @@
               <fieldset class="fieldset-onecolumn">
                 <div class="form-field">
                   <label>Available Date</label>
-                  <input type="date" name="availabale_date" class="availabale_date">
-                  <!-- <div class="availabale_date"></div> -->
+                  <input type="date" name="availabaleDate" class="availabaleDate">
+                  <!-- <div class="availabaleDate"></div> -->
                 </div>
               </fieldset>
               <fieldset class="fieldset-onecolumn">
                 <div class="form-field">
                   <label>Minimum Tenancy</label>
-                  <input type="text" name="minimume_tenancy" placeholder="minimume Tenancy">
+                  <input type="text" name="minimumeTenancy" placeholder="minimume Tenancy">
                 </div>
               </fieldset>
             </div>
@@ -898,7 +893,7 @@
             <!-- Property media end -->
 
             <div class="form-field forid">
-              <input type="text" name="id" placeholder="id">
+              <input type="text" name="_id" placeholder="id">
             </div>
 
             <!-- Submit -->
@@ -937,7 +932,7 @@
                 <div class="filter-bottom-s">
                   <div class="content-s">
                     <span>Property Owner</span>
-                    <span><%- item.owner_contect_details %></span>
+                    <span><%- item.ownerContectDetails %></span>
                   </div>
                   <div class="summary-con">
                     <h2><%- item.name %></h2>
@@ -954,15 +949,15 @@
                         </path>
                       </svg>
                       <span>
-                        <% if(item.rent && item.rent.per_calander_month) { %>
-                          <%- item.rent.per_calander_month%> PM
+                        <% if(item.rent && item.rent.perCalanderMonth) { %>
+                          <%- item.rent.perCalanderMonth%> PM
                             <% } else{ %>
 
                               <% } %>
 
 
-                      <% if(item.details_price && item.details_price.residentail_fix_price) { %>
-                        <%- item.details_price.residentail_fix_price%> Fix Price
+                      <% if(item.details_price && item.details_price.residentailFixPrice) { %>
+                        <%- item.details_price.residentailFixPrice%> Fix Price
                           <% } else{ %>
 
                             <% } %>

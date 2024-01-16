@@ -10,7 +10,7 @@ propertyId:{
     type:String,
     require:true
 },
-property_type_name:{
+propertyTypeName:{
     type:String,
     require:true
 }

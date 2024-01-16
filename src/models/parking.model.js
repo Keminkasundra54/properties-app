@@ -10,7 +10,7 @@ propertyId:{
     type:String,
     require:true
 },
-parking_name:{
+parkingName:{
     type:String,
     require:true
 }

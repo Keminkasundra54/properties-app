@@ -27,15 +27,14 @@ function setFieldsView(type) {
   if (type == 'to_let') {
     $(document).find('div .residentail_sale').hide()
     $(document).find('div .residentail_letting').show()
-    $(document).find('div #tolet_availability').show()
-    $(document).find('div #availability').hide()
-
+    $(document).find('div .tolet_availability').show()
+    $(document).find('div .availability').hide()
   }
   if (type == 'for_sale') {
     $(document).find('div .residentail_sale').show()
     $(document).find('div .residentail_letting').hide()
-    $(document).find('div  #availability').show()
-    $(document).find('div #tolet_availability').hide()
+    $(document).find('div .availability').show()
+    $(document).find('div .tolet_availability').hide()
 
   }
 }
@@ -67,21 +66,17 @@ $(document).ready(function () {
         success: function (result) {
           // console.log(result.data);
 
-          let myarray = result.data.property_description
-          for (let i = 0; i < result.data.property_description.length; i++) {
+          let myarray = result.data.propertyDescription
+          for (let i = 0; i < result.data.propertyDescription.length; i++) {
             var clonner = $('.newform-two-clr').eq(0).clone();
-            clonner.find('.form-left-rq').eq(0).find('.data').text(myarray[i].room_name);
-            clonner.find('.RemoveRoom').eq(0).append('<a href="#">Room Remove</a>')
-
-            clonner.find('.form-left-rq').eq(1).find('.data').text(myarray[i].summary_description);
-
-
-            clonner.find('.form-left-rq').eq(2).find('.data').text(myarray[i].room_dimension);
-            for (let k = 0; k < myarray[i].unique_features.length; k++) {
-              clonner.find('.form-left-rq').eq(3).find('.data').append(`<span>${myarray[i].unique_features[k]}</span>`);
+            clonner.find('.RemoveRoom').append('<a href="#">Room Remove</a>')
+            clonner.find('.summaryDescription').find('.data').text(myarray[i].summaryDescription);
+            for (let k = 0; k < myarray[i].uniqueFeatures.length; k++) {
+              clonner.find('.room-feature').find('.data').append(`<span>${myarray[i].uniqueFeatures[k]}</span>`);
             }
-
-
+            clonner.find('.room-title').find('.data').text(myarray[i].roomName);
+            clonner.find('.room-dimension').find('.data').text(myarray[i].roomDimension);
+            clonner.find('.room-description').find('.data').text(myarray[i].roomDescription);
             for (let j = 0; j < myarray[i].room_image.length; j++) {
               clonner.find('.first-bg-s').append('<div><div class="fst-bg-img" style="background-image:url(' + "/roomimage/" + myarray[i].room_image[j] + '")></div></div>')
             }
@@ -94,65 +89,55 @@ $(document).ready(function () {
               slidesToShow: 1
             });
           }
-
-
           let myimage = result.data.image
           for (let a = 0; a < myimage.length; a++) {
             $(".fieldset-fourcolumn").append('<div class="main"><div class="myimgtype">' + myimage[a].imagetype + '</div><div class="myimage">' + myimage[a].imagedata + '</div><div class="boxsRemove"><a href="#" class="delimg">remove</a></div><br><br>')
           }
           setFieldsView(result.data.propertytype);
-          // radio button value
 
-          // select option value
-          if (result.data.availability) {
-            try {
-              $("div .availability > select > option[value=" + result.data.availability + "]").prop("selected", true);
-            } catch (e) {
-            }
-          }
-          if (result.data.parking) {
-            try {
-              $("div .parking > select > option[value=" + result.data.parking + "]").prop("selected", true);
-            } catch (e) {
-            }
-          }
-          if (result.data.property_type) {
-            try {
-              $("div .property_type > select > option[value=" + result.data.property_type + "]").prop("selected", true);
-            } catch (e) {
-            }
-          }
-          if (result.data.outside_space){
-            try {
-              $("div .outside_space > select > option[value=" + result.data.outside_space + "]").prop("selected", true);
-            } catch (e) {
-            }
-          }
-          // $("div .availabale_date").text(result.data.availabale_date)
-
-          const day = new Date(result.data.availabale_date).getDate()
-          const month = '0' + (new Date(result.data.availabale_date).getMonth() + 1)
-          const year = new Date(result.data.availabale_date).getFullYear()
+          const day = new Date(result.data.availabaleDate).getDate()
+          const month = '0' + (new Date(result.data.availabaleDate).getMonth() + 1)
+          const year = new Date(result.data.availabaleDate).getFullYear()
           var today = year + "-" + (month) + "-" + (day);
-          $("div .availabale_date").val(today);
+          $("div .availabaleDate").val(today);
           if (result && result.data) {
-            var fields = ['name', 'description'];
+            var fields = ['_id', 'ownerContectDetails','name', 'description' , 'bedrooms' ,'locationMap' , 'bathrooms' ,'receptionRooms','councilTaxBand','deposit' ,'furnishing','minimumeTenancy',  ]
             for (let key of fields) {
-              console.log($('input[name="' + key + '"],textarea[name="' + key + '"]'),result.data[key] )
+              // console.log($('input[name="' + key + '"],textarea[name="' + key + '"]'),result.data[key] )
               if (result.data[key]) {
                 $('input[name="' + key + '"],textarea[name="' + key + '"]').val(result.data[key]);
               }
-
             }
             var radios = ['active', 'propertytype', 'featured', 'furnishing'];
             for (let key of radios) {
-              console.log($('input[name="' + key + '"],textarea[name="' + key + '"]'),result.data[key] )
+              // console.log($('input[name="' + key + '"],textarea[name="' + key + '"]'),result.data[key] )
               if (result.data[key]) {
                 $(`input[name=${key}][value="${result.data[key]}"]`).attr("checked", true)
               }
-
             }
-
+            var select = ['availability','tolet_availability', 'parking', 'propertyType', 'outsideSpace'];
+            for (let key of select) {
+              // console.log($('input[name="' + key + '"],textarea[name="' + key + '"]'),result.data[key] )
+              if (result.data[key]) {
+                $(`div .${key} > select > option[value="${result.data[key]}"]`).prop("selected", true)
+              }
+            }
+            for(let key in result.data.address)
+            {
+                $('input[name="' + key + '"],textarea[name="' + key + '"]').val(result.data.address[key]);
+            }
+            for(let key in result.data.deatilsTenure)
+            {
+              $('input[name="' + key + '"],textarea[name="' + key + '"]').val(result.data.deatilsTenure[key]);
+            }
+            for(let key in result.data.detailsPrice)
+            {
+              $('input[name="' + key + '"],textarea[name="' + key + '"]').val(result.data.detailsPrice[key]);
+            }
+            for(let key in result.data.rent)
+            {
+                $('input[name="' + key + '"],textarea[name="' + key + '"]').val(result.data.rent[key]);
+            }
           }
         }
       });
@@ -177,11 +162,11 @@ $(document).ready(function () {
 
   $(document).on('click', '.RemoveRoom', function (e) {
     const roomdata = {
-    "summary_description" : '',
-    "unique_features" : $(this).siblings('div.change-clr').find('.form-left-rq .data:eq(1)').text(),
-    "room_name" : $(this).siblings('div.change-clr').find('.form-left-rq .data:eq(2)').text(),
-    "room_dimension" :$(this).siblings('div.change-clr').find('.form-left-rq .data:eq(3)').text(),
-    "room_description" : $(this).siblings('div.change-clr').find('.form-left-rq .data:eq(4)').text(),
+    "summaryDescription" : $(this).siblings('div.change-clr').find('.summaryDescription .data').text(),
+    "uniqueFeatures" : $(this).siblings('div.change-clr').find('.room-feature .data').text(),
+    "roomName" : $(this).siblings('div.change-clr').find('.room-title .data').text(),
+    "roomDimension" :$(this).siblings('div.change-clr').find('.room-dimension .data').text(),
+    "roomDescription" : $(this).siblings('div.change-clr').find('.room-description .data').text(),
     }
     console.log(roomdata)
     if (roomdata) {

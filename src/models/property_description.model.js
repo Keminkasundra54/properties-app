@@ -17,7 +17,7 @@ const propertySchema = new Schema({
   description: {
     type: String
   },
-  owner_contect_details: {
+  ownerContectDetails: {
     type: String
   },
   address: {
@@ -26,7 +26,7 @@ const propertySchema = new Schema({
   price: {
     type: Object
   },
-  location_map: {
+  locationMap: {
     type: String
   },
   tenure: {
@@ -39,10 +39,10 @@ const propertySchema = new Schema({
   bathrooms: {
     type: Number
   },
-  reception_rooms: {
+  receptionRooms: {
     type: Number
   },
-  property_type: {
+  propertyType: {
     type: String,
     default: 'apartment'
   },
@@ -50,11 +50,11 @@ const propertySchema = new Schema({
     type: String,
     default: 'grage'
   },
-  outside_space: {
+  outsideSpace: {
     type: String,
     default: 'rear garden'
   },
-  council_tax_band: {
+  councilTaxBand: {
     type: Object
   },
   image: {
@@ -73,18 +73,21 @@ const propertySchema = new Schema({
     type: String,
     default: 'for_sale'
   },
-  send_to_portal: {
+  tolet_availability:{
+    type:String
+  },
+  sendToPortal: {
     type: String
   },
-  property_description: {
+  propertyDescription: {
     type: Object
   },
 
-  details_price: {
+  detailsPrice: {
     type: Object,
     default: null
   },
-  deatils_tenure: {
+  deatilsTenure: {
     type: Object,
     default: null
   },
@@ -100,11 +103,11 @@ const propertySchema = new Schema({
     type: String,
     default: null
   },
-  availabale_date: {
+  availabaleDate: {
     type: Date,
     default: null
   },
-  minimume_tenancy: {
+  minimumeTenancy: {
     type: String,
     default: null
   }
@@ -115,12 +118,12 @@ const propertySchema = new Schema({
 propertySchema.method({
   transform () {
     const transformed = {}
-    const fields = ['_id', 'propertytype', 'owner_contect_details', 'address', 'price', 'location_map', 'tenure',
-      'bedrooms', 'bathrooms', 'reception_rooms', 'propery_type', 'parking', 'outside_space', 'price', 'council_tax_band', 'image',
-      'active', 'featured', , 'availability', 'send_to_portal',
-      'property_description',
-      'details_price', 'deatils_tenure',
-      'rent', 'deposit', 'furnishing', 'availabale_date', 'minimume_tenancy']
+    const fields = ['propertytype', 'ownerContectDetails', 'address', 'price', 'locationMap', 'tenure',
+      'bedrooms', 'bathrooms', 'receptionRooms', 'propery_type', 'parking', 'outsideSpace', 'price', 'councilTaxBand', 'image',
+      'active', 'featured', , 'availability', 'sendToPortal',
+      'propertyDescription',
+      'detailsPrice', 'deatilsTenure',
+      'rent', 'deposit', 'furnishing', 'availabaleDate', 'minimumeTenancy']
 
     fields.forEach((field) => {
       transformed[field] = this[field]

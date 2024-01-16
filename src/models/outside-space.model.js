@@ -10,7 +10,7 @@ propertyId:{
     type:String,
     require:true
 },
-outsideSpace_name:{
+outsideSpaceName:{
     type:String,
     require:true
 }

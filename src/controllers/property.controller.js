@@ -22,7 +22,6 @@ exports.create = async (req, res, next) => {
     let roomimagevar = []
     const room_information = []
 
-    console.log(req.body.imagetype)
     const roomjsondata = JSON.parse(req.body.room_information)
     const img = req.files.roomimage
     const myimg = req.files.image
@@ -54,19 +53,20 @@ exports.create = async (req, res, next) => {
         }
       }
       const obj = {
-        'room_name': roomjsondata[i].room_name,
-        'summary_description': roomjsondata[i].summary_description,
-        'unique_features': roomjsondata[i].unique_features,
-        'room_description': roomjsondata[i].room_description,
-        'room_dimension': roomjsondata[i].room_dimension,
+        'roomName': roomjsondata[i].roomName,
+        'summaryDescription': roomjsondata[i].summaryDescription,
+        'uniqueFeatures': roomjsondata[i].uniqueFeatures,
+        'roomDescription': roomjsondata[i].roomDescription,
+        'roomDimension': roomjsondata[i].roomDimension,
         'room_image': lastdata
       }
       room_information.push(obj)
     }
     if (myimg != undefined) {
+
       if (myimg.length > 0) {
-        console.log(myimg, 'img')
         for (const i in myimg) {
+          
           const teamObj = myimg[i]
           if (teamObj.fieldname == 'image') {
             const imgdata = new Image({
@@ -104,20 +104,20 @@ exports.create = async (req, res, next) => {
     //   "fixed_price": req.body.fixed_price
     // }
     const details_pricedata = {
-      'residentail_orio': req.body.residentail_orio,
-      'residentail_offers_over': req.body.residentail_offers_over,
-      'residentail_guide_price': req.body.residentail_guide_price,
-      'residentail_fix_price': req.body.residentail_fix_price,
-      'residentail_price_on_application': req.body.residentail_price_on_application
+      'residentailOrio': req.body.residentailOrio,
+      'residentailOffersOver': req.body.residentailOffersOver,
+      'residentailGuidePrice': req.body.residentailGuidePrice,
+      'residentailFixPrice': req.body.residentailFixPrice,
+      'residentailPriceOnApplication': req.body.residentailPriceOnApplication
     }
     const deatils_tenuredata = {
-      'residentail_free_hold': req.body.residentail_free_hold,
-      'residentail_less_hold': req.body.residentail_less_hold
+      'residentailFreeHold': req.body.residentailFreeHold,
+      'residentailLessHold': req.body.residentailLessHold
     }
     const addressdata = {
-      'building_name': req.body.building_name,
+      'buildingName': req.body.buildingName,
       'street': req.body.street,
-      'addrress_line_2': req.body.addrress_line_2,
+      'addrressLine2': req.body.addrressLine2,
       'town': req.body.town,
       'country': req.body.country,
       'passcode': req.body.passcode
@@ -127,52 +127,49 @@ exports.create = async (req, res, next) => {
     //   "less_hold": req.body.less_hold,
     // }
     const rent = {
-      'per_person_per_week': req.body.per_person_per_week,
-      'per_week': req.body.per_week,
-      'per_calander_month': req.body.per_calander_month,
-      'per_quater': req.body.per_quater,
-      'per_annum': req.body.per_annum
+      'perPersonPerWeek': req.body.perPersonPerWeek,
+      'perWeek': req.body.perWeek,
+      'perCalanderMonth': req.body.perCalanderMonth,
+      'perQuater': req.body.perQuater,
+      'perAnnum': req.body.perAnnum
     }
     let mytype
     if (req.body.propertytype == 'undefined' || req.body.propertytype == 'for_sale') {
-      console.log('i am if')
       mytype = 'for_sale'
     } else {
-      console.log('i am else')
       mytype = 'to_let'
     }
     if (body) {
       const propertySave = new Property({
         propertytype: mytype,
-        owner_contect_details: req.body.owner_contect_details,
+        ownerContectDetails: req.body.ownerContectDetails,
         address: addressdata,
-        location_map: req.body.location_map,
-        // price: pricedata,
-        // tenure: tenuredata,
+        locationMap: req.body.locationMap,
 
         bedrooms: req.body.bedrooms,
         bathrooms: req.body.bathrooms,
-        reception_rooms: req.body.reception_rooms,
-        property_type: req.body.property_type,
+        receptionRooms: req.body.receptionRooms,
+        propertyType: req.body.propertyType,
         parking: req.body.parking,
-        outside_space: req.body.outside_space,
-        council_tax_band: req.body.council_tax_band,
+        outsideSpace: req.body.outsideSpace,
+        councilTaxBand: req.body.councilTaxBand,
         image: imagevar,
 
         active: req.body.active,
         featured: req.body.featured,
         availability: req.body.availability,
+        tolet_availability:req.body.tolet_availability,
 
-        property_description: room_information,
+        propertyDescription: room_information,
 
-        details_price: details_pricedata,
-        deatils_tenure: deatils_tenuredata,
+        detailsPrice: details_pricedata,
+        deatilsTenure: deatils_tenuredata,
 
         rent: rent,
         deposit: req.body.deposit,
         furnishing: req.body.furnishing,
-        availabale_date: req.body.availabale_date,
-        minimume_tenancy: req.body.minimume_tenancy,
+        availabaleDate: req.body.availabaleDate,
+        minimumeTenancy: req.body.minimumeTenancy,
         name: req.body.name,
         description: req.body.description
       })
@@ -180,19 +177,19 @@ exports.create = async (req, res, next) => {
 
       const outsideSpacedata = new OutsideSpace({
         propertyId: propertySave._id,
-        outsideSpace_name: req.body.outside_space
+        outsideSpaceName: req.body.outsideSpace
       })
       await outsideSpacedata.save()
 
       const parkingdata = new Parking({
         propertyId: propertySave._id,
-        parking_name: req.body.parking
+        parkingName: req.body.parking
       })
       await parkingdata.save()
 
       const PropertyTypedata = new PropertyType({
         propertyId: propertySave._id,
-        property_type_name: req.body.property_type
+        propertyTypeName: req.body.propertyType
       })
       await PropertyTypedata.save()
 
@@ -262,20 +259,21 @@ exports.updateProperty = async (req, res, next) => {
     let roomimagevar = []
     const room_information = []
     const myimg = req.files.image
-
+     
     //  for roomimage add and update
     const roomjsondata = JSON.parse(req.body.room_information)
     const img = req.files.roomimage
-    const olddata = await Property.findOne({ _id: req.body.id })
-    if (olddata.property_description.length > 0) {
-      for (let v = 0; v < olddata.property_description.length; v++) {
-        room_information.push(olddata.property_description[v])
+    const olddata = await Property.findOne({ _id: req.body._id })
+    console.log(olddata.propertyDescription.length)
+    if (olddata.propertyDescription.length > 0) {
+      for (let v = 0; v < olddata.propertyDescription.length; v++) {
+        room_information.push(olddata.propertyDescription[v])
       }
     }
-    for (let a = 0; a < olddata.property_description.length; a++) {
-      if (olddata.property_description[a].room_image.length) {
-        for (let b = 0; b < olddata.property_description[a].room_image.length; b++) {
-          const mydata = olddata.property_description[a].room_image[b]
+    for (let a = 0; a < olddata.propertyDescription.length; a++) {
+      if (olddata.propertyDescription[a].room_image.length) {
+        for (let b = 0; b < olddata.propertyDescription[a].room_image.length; b++) {
+          const mydata = olddata.propertyDescription[a].room_image[b]
           if (mydata) {
             roomimagevar.push(mydata)
             // const fils = fs.unlinkSync('./roomimage/' + mydata)
@@ -310,11 +308,11 @@ exports.updateProperty = async (req, res, next) => {
         }
       }
       const obj = {
-        'room_name': roomjsondata[i].room_name,
-        'summary_description': roomjsondata[i].summary_description,
-        'unique_features': roomjsondata[i].unique_features,
-        'room_description': roomjsondata[i].room_description,
-        'room_dimension': roomjsondata[i].room_dimension,
+        'roomName': roomjsondata[i].roomName,
+        'summaryDescription': roomjsondata[i].summaryDescription,
+        'uniqueFeatures': roomjsondata[i].uniqueFeatures,
+        'roomDescription': roomjsondata[i].roomDescription,
+        'roomDimension': roomjsondata[i].roomDimension,
         'room_image': lastdata
       }
       room_information.push(obj)
@@ -366,68 +364,61 @@ exports.updateProperty = async (req, res, next) => {
     }
     // image update end
 
-    const property = await Property.findOneAndUpdate({ _id: req.body.id }, {
+    const property = await Property.findOneAndUpdate({ _id: req.body._id }, {
       $set: {
         'image': imagevar,
 
-        'address.building_name': req.body.building_name,
+        'address.buildingName': req.body.buildingName,
         'address.street': req.body.street,
-        'address.addrress_line_2': req.body.addrress_line_2,
+        'address.addrressLine2': req.body.addrressLine2,
         'address.town': req.body.town,
         'address.country': req.body.country,
-        'owner_contect_details': req.body.owner_contect_details,
+        'ownerContectDetails': req.body.ownerContectDetails,
 
-        'location_map': req.body.location_map,
-
-        // 'price.orio': req.body.orio,
-        // 'price.offers_over': req.body.offers_over,
-        // 'price.guide_price': req.body.guide_price,
-        // "price.fixed_price": req.body.fixed_price,
-
-        // 'tenure.guide_price': req.body.free_hold,
-        // "tenure.fixed_price": req.body.less_hold,
+        'locationMap': req.body.locationMap,
 
         'bedrooms': req.body.bedrooms,
         'bathrooms': req.body.bathrooms,
-        'reception_rooms': req.body.reception_rooms,
-        'council_tax_band': req.body.council_tax_band,
+        'receptionRooms': req.body.receptionRooms,
+        'councilTaxBand': req.body.councilTaxBand,
         'active': req.body.active,
         'featured': req.body.featured,
-        'property_description': req.body.property_description,
+        // 'propertyDescription': req.body.propertyDescription,
 
         'availability': req.body.availability,
+        "tolet_availability":req.body.tolet_availability,
 
-        'property_type': req.body.property_type,
+        'propertyType': req.body.propertyType,
         'parking': req.body.parking,
-        'outside_space': req.body.outside_space,
+        'outsideSpace': req.body.outsideSpace,
 
-        'details_price.residentail_orio': req.body.residentail_orio,
-        'details_price.residentail_offers_over': req.body.residentail_offers_over,
-        'details_price.residentail_guide_price': req.body.residentail_guide_price,
-        'details_price.residentail_fix_price': req.body.residentail_fix_price,
-        'details_price.residentail_price_on_application': req.body.residentail_price_on_application,
+        'details_price.residentailOrio': req.body.residentailOrio,
+        'details_price.residentailOffersOver': req.body.residentailOffersOver,
+        'details_price.residentailGuidePrice': req.body.residentailGuidePrice,
+        'details_price.residentailFixPrice': req.body.residentailFixPrice,
+        'details_price.residentailPriceOnApplication': req.body.residentailPriceOnApplication,
 
-        'deatils_tenure.residentail_free_hold': req.body.residentail_free_hold,
-        'deatils_tenure.residentail_less_hold': req.body.residentail_less_hold,
+        'deatils_tenure.residentailFreeHold': req.body.residentailFreeHold,
+        'deatils_tenure.residentailLessHold': req.body.residentailLessHold,
 
         'deposit': req.body.deposit,
         'furnishing': req.body.furnishing,
-        'availabale_date': req.body.availabale_date,
-        'minimume_tenancy': req.body.minimume_tenancy,
+        'availabaleDate': req.body.availabaleDate,
+        'minimumeTenancy': req.body.minimumeTenancy,
 
-        'rent.per_person_per_week': req.body.per_person_per_week,
-        'rent.per_week': req.body.per_week,
-        'rent.per_calander_month': req.body.per_calander_month,
-        'rent.per_quater': req.body.per_quater,
-        'rent.per_annum': req.body.per_annum,
-        'property_description': room_information
+        'rent.perPersonPerWeek': req.body.perPersonPerWeek,
+        'rent.perWeek': req.body.perWeek,
+        'rent.perCalanderMonth': req.body.perCalanderMonth,
+        'rent.perQuater': req.body.perQuater,
+        'rent.perAnnum': req.body.perAnnum,
+        'propertyDescription': room_information
 
       }
     })
 
-    await Parking.findOneAndUpdate({ propertyId: req.body.id }, { $set: { 'parking_name': req.body.parking } })
-    await OutsideSpace.findOneAndUpdate({ propertyId: req.body.id }, { $set: { 'outsideSpace_name': req.body.outside_space } })
-    await PropertyType.findOneAndUpdate({ propertyId: req.body.id }, { $set: { 'property_type_name': req.body.property_type } })
+    await Parking.findOneAndUpdate({ propertyId: req.body._id }, { $set: { 'parking_name': req.body.parking } })
+    await OutsideSpace.findOneAndUpdate({ propertyId: req.body._id }, { $set: { 'outsideSpace_name': req.body.outsideSpace } })
+    await PropertyType.findOneAndUpdate({ propertyId: req.body._id }, { $set: { 'propertyType_name': req.body.propertyType } })
 
     return res.json({ message: 'OK', data: property })
   } catch (error) {
@@ -437,8 +428,8 @@ exports.updateProperty = async (req, res, next) => {
 }
 exports.getAllProperty = async (req, res, next) => {
   try {
-    const property = await Property.find()
 
+    const property = await Property.find()
     return res.json({ message: 'OK', data: property })
   } catch (error) {
     next(error)
@@ -449,17 +440,26 @@ exports.deleteProperty = async (req, res, next) => {
     const id = req.body._id
 
     const olddata = await Property.findOne({ _id: id })
-    if (olddata.property_description && olddata.property_description.length) {
-      for (let a = 0; a < olddata.property_description.length; a++) {
-        if (olddata.property_description[a] && olddata.property_description[a].room_image && olddata.property_description[a].room_image.length) {
-          for (let b = 0; b < olddata.property_description[a].room_image.length; b++) {
-            const mydata = olddata.property_description[a].room_image[b]
+    if (olddata.propertyDescription && olddata.propertyDescription.length) {
+      for (let a = 0; a < olddata.propertyDescription.length; a++) {
+        if (olddata.propertyDescription[a] && olddata.propertyDescription[a].room_image && olddata.propertyDescription[a].room_image.length) {
+          for (let b = 0; b < olddata.propertyDescription[a].room_image.length; b++) {
+            const mydata = olddata.propertyDescription[a].room_image[b]
             if (mydata) {
-              console.log(mydata)
-              // const fils = fs.unlinkSync('./roomimage/' + mydata)
+              const fils = fs.unlinkSync('./roomimage/' + mydata)
             }
           }
         }
+      }
+    }
+    if (olddata.image && olddata.image.length) {
+      for (let a = 0; a < olddata.image.length; a++) {
+            const mydata = olddata.image[a].imagedata
+            console.log(mydata)
+            if (mydata) {
+              
+              const fils = fs.unlinkSync('./images/' + mydata)
+            }
       }
     }
     await Property.findOneAndDelete({ _id: id })
@@ -477,7 +477,7 @@ function getPropertyPayload (property) {
     room.room_photo_urls = room.roomimage.map(url => {
       return 'https://propertyapp.hubresolution.com/roomimage/' + url
     })
-    room.room_dimension_unit = 5
+    room.roomDimension_unit = 5
     return room
   })
   let medias = property.image.map(media => {
@@ -540,9 +540,9 @@ function getPropertyPayload (property) {
         ],
         'bedrooms': 1,
         'bathrooms': 1,
-        'reception_rooms': 1,
+        'receptionRooms': 1,
         'parking': [15],
-        'outside_space': [30],
+        'outsideSpace': [30],
         'year_built': 1999,
         'entrance_floor': 6,
         'condition': 1,
@@ -594,22 +594,22 @@ exports.removeimage = async (req, res, next) => {
 }
 exports.removeRoom = async (req, res, next) => {
   try {
-    console.log('room call')
+
     const roomdata = req.body.roomdata
-    const room_description = roomdata.room_description
-    const summary_description = roomdata.summary_description
-    const room_name = roomdata.room_name
-    const room_dimension = roomdata.room_dimension
+    const roomDescription = roomdata.roomDescription
+    const summaryDescription = roomdata.summaryDescription
+    const roomName = roomdata.roomName
+    const roomDimension = roomdata.roomDimension
     const modifydata = []
-    const propertydata = await Property.findOne({ 'property_description.room_description': room_description, 'property_description.summary_description': summary_description, 'property_description.room_name': room_name, 'property_description.room_dimension': room_dimension})
+    const propertydata = await Property.findOne({ 'propertyDescription.roomDescription': roomDescription, 'propertyDescription.summaryDescription': summaryDescription, 'propertyDescription.roomName': roomName, 'propertyDescription.roomDimension': roomDimension})
     if (propertydata) {
-      const data = propertydata.property_description
-      for (let j = 0; j < propertydata.property_description.length; j++) {
-        if (data[j].room_description != room_description && data[j].summary_description != summary_description && data[j].room_name != room_name && data[j].room_dimension != room_dimension) {
+      const data = propertydata.propertyDescription
+      for (let j = 0; j < propertydata.propertyDescription.length; j++) {
+        if (data[j].roomDescription != roomDescription && data[j].summaryDescription != summaryDescription && data[j].roomName != roomName && data[j].roomDimension != roomDimension) {
           modifydata.push(data[j])
         }
       }
-      await Property.findOneAndUpdate({ property_description: modifydata })
+      await Property.findOneAndUpdate({_id:propertydata._id},{set:{propertyDescription: modifydata }})
     }
     return res.json({ message: 'OK', data: { message: 'Remove' } })
   } catch (err) {
