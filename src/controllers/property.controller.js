@@ -134,14 +134,14 @@ exports.create = async (req, res, next) => {
       'perAnnum': req.body.perAnnum
     }
     let mytype
-    if (req.body.propertytype == 'undefined' || req.body.propertytype == 'for_sale') {
+    if (req.body.type == 'undefined' || req.body.type == 'for_sale') {
       mytype = 'for_sale'
     } else {
       mytype = 'to_let'
     }
     if (body) {
       const propertySave = new Property({
-        propertytype: mytype,
+        type: mytype,
         ownerContectDetails: req.body.ownerContectDetails,
         address: addressdata,
         locationMap: req.body.locationMap,
@@ -578,14 +578,14 @@ exports.removeimage = async (req, res, next) => {
       } catch(e) {
 
       }
-
     }
     for (let j = 0; j < removeimg.image.length; j++) {
       if (removeimg.image[j].imagedata != imageName) {
         modifydata.push(removeimg.image[j])
       }
     }
-    await Property.findOneAndUpdate({ image: modifydata })
+    await Property.findOneAndUpdate({ _id:removeimg._id} ,{$set:{image:modifydata}})
+    
 
     return res.json({ message: 'OK', data: { message: 'Remove' } })
   } catch (e) {
@@ -594,22 +594,22 @@ exports.removeimage = async (req, res, next) => {
 }
 exports.removeRoom = async (req, res, next) => {
   try {
-
     const roomdata = req.body.roomdata
     const roomDescription = roomdata.roomDescription
     const summaryDescription = roomdata.summaryDescription
     const roomName = roomdata.roomName
     const roomDimension = roomdata.roomDimension
-    const modifydata = []
+    
     const propertydata = await Property.findOne({ 'propertyDescription.roomDescription': roomDescription, 'propertyDescription.summaryDescription': summaryDescription, 'propertyDescription.roomName': roomName, 'propertyDescription.roomDimension': roomDimension})
     if (propertydata) {
+      const modifydata = []
       const data = propertydata.propertyDescription
-      for (let j = 0; j < propertydata.propertyDescription.length; j++) {
+      for (let j = 0; j < data.length; j++) {
         if (data[j].roomDescription != roomDescription && data[j].summaryDescription != summaryDescription && data[j].roomName != roomName && data[j].roomDimension != roomDimension) {
           modifydata.push(data[j])
         }
       }
-      await Property.findOneAndUpdate({_id:propertydata._id},{set:{propertyDescription: modifydata }})
+      await Property.findOneAndUpdate({_id:propertydata._id},{$set:{propertyDescription:modifydata}})
     }
     return res.json({ message: 'OK', data: { message: 'Remove' } })
   } catch (err) {

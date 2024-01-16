@@ -66,77 +66,76 @@ $(document).ready(function () {
         success: function (result) {
           // console.log(result.data);
 
+          setFieldsView(result.data.type);
           let myarray = result.data.propertyDescription
-          for (let i = 0; i < result.data.propertyDescription.length; i++) {
-            var clonner = $('.newform-two-clr').eq(0).clone();
-            clonner.find('.RemoveRoom').append('<a href="#">Room Remove</a>')
-            clonner.find('.summaryDescription').find('.data').text(myarray[i].summaryDescription);
-            for (let k = 0; k < myarray[i].uniqueFeatures.length; k++) {
-              clonner.find('.room-feature').find('.data').append(`<span>${myarray[i].uniqueFeatures[k]}</span>`);
+          if (myarray) {
+            for (let i = 0; i < result.data.propertyDescription.length; i++) {
+              var clonner = $('.newform-two-clr').eq(0).clone();
+              clonner.find('.RemoveRoom').append('<a href="#">Room Remove</a>')
+              clonner.find('.summaryDescription').find('.data').text(myarray[i].summaryDescription);
+              for (let k = 0; k < myarray[i].uniqueFeatures.length; k++) {
+                clonner.find('.room-feature').find('.data').append(`<span>${myarray[i].uniqueFeatures[k]}</span>`);
+              }
+              clonner.find('.room-title').find('.data').text(myarray[i].roomName);
+              clonner.find('.room-dimension').find('.data').text(myarray[i].roomDimension);
+              clonner.find('.room-description').find('.data').text(myarray[i].roomDescription);
+              for (let j = 0; j < myarray[i].room_image.length; j++) {
+                clonner.find('.first-bg-s').append('<div><div class="fst-bg-img" style="background-image:url(' + "/roomimage/" + myarray[i].room_image[j] + '")></div></div>')
+              }
+              $(clonner).find('.first-bg-s > div:eq(0)').remove();
+              $('.newform-two-clr:last').after(clonner);
+              $('.newform-two-clr:last .first-bg-s').slick({
+                dots: false,
+                infinite: true,
+                speed: 300,
+                slidesToShow: 1
+              });
             }
-            clonner.find('.room-title').find('.data').text(myarray[i].roomName);
-            clonner.find('.room-dimension').find('.data').text(myarray[i].roomDimension);
-            clonner.find('.room-description').find('.data').text(myarray[i].roomDescription);
-            for (let j = 0; j < myarray[i].room_image.length; j++) {
-              clonner.find('.first-bg-s').append('<div><div class="fst-bg-img" style="background-image:url(' + "/roomimage/" + myarray[i].room_image[j] + '")></div></div>')
-            }
-            $(clonner).find('.first-bg-s > div:eq(0)').remove();
-            $('.newform-two-clr:last').after(clonner);
-            $('.newform-two-clr:last .first-bg-s').slick({
-              dots: false,
-              infinite: true,
-              speed: 300,
-              slidesToShow: 1
-            });
           }
           let myimage = result.data.image
-          for (let a = 0; a < myimage.length; a++) {
-            $(".fieldset-fourcolumn").append('<div class="main"><div class="myimgtype">' + myimage[a].imagetype + '</div><div class="myimage">' + myimage[a].imagedata + '</div><div class="boxsRemove"><a href="#" class="delimg">remove</a></div><br><br>')
+          if (myimage) {
+            for (let a = 0; a < myimage.length; a++) {
+              $(".fieldset-fourcolumn").append('<div class="main"><div class="myimgtype">' + myimage[a].imagetype + '</div><div class="myimage">' + myimage[a].imagedata + '</div><div class="boxsRemove"><a href="#" class="delimg">remove</a></div><br><br>')
+            }
           }
-          setFieldsView(result.data.propertytype);
-
           const day = new Date(result.data.availabaleDate).getDate()
           const month = '0' + (new Date(result.data.availabaleDate).getMonth() + 1)
           const year = new Date(result.data.availabaleDate).getFullYear()
           var today = year + "-" + (month) + "-" + (day);
           $("div .availabaleDate").val(today);
           if (result && result.data) {
-            var fields = ['_id', 'ownerContectDetails','name', 'description' , 'bedrooms' ,'locationMap' , 'bathrooms' ,'receptionRooms','councilTaxBand','deposit' ,'furnishing','minimumeTenancy',  ]
+            var fields = ['_id', 'ownerContectDetails', 'name', 'description', 'bedrooms', 'locationMap', 'bathrooms', 'receptionRooms', 'councilTaxBand', 'deposit', 'furnishing', 'minimumeTenancy',]
             for (let key of fields) {
               // console.log($('input[name="' + key + '"],textarea[name="' + key + '"]'),result.data[key] )
               if (result.data[key]) {
                 $('input[name="' + key + '"],textarea[name="' + key + '"]').val(result.data[key]);
               }
             }
-            var radios = ['active', 'propertytype', 'featured', 'furnishing'];
+            var radios = ['active', 'type', 'featured', 'furnishing'];
             for (let key of radios) {
               // console.log($('input[name="' + key + '"],textarea[name="' + key + '"]'),result.data[key] )
               if (result.data[key]) {
                 $(`input[name=${key}][value="${result.data[key]}"]`).attr("checked", true)
               }
             }
-            var select = ['availability','tolet_availability', 'parking', 'propertyType', 'outsideSpace'];
+            var select = ['availability', 'tolet_availability', 'parking', 'propertyType', 'outsideSpace'];
             for (let key of select) {
               // console.log($('input[name="' + key + '"],textarea[name="' + key + '"]'),result.data[key] )
               if (result.data[key]) {
                 $(`div .${key} > select > option[value="${result.data[key]}"]`).prop("selected", true)
               }
             }
-            for(let key in result.data.address)
-            {
-                $('input[name="' + key + '"],textarea[name="' + key + '"]').val(result.data.address[key]);
+            for (let key in result.data.address) {
+              $('input[name="' + key + '"],textarea[name="' + key + '"]').val(result.data.address[key]);
             }
-            for(let key in result.data.deatilsTenure)
-            {
+            for (let key in result.data.deatilsTenure) {
               $('input[name="' + key + '"],textarea[name="' + key + '"]').val(result.data.deatilsTenure[key]);
             }
-            for(let key in result.data.detailsPrice)
-            {
+            for (let key in result.data.detailsPrice) {
               $('input[name="' + key + '"],textarea[name="' + key + '"]').val(result.data.detailsPrice[key]);
             }
-            for(let key in result.data.rent)
-            {
-                $('input[name="' + key + '"],textarea[name="' + key + '"]').val(result.data.rent[key]);
+            for (let key in result.data.rent) {
+              $('input[name="' + key + '"],textarea[name="' + key + '"]').val(result.data.rent[key]);
             }
           }
         }
@@ -162,11 +161,11 @@ $(document).ready(function () {
 
   $(document).on('click', '.RemoveRoom', function (e) {
     const roomdata = {
-    "summaryDescription" : $(this).siblings('div.change-clr').find('.summaryDescription .data').text(),
-    "uniqueFeatures" : $(this).siblings('div.change-clr').find('.room-feature .data').text(),
-    "roomName" : $(this).siblings('div.change-clr').find('.room-title .data').text(),
-    "roomDimension" :$(this).siblings('div.change-clr').find('.room-dimension .data').text(),
-    "roomDescription" : $(this).siblings('div.change-clr').find('.room-description .data').text(),
+      "summaryDescription": $(this).siblings('div.change-clr').find('.summaryDescription .data').text(),
+      "uniqueFeatures": $(this).siblings('div.change-clr').find('.room-feature .data').text(),
+      "roomName": $(this).siblings('div.change-clr').find('.room-title .data').text(),
+      "roomDimension": $(this).siblings('div.change-clr').find('.room-dimension .data').text(),
+      "roomDescription": $(this).siblings('div.change-clr').find('.room-description .data').text(),
     }
     console.log(roomdata)
     if (roomdata) {

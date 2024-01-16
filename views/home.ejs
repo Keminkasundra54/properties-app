@@ -148,8 +148,8 @@
 
 
 
-  <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
-  <script src="http://code.jquery.com/ui/1.11.0/jquery-ui.js"></script>
+  <script src="https://code.jquery.com/jquery-1.9.1.js"></script>
+  <script src="https://code.jquery.com/ui/1.11.0/jquery-ui.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
   <script src="/static/js/main.js"></script>
   <script>
@@ -186,7 +186,6 @@
     }
     $(document).on('change', '.myimgtype .radio input:radio:checked', function () {
       var value = $(this).val();
-      console.log(value)
       formdata.append('imagetype', value);
     });
 
@@ -198,8 +197,10 @@
       $('input[name="uniqueFeatures"]').val('');
       $('.feature_list').append(`<span>${features}</span>`);
     }
+    
     function myvalue(event) {
-      const myvalue = $(event.target).closest('input').val()
+      const myvalue = $(event.target).val()
+      console.log(myvalue)
       setFieldsView(myvalue);
     }
     function getBase64(file) {
@@ -320,7 +321,7 @@
       // radio button
       formdata.append('active', $('input[name="active"]:checked').val());
       formdata.append('featured', $('input[name="featured"]:checked').val())
-      formdata.append('propertytype', $('input[name="propertytype"]:checked').val());
+      formdata.append('type', $('input[name="type"]:checked').val());
       formdata.append('furnishing', $('input[name="furnishing"]:checked').val());
 
       //select button
@@ -439,11 +440,11 @@
             <div class="mybutton mainTabButtons" onchange="myvalue(event)">
               <div class="radioGroup">
                   <div class="radio" for="mybutton1">
-                    <input type="radio" id="mybutton1" class="mybutton" name="propertytype" value="for sale">
+                    <input type="radio" id="mybutton1" class="mybutton" name="type" value="for_sale">
                       <label for="mybutton1">For Sale</label>
                   </div>
                   <div class="radio" for="mybutton2">
-                      <input type="radio" id="mybutton2" class="mybutton" name="propertytype" value="to let">
+                      <input type="radio" id="mybutton2" class="mybutton" name="type" value="to_let">
                       <label for="mybutton2">To Let</label>
                   </div>
               </div>

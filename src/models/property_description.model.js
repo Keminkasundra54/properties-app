@@ -7,7 +7,7 @@ const string = require('joi/lib/types/string')
 const Schema = mongoose.Schema
 
 const propertySchema = new Schema({
-  propertytype: {
+  type: {
     type: String,
     default: 'for_sale'
   },
