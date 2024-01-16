@@ -573,11 +573,8 @@ exports.removeimage = async (req, res, next) => {
     let modifydata = []
     const removeimg = await Property.findOne({ 'image.imagedata': imageName })
     if (removeimg) {
-      try {
-        fs.unlinkSync('./images/' + imageName)
-      } catch(e) {
-
-      }
+    if(fs.existsSync(imageName)){
+    fs.unlinkSync('./images/' + imageName)
     }
     for (let j = 0; j < removeimg.image.length; j++) {
       if (removeimg.image[j].imagedata != imageName) {
@@ -585,6 +582,8 @@ exports.removeimage = async (req, res, next) => {
       }
     }
     await Property.findOneAndUpdate({ _id:removeimg._id} ,{$set:{image:modifydata}})
+  }
+  
     
 
     return res.json({ message: 'OK', data: { message: 'Remove' } })
