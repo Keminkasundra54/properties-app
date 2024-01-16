@@ -11,101 +11,81 @@
     #ui-datepicker-div {
       display: none;
     }
-
     .forid {
       display: none;
     }
-
     input::-webkit-outer-spin-button,
     input::-webkit-inner-spin-button {
       -webkit-appearance: none;
       margin: 0;
     }
-
     div .tolet_availability {
       display: none
     }
-
     input[type=number] {
       -moz-appearance: textfield;
       appearance: none;
     }
-
     fieldset {
       border: none;
     }
-
     fieldset.fieldset-twocolumn .form-field {
       width: 50%
     }
-
     fieldset.fieldset-threecolumn .form-field {
       width: 33.33%;
     }
-
     fieldset.fieldset-twocolumn {
       display: flex;
       flex-wrap: wrap;
     }
-
     fieldset.fieldset-twocolumn {
       border: 1px solid black;
       padding: 9px;
       border-radius: 5px;
     }
-
     .popupBoxs {
       max-width: 600px;
     }
-
     fieldset.fieldset-threecolumn {
       display: flex;
       justify-content: space-evenly;
     }
-
     .form-field.radio-btn {
       display: flex;
       align-items: center;
       padding-left: 20px;
     }
-
     .form-field.radio-btn label {
       font-size: 17px;
       color: dimgray;
       padding: 5px;
     }
-
     select {
       width: 100%;
       padding: 12px 15px;
       border-radius: 5px;
     }
-
-    .form-field h6 {
+  .form-field h6 {
       display: inline;
     }
-
     input[type="number"] {
       width: 100%;
       padding: 12px 15px;
       border-radius: 5px;
     }
-
     input#yes {
       vertical-align: middle;
     }
-
     .residentail_letting {
       display: none;
     }
-
     .mybutton {
       display: flex;
       flex-direction: row;
       align-items: stretch;
       justify-content: center;
     }
-
     .main {
       width: 100%;
       display: flex;
@@ -114,24 +94,19 @@
       align-items: center;
       justify-content: space-between;
     }
-
     .myimage {
       width: 65%;
       text-align: left;
     }
-
     .main div svg {
       height: 17px;
       width: 20px;
     }
-
     .myimgtype {
       width: 30%;
       text-align: left;
       padding-left: 10px;
     }
-
-
     .main input[type="button"] svg {
       height: 17px;
       width: 20px;
@@ -139,11 +114,9 @@
     .main div.boxsRemove {
     width: 100px;
 }
-
     .first-bg-s>div:first-child {
       display: none;
     }
-
   </style>
 
 
@@ -190,17 +163,14 @@
     });
 
     let myfeaturesdata = [];
-
-    function myfeatures(event) {
+    function myfeatures(event){
       const features = $('input[name="uniqueFeatures"]').val()
       myfeaturesdata.push(features)
       $('input[name="uniqueFeatures"]').val('');
       $('.feature_list').append(`<span>${features}</span>`);
     }
-    
     function myvalue(event) {
       const myvalue = $(event.target).val()
-      console.log(myvalue)
       setFieldsView(myvalue);
     }
     function getBase64(file) {
@@ -406,7 +376,6 @@
     })
   </script>
 </head>
-
 <body>
   <div class="headerSection">
     <div  class="wrapper largerWrapper">

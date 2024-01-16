@@ -97,12 +97,6 @@ exports.create = async (req, res, next) => {
         }
       }
     }
-    // const pricedata = {
-    //   "orio": req.body.orio,
-    //   "offers_over": req.body.offers_over,
-    //   "guide_price": req.body.guide_price,
-    //   "fixed_price": req.body.fixed_price
-    // }
     const details_pricedata = {
       'residentailOrio': req.body.residentailOrio,
       'residentailOffersOver': req.body.residentailOffersOver,
@@ -133,7 +127,7 @@ exports.create = async (req, res, next) => {
       'perQuater': req.body.perQuater,
       'perAnnum': req.body.perAnnum
     }
-    let mytype
+    let mytype;
     if (req.body.type == 'undefined' || req.body.type == 'for_sale') {
       mytype = 'for_sale'
     } else {
@@ -264,7 +258,6 @@ exports.updateProperty = async (req, res, next) => {
     const roomjsondata = JSON.parse(req.body.room_information)
     const img = req.files.roomimage
     const olddata = await Property.findOne({ _id: req.body._id })
-    console.log(olddata.propertyDescription.length)
     if (olddata.propertyDescription.length > 0) {
       for (let v = 0; v < olddata.propertyDescription.length; v++) {
         room_information.push(olddata.propertyDescription[v])
@@ -363,7 +356,6 @@ exports.updateProperty = async (req, res, next) => {
       }
     }
     // image update end
-
     const property = await Property.findOneAndUpdate({ _id: req.body._id }, {
       $set: {
         'image': imagevar,
@@ -416,9 +408,9 @@ exports.updateProperty = async (req, res, next) => {
       }
     })
 
-    await Parking.findOneAndUpdate({ propertyId: req.body._id }, { $set: { 'parking_name': req.body.parking } })
-    await OutsideSpace.findOneAndUpdate({ propertyId: req.body._id }, { $set: { 'outsideSpace_name': req.body.outsideSpace } })
-    await PropertyType.findOneAndUpdate({ propertyId: req.body._id }, { $set: { 'propertyType_name': req.body.propertyType } })
+    await Parking.findOneAndUpdate({ propertyId: req.body._id }, { $set: { 'parkingName': req.body.parking } })
+    await OutsideSpace.findOneAndUpdate({ propertyId: req.body._id }, { $set: { 'outsideSpaceName': req.body.outsideSpace } })
+    await PropertyType.findOneAndUpdate({ propertyId: req.body._id }, { $set: { 'propertyTypeName': req.body.propertyType } })
 
     return res.json({ message: 'OK', data: property })
   } catch (error) {
@@ -569,7 +561,6 @@ function getPropertyPayload (property) {
 exports.removeimage = async (req, res, next) => {
   try {
     const imageName = req.body.imageName
-    console.log(imageName)
     let modifydata = []
     const removeimg = await Property.findOne({ 'image.imagedata': imageName })
     if (removeimg) {
@@ -583,10 +574,7 @@ exports.removeimage = async (req, res, next) => {
     }
     await Property.findOneAndUpdate({ _id:removeimg._id} ,{$set:{image:modifydata}})
   }
-  
-    
-
-    return res.json({ message: 'OK', data: { message: 'Remove' } })
+    return res.json({message: 'OK', data: {message: 'Remove' }})
   } catch (e) {
     next(e)
   }
@@ -606,6 +594,14 @@ exports.removeRoom = async (req, res, next) => {
       for (let j = 0; j < data.length; j++) {
         if (data[j].roomDescription != roomDescription && data[j].summaryDescription != summaryDescription && data[j].roomName != roomName && data[j].roomDimension != roomDimension) {
           modifydata.push(data[j])
+        }
+        else{
+          if(data[j].room_image){
+            for(let i=0; i< data[j].room_image.length;i++){
+              const roomimg = data[j].room_image[i]
+                fs.unlinkSync('./roomimage/' + roomimg)
+            }
+          } 
         }
       }
       await Property.findOneAndUpdate({_id:propertydata._id},{$set:{propertyDescription:modifydata}})
