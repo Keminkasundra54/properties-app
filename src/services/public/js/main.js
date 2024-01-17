@@ -172,7 +172,7 @@ $(document).ready(function () {
       $.ajax({
         url: "/api/property/removeRoom",
         method: 'post',
-        data: JSON.stringify({ roomdata: roomdata }),
+        data: JSON.stringify({roomdata: roomdata}),
         dataType: "json",
         contentType: "application/json; charset=utf-8",
         success: function (result) {

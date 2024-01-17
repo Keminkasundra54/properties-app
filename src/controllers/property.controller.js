@@ -66,7 +66,7 @@ exports.create = async (req, res, next) => {
 
       if (myimg.length > 0) {
         for (const i in myimg) {
-          
+
           const teamObj = myimg[i]
           if (teamObj.fieldname == 'image') {
             const imgdata = new Image({
@@ -116,10 +116,6 @@ exports.create = async (req, res, next) => {
       'country': req.body.country,
       'passcode': req.body.passcode
     }
-    // const tenuredata = {
-    //   "free_hold": req.body.free_hold,
-    //   "less_hold": req.body.less_hold,
-    // }
     const rent = {
       'perPersonPerWeek': req.body.perPersonPerWeek,
       'perWeek': req.body.perWeek,
@@ -152,7 +148,7 @@ exports.create = async (req, res, next) => {
         active: req.body.active,
         featured: req.body.featured,
         availability: req.body.availability,
-        tolet_availability:req.body.tolet_availability,
+        tolet_availability: req.body.tolet_availability,
 
         propertyDescription: room_information,
 
@@ -253,7 +249,7 @@ exports.updateProperty = async (req, res, next) => {
     let roomimagevar = []
     const room_information = []
     const myimg = req.files.image
-     
+
     //  for roomimage add and update
     const roomjsondata = JSON.parse(req.body.room_information)
     const img = req.files.roomimage
@@ -378,7 +374,7 @@ exports.updateProperty = async (req, res, next) => {
         // 'propertyDescription': req.body.propertyDescription,
 
         'availability': req.body.availability,
-        "tolet_availability":req.body.tolet_availability,
+        "tolet_availability": req.body.tolet_availability,
 
         'propertyType': req.body.propertyType,
         'parking': req.body.parking,
@@ -446,12 +442,12 @@ exports.deleteProperty = async (req, res, next) => {
     }
     if (olddata.image && olddata.image.length) {
       for (let a = 0; a < olddata.image.length; a++) {
-            const mydata = olddata.image[a].imagedata
-            console.log(mydata)
-            if (mydata) {
-              
-              const fils = fs.unlinkSync('./images/' + mydata)
-            }
+        const mydata = olddata.image[a].imagedata
+        console.log(mydata)
+        if (mydata) {
+
+          const fils = fs.unlinkSync('./images/' + mydata)
+        }
       }
     }
     await Property.findOneAndDelete({ _id: id })
@@ -464,7 +460,7 @@ exports.deleteProperty = async (req, res, next) => {
     next(error)
   }
 }
-function getPropertyPayload (property) {
+function getPropertyPayload(property) {
   let rooms = property.room_information.map((room) => {
     room.room_photo_urls = room.roomimage.map(url => {
       return 'https://propertyapp.hubresolution.com/roomimage/' + url
@@ -564,17 +560,17 @@ exports.removeimage = async (req, res, next) => {
     let modifydata = []
     const removeimg = await Property.findOne({ 'image.imagedata': imageName })
     if (removeimg) {
-    if(fs.existsSync(imageName)){
-    fs.unlinkSync('./images/' + imageName)
-    }
-    for (let j = 0; j < removeimg.image.length; j++) {
-      if (removeimg.image[j].imagedata != imageName) {
-        modifydata.push(removeimg.image[j])
+      fs.exists('./images/' + imageName, (exists) => {
+        exists ? fs.unlinkSync('./images/' + imageName) : 'Not found!';
+      });
+      for (let j = 0; j < removeimg.image.length; j++) {
+        if (removeimg.image[j].imagedata != imageName) {
+          modifydata.push(removeimg.image[j])
+        }
       }
+      await Property.findOneAndUpdate({ _id: removeimg._id }, { $set: { image: modifydata } })
     }
-    await Property.findOneAndUpdate({ _id:removeimg._id} ,{$set:{image:modifydata}})
-  }
-    return res.json({message: 'OK', data: {message: 'Remove' }})
+    return res.json({ message: 'OK', data: { message: 'Remove' } })
   } catch (e) {
     next(e)
   }
@@ -586,8 +582,7 @@ exports.removeRoom = async (req, res, next) => {
     const summaryDescription = roomdata.summaryDescription
     const roomName = roomdata.roomName
     const roomDimension = roomdata.roomDimension
-    
-    const propertydata = await Property.findOne({ 'propertyDescription.roomDescription': roomDescription, 'propertyDescription.summaryDescription': summaryDescription, 'propertyDescription.roomName': roomName, 'propertyDescription.roomDimension': roomDimension})
+    const propertydata = await Property.findOne({ 'propertyDescription.roomDescription': roomDescription, 'propertyDescription.summaryDescription': summaryDescription, 'propertyDescription.roomName': roomName, 'propertyDescription.roomDimension': roomDimension })
     if (propertydata) {
       const modifydata = []
       const data = propertydata.propertyDescription
@@ -595,16 +590,18 @@ exports.removeRoom = async (req, res, next) => {
         if (data[j].roomDescription != roomDescription && data[j].summaryDescription != summaryDescription && data[j].roomName != roomName && data[j].roomDimension != roomDimension) {
           modifydata.push(data[j])
         }
-        else{
-          if(data[j].room_image){
-            for(let i=0; i< data[j].room_image.length;i++){
+        else {
+          if (data[j].room_image) {
+            for (let i = 0; i < data[j].room_image.length; i++) {
               const roomimg = data[j].room_image[i]
-                fs.unlinkSync('./roomimage/' + roomimg)
+              fs.exists('./roomimage/' + roomimg, (exists) => {
+                exists ? fs.unlinkSync('./roomimage/' + roomimg) : 'Not found!';
+              });
             }
-          } 
+          }
         }
       }
-      await Property.findOneAndUpdate({_id:propertydata._id},{$set:{propertyDescription:modifydata}})
+      await Property.findOneAndUpdate({ _id: propertydata._id }, { $set: { propertyDescription: modifydata } })
     }
     return res.json({ message: 'OK', data: { message: 'Remove' } })
   } catch (err) {

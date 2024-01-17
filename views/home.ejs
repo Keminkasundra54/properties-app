@@ -208,7 +208,8 @@
       $('.feature_list').html('');
       myfeaturesdata = []
       const allfeatures = []
-      $(event.target).parents('.roomFields').find('.form-field input').val('');
+
+      $(event.target).parents().siblings('.roomFields').find('input').val('')
       var clonner = $('.newform-two-clr').eq(0).clone();
       $(clonner).find('.first-bg-s > div:gt(0)').remove();
       for (let image of imageBase64) 
@@ -231,7 +232,7 @@
       $(clonner).find('.first-bg-s > div:eq(0)').remove();
 
       $('.newform-two-clr:last').after(clonner);
-      console.log($('.newform-two-clr:last .first-bg-s'))
+
       // $('.newform-two-clr:last .first-bg-s').slick({
       $('.newform-two-clr:last .first-bg-s').slick({
         dots: false,
@@ -334,6 +335,8 @@
       formdata.append('perWeek', data.perWeek);
       formdata.append('perCalanderMonth', data.perCalanderMonth)
       formdata.append('perQuater', data.perQuater);
+      formdata.append('perAnnum', data.perAnnum);
+
       formdata.append('deposit', data.deposit)
       formdata.append('availabaleDate', data.availabaleDate);
       formdata.append('minimumeTenancy', data.minimumeTenancy)
