@@ -224,22 +224,23 @@ exports.pushToHive = async (req, res, next) => {
     const axiosInstance = axios.create({ headers: { 'User-Agent': 'rightmove-datafeed/1.0' }, httpsAgent })
     const preparePropertyPayload = getPropertyPayload(property)
     const result = axiosInstance.post(url, preparePropertyPayload, { httpsAgent }).then(async ({ data }) => {
-      console.log(data)
+        console.log("data" , data)
       if (data && data.success) {
         const property = await Property.findOneAndUpdate({ _id: req.body._id }, { pushedToHive: true })
         return res.json({ message: 'OK', data: result })
       } else {
-        return res.json({ message: 'Failed', data: {} })
+        return res.json({ message: 'Failed at else', data: {} })
       }
     })
       .catch((_error) => {
         console.log(_error)
-        return res.json({ message: 'Failed', data: {} })
+        return res.json({ message: 'Failed at catch', data: {_error} })
       })
       .finally((data) => {
         console.log('finally', data)
       })
   } catch (error) {
+    console.log(error)
     next(error)
   }
 }
@@ -461,8 +462,8 @@ exports.deleteProperty = async (req, res, next) => {
   }
 }
 function getPropertyPayload(property) {
-  let rooms = property.room_information.map((room) => {
-    room.room_photo_urls = room.roomimage.map(url => {
+  let rooms = property.propertyDescription.map((room) => {
+    room.room_image = room.room_image.map(url => {
       return 'https://propertyapp.hubresolution.com/roomimage/' + url
     })
     room.roomDimension_unit = 5
@@ -471,12 +472,40 @@ function getPropertyPayload(property) {
   let medias = property.image.map(media => {
     return {
       'media_type': 2,
-      'media_url': 'https://propertyapp.hubresolution.com/profile/' + media,
-      'caption': 'Floor plan',
+      'media_url': 'https://propertyapp.hubresolution.com/profile/' + media.imagedata,
+      'caption':media.imagetype,
       'sort_order': 1,
       'media_update_date': '01-03-2017 10:00:00'
     }
   })
+
+   const formate1 = property.createdAt
+   const day = formate1.getDate() 
+   const month = formate1.getMonth() +1 
+   const year = formate1.getFullYear()
+   const hours = formate1.getHours()
+   const minutes = formate1.getMinutes()
+   const secounds = formate1.getSeconds()
+
+   const formate2 = property.updatedAt
+   const day1 = formate2.getDate() 
+   const month1 = formate2.getMonth() +1 
+   const year1 = formate2.getFullYear()
+   const hours1 = formate2.getHours()
+   const minutes1 = formate2.getMinutes()
+   const secounds1 = formate2.getSeconds()
+
+   let day2 , month2 , year2;
+  if(property.availabaleDate){
+  const formate3 = property.availabaleDate
+  day2 = formate3.getDate() 
+  month2 = formate3.getMonth() +1 
+  year2 = formate3.getFullYear()
+}
+   let parking = property.parking 
+   if(parking == 'Grage'){
+    parking = 16
+   }
   return {
     'network': {
       'network_id': 13076
@@ -493,17 +522,17 @@ function getPropertyPayload(property) {
       'status': 1,
       'new_home': false,
       'student_property': false,
-      'create_date': '01-03-2017 10:00:00',
-      'update_date': '01-03-2017 10:00:00',
-      'date_available': '01-04-2017',
+      'create_date': `${day}-${month}-${year} ${hours}:${minutes}:${secounds}` ,//"01-03-2017 10:00:00"
+      'update_date': `${day1}-${month1}-${year1} ${hours1}:${minutes1}:${secounds1}`,//"01-03-2017 10:00:00"
+      'date_available': `${day2}-${month2}-${year2}`,//"01-03-2017
       'address': {
-        'house_name_number': property.address.house_name_number,
+        'house_name_number': property.address.buildingName,
         'town': property.address.town,
-        'postcode_1': property.address.postcode_1,
-        'postcode_2': property.address.postcode_2,
-        'display_address': property.address.display_address,
-        'latitude': property.address.latitude,
-        'longitude': property.address.longitude,
+        'postcode_1': property.address.passcode,
+        'postcode_2': 'Gt8',
+        'display_address': property.address.addrressLine2,
+        'latitude': 51.51482,
+        'longitude': -0.13249,
         'pov_latitude': 51.51482,
         'pov_longitude': -0.13249,
         'pov_pitch': -16.78,
@@ -511,26 +540,20 @@ function getPropertyPayload(property) {
         'pov_zoom': 0
       },
       'price_information': {
-        'price': property.price_information.price,
+        'price': property.detailsPrice.residentailFixPrice,
         'price_qualifier': 0,
-        'deposit': property.price_information.deposit,
-        'administration_fee': property.price_information.administration_fee
+        'deposit': property.deposit,
+        'administration_fee': '10000'
       },
       'details': {
-        'summary': property.summary,
+        'summary': property.name,
         'description': property.description,
-        'features': [
-          'Brand New',
-          'Private Parking',
-          'Panoramic views',
-          'Lift Access',
-          'Private Patio'
-        ],
-        'bedrooms': 1,
-        'bathrooms': 1,
-        'receptionRooms': 1,
-        'parking': [15],
-        'outsideSpace': [30],
+        'features': [property.propertyDescription.uniqueFeatures],
+        'bedrooms': property.bedrooms,
+        'bathrooms': property.bathrooms,
+        'receptionRooms': property.receptionRooms,
+        'parking': [parking],
+        'outsideSpace': property.outsideSpace,
         'year_built': 1999,
         'entrance_floor': 6,
         'condition': 1,
