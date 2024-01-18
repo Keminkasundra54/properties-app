@@ -223,8 +223,8 @@ exports.pushToHive = async (req, res, next) => {
     })
     const axiosInstance = axios.create({ headers: { 'User-Agent': 'rightmove-datafeed/1.0' }, httpsAgent })
     const preparePropertyPayload = getPropertyPayload(property)
+    console.log(preparePropertyPayload)
     const result = axiosInstance.post(url, preparePropertyPayload, { httpsAgent }).then(async ({ data }) => {
-        console.log("data" , data)
       if (data && data.success) {
         const property = await Property.findOneAndUpdate({ _id: req.body._id }, { pushedToHive: true })
         return res.json({ message: 'OK', data: result })
@@ -462,6 +462,21 @@ exports.deleteProperty = async (req, res, next) => {
   }
 }
 function getPropertyPayload(property) {
+  let availabaleDate;
+  let price;
+  if(property.type == 'for_sale'){
+     availabaleDate = '01-01-2024'
+     price = property.detailsPrice.residentailFixPrice
+  }
+  else if(property.type == 'to_let'){
+    const formate3 = property.availabaleDate
+    const day2 = formate3.getDate() 
+    const month2 = formate3.getMonth() +1 
+    const year2 = formate3.getFullYear()
+    availabaleDate = `${day2}-${month2}-${year2}`
+    price = property.rent.perCalanderMonth
+  }
+
   let rooms = property.propertyDescription.map((room) => {
     room.room_image = room.room_image.map(url => {
       return 'https://propertyapp.hubresolution.com/roomimage/' + url
@@ -495,17 +510,25 @@ function getPropertyPayload(property) {
    const minutes1 = formate2.getMinutes()
    const secounds1 = formate2.getSeconds()
 
-   let day2 , month2 , year2;
-  if(property.availabaleDate){
-  const formate3 = property.availabaleDate
-  day2 = formate3.getDate() 
-  month2 = formate3.getMonth() +1 
-  year2 = formate3.getFullYear()
-}
    let parking = property.parking 
-   if(parking == 'Grage'){
+   if(parking == 'Grage')
+   {
     parking = 16
    }
+   else if(parking == 'Allocated'){ parking = 13}
+   else if(parking == 'Communal'){ parking = 14}
+   else if(parking == 'Covered'){ parking = 15}
+   else if(parking == 'Driveway'){ parking = 17}
+   else if(parking == 'Gated'){ parking = 18}
+   else if(parking == 'Off-street'){ parking = 19}
+   else if(parking == 'On Street'){ parking = 20}
+   else if(parking == 'Rear'){ parking = 21}
+   else if(parking == 'Permit'){ parking = 22}
+   else if(parking == 'Private'){ parking = 23}
+   else if(parking == 'Residents'){ parking = 24}
+   else if(parking == 'Carport'){ parking = 25}
+
+
   return {
     'network': {
       'network_id': 13076
@@ -524,13 +547,13 @@ function getPropertyPayload(property) {
       'student_property': false,
       'create_date': `${day}-${month}-${year} ${hours}:${minutes}:${secounds}` ,//"01-03-2017 10:00:00"
       'update_date': `${day1}-${month1}-${year1} ${hours1}:${minutes1}:${secounds1}`,//"01-03-2017 10:00:00"
-      'date_available': `${day2}-${month2}-${year2}`,//"01-03-2017
+      'date_available': availabaleDate,//"01-03-2017
       'address': {
         'house_name_number': property.address.buildingName,
         'town': property.address.town,
         'postcode_1': property.address.passcode,
         'postcode_2': 'Gt8',
-        'display_address': property.address.addrressLine2,
+        'display_address': property.address.buildingName  +" "+ property.address.town +" "+ property.address.passcode,
         'latitude': 51.51482,
         'longitude': -0.13249,
         'pov_latitude': 51.51482,
@@ -540,7 +563,7 @@ function getPropertyPayload(property) {
         'pov_zoom': 0
       },
       'price_information': {
-        'price': property.detailsPrice.residentailFixPrice,
+        'price': price,
         'price_qualifier': 0,
         'deposit': property.deposit,
         'administration_fee': '10000'
